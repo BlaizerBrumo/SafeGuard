@@ -51,7 +51,7 @@ Custom server image- If you go to the resource pack of the anti-cheat, textures 
 
 Custom banned items- If you go to the behavior pack of the anti-cheat, functions > anti > anti_items.mcfunction  you can scroll until you find a clear space to write the items you want to clear, template: clear @a[tag=!admin] [item name] [data]
 
-=====How to Use=====
+# =====How to Use=====
 
 Download the files from gihub or files below
 If you want to customize, change the .mcpack to .zip, unzip files, change the things you want, zip it, and change .zip to .mcpack
