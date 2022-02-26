@@ -1,6 +1,6 @@
 SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and customizable functions to use against hackers, it includes such things as:
 
-## ======Functions======
+## ======Modules======
 
 - Anti CBE- Kills NPCs and command block minecarts to stop hackers from using command block exploit.
 
@@ -26,11 +26,9 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 - Vanish- This function is a toggle command which puts you in and out of invisibility
 
-- Summon NPC- Since the anti-cheat kills all NPCs, this command will summon an NPC at your location which will not die.
+- Summon NPC- Since the anti-cheat kills all NPCs, this command will summon an NPC at your location which will not die /function setup/summon_npc.
 
 - Clearchat- Clear the chat, /function admin_cmds/clearchat
-
-- Enderchest wipe- Clears person's enderchest, /tag [name] add echest_wipe
 
 ## =====Punishments=====
 
@@ -44,11 +42,19 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 - Inventory Lock- Clears person inventory and puts un-removable items in their inventory | /tag[name] add inv_lock to inventory lock | /execute [name] ~~~ function punishment/inv_lock/inv_lock_remove to remove inventory lock
 
+- Enderchest wipe- Clears person's enderchest, /tag [name] add echest_wipe
+
 - Enderchest ban- Doesn't allow person to use enderchests | /tag [name] add echest_ban to enderchest ban | /execute [name] ~~~ function punishment/echest_ban/echest_ban to remove enderchest ban 
+
+- Ban- Bans people forever, cannot unban people yet | /execute [name] ~~~ function punishments/ban/ban
 
 ## =====Helpful Features=====
 
-- Auto Mod(BETA)- Auto flags people
+- Auto Mod- Auto flags people
+
+- Illegal items crash- Kick people if they obtain items like movingblock or fire
+
+- Help Command- Gives a quick guide of the anticheat | /function setup/help
 
 - Welcomer- Sends a message in chat when a person join the game for the first time
 
@@ -56,13 +62,15 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 ## =====Customize=====
 
-- Custom server name- If you go to the resource pack of the anti-cheat, UI > debug_screen.json  and change the part where it says [Server Name] you will get a custom server name.
-
-- Custom server image- If you go to the resource pack of the anti-cheat, textures > image.png and change it, you will get a custom server image.
-
-
-
 - Custom banned items- If you go to the behavior pack of the anti-cheat, functions > anti > anti_items.mcfunction  you can scroll until you find a clear space to write the items you want to clear, template: clear @a[tag=!admin] [item name] [data]
+
+## =====Settings(toggle)=====
+
+- Lock End- Teleports players away from the end portal
+
+- Auto Mod- Auto flags people
+
+- No Shulker Barrels- Clears either shulker boxes, barrels, or both(made to prevent kits like 32k)
 
 ## =====How to Use=====
 
@@ -72,4 +80,5 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 - Run /function setup/setup
 - Put use_all to activate all modules, or use_all_auto_mod to have auto mod on. Or the modules you want to be activated in an always active repeating command block
 - Stand near the command block and run /function setup/tickingarea so the anti-cheat works anywhere in the world
+- Turn on any setting you want in /function settings/
 - Enjoy!
