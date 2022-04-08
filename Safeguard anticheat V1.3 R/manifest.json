@@ -1,0 +1,37 @@
+//bridge-file-version: #2
+{
+	"format_version": 2,
+	"header": {
+		"name": "SafeGuard anticheat",
+		"description": "Made by  Blazer#1692 V1.3",
+		"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad",
+		"version": [
+			1,
+			0,
+			0
+		],
+		"min_engine_version": [
+			1,
+			13,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "e9b20740-0ca8-40b2-83df-9df02cd18ca8",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"metadata": {
+		"generated_with": {
+			"bridge": [
+				"1.8.4"
+			]
+		}
+	}
+}

@@ -1,0 +1,692 @@
+{
+    "air": {
+        "blockshape": "invisible"
+    },
+    "stone": {
+        "blockshape": "block"
+    },
+    "grass": {
+        "blockshape": "block"
+    },
+    "dirt": {
+        "blockshape": "block"
+    },
+    "cobblestone": {
+        "blockshape": "block"
+    },
+    "planks": {
+        "blockshape": "block"
+    },
+    "sapling": {
+        "blockshape": "cross_texture"
+    },
+    "bedrock": {
+        "blockshape": "block"
+    },
+    "flowing_water": {
+        "blockshape": "water"
+    },
+    "water": {
+        "blockshape": "water"
+    },
+    "flowing_lava": {
+        "blockshape": "water"
+    },
+    "lava": {
+        "blockshape": "water"
+    },
+    "sand": {
+        "blockshape": "block"
+    },
+    "gravel": {
+        "blockshape": "block"
+    },
+    "gold_ore": {
+        "blockshape": "block"
+    },
+    "iron_ore": {
+        "blockshape": "block"
+    },
+    "coal_ore": {
+        "blockshape": "block"
+    },
+    "log": {
+        "blockshape": "tree"
+    },
+    "leaves": {
+        "blockshape": "block"
+    },
+    "sponge": {
+        "blockshape": "block"
+    },
+    "glass": {
+        "blockshape": "block"
+    },
+    "lapis_ore": {
+        "blockshape": "block"
+    },
+    "lapis_block": {
+        "blockshape": "block"
+    },
+    "dispenser": {
+        "blockshape": "block"
+    },
+    "sandstone": {
+        "blockshape": "block"
+    },
+    "noteblock": {
+        "blockshape": "block"
+    },
+    "bed": {
+        "blockshape": "bed"
+    },
+    "golden_rail": {
+        "blockshape": "rail"
+    },
+    "detector_rail": {
+        "blockshape": "rail"
+    },
+    "sticky_piston": {
+        "blockshape": "piston"
+    },
+    "web": {
+        "blockshape": "cross_texture"
+    },
+    "tallgrass": {
+        "blockshape": "cross_texture"
+    },
+    "deadbush": {
+        "blockshape": "cross_texture"
+    },
+    "piston": {
+        "blockshape": "piston"
+    },
+    "pistonArmCollision": {
+        "blockshape": "invisible"
+    },
+    "wool": {
+        "blockshape": "block"
+    },
+    "yellow_flower": {
+        "blockshape": "cross_texture_poly"
+    },
+    "red_flower": {
+        "blockshape": "cross_texture_poly"
+    },
+    "brown_mushroom": {
+        "blockshape": "cross_texture_poly"
+    },
+    "red_mushroom": {
+        "blockshape": "cross_texture_poly"
+    },
+    "gold_block": {
+        "blockshape": "block"
+    },
+    "iron_block": {
+        "blockshape": "block"
+    },
+    "double_stone_slab": {
+        "blockshape": "block"
+    },
+    "stone_slab": {
+        "blockshape": "block_half"
+    },
+    "brick_block": {
+        "blockshape": "block"
+    },
+    "tnt": {
+        "blockshape": "block"
+    },
+    "bookshelf": {
+        "blockshape": "block"
+    },
+    "mossy_cobblestone": {
+        "blockshape": "block"
+    },
+    "obsidian": {
+        "blockshape": "block"
+    },
+    "torch": {
+        "blockshape": "torch"
+    },
+    "mob_spawner": {
+        "blockshape": "block"
+    },
+    "oak_stairs": {
+        "blockshape": "stairs"
+    },
+    "chest": {
+        "blockshape": "chest"
+    },
+    "redstone_wire": {
+        "blockshape": "red_dust"
+    },
+    "diamond_ore": {
+        "blockshape": "block"
+    },
+    "diamond_block": {
+        "blockshape": "block"
+    },
+    "crafting_table": {
+        "blockshape": "block"
+    },
+    "wheat": {
+        "blockshape": "rows"
+    },
+    "farmland": {
+        "blockshape": "block"
+    },
+    "furnace": {
+        "blockshape": "block"
+    },
+    "lit_furnace": {
+        "blockshape": "block"
+    },
+    "standing_sign": {
+        "blockshape": "invisible"
+    },
+    "wooden_door": {
+        "blockshape": "door"
+    },
+    "ladder": {
+        "blockshape": "ladder"
+    },
+    "rail": {
+        "blockshape": "rail"
+    },
+    "stone_stairs": {
+        "blockshape": "stairs"
+    },
+    "wall_sign": {
+        "blockshape": "invisible"
+    },
+    "lever": {
+        "blockshape": "lever"
+    },
+    "stone_pressure_plate": {
+        "blockshape": "block"
+    },
+    "iron_door": {
+        "blockshape": "door"
+    },
+    "wooden_pressure_plate": {
+        "blockshape": "block"
+    },
+    "redstone_ore": {
+        "blockshape": "block"
+    },
+    "lit_redstone_ore": {
+        "blockshape": "block"
+    },
+    "unlit_redstone_torch": {
+        "blockshape": "torch"
+    },
+    "redstone_torch": {
+        "blockshape": "torch"
+    },
+    "stone_button": {
+        "blockshape": "block"
+    },
+    "snow_layer": {
+        "blockshape": "top_snow"
+    },
+    "ice": {
+        "blockshape": "block"
+    },
+    "snow": {
+        "blockshape": "block"
+    },
+    "cactus": {
+        "blockshape": "cactus"
+    },
+    "clay": {
+        "blockshape": "block"
+    },
+    "reeds": {
+        "blockshape": "cross_texture"
+    },
+    "fence": {
+        "blockshape": "fence"
+    },
+    "nether_brick_fence": {
+        "blockshape": "fence"
+    },
+    "pumpkin": {
+        "blockshape": "block"
+    },
+    "netherrack": {
+        "blockshape": "block"
+    },
+    "soul_sand": {
+        "blockshape": "block"
+    },
+    "glowstone": {
+        "blockshape": "block"
+    },
+    "portal": {
+        "blockshape": "block"
+    },
+    "lit_pumpkin": {
+        "blockshape": "block"
+    },
+    "cake": {
+        "blockshape": "block"
+    },
+    "unpowered_repeater": {
+        "blockshape": "repeater"
+    },
+    "powered_repeater": {
+        "blockshape": "repeater"
+    },
+    "invisibleBedrock": {
+        "blockshape": "invisible"
+    },
+    "trapdoor": {
+        "blockshape": "block_half"
+    },
+    "monster_egg": {
+        "blockshape": "block"
+    },
+    "stonebrick": {
+        "blockshape": "block"
+    },
+    "brown_mushroom_block": {
+        "blockshape": "block"
+    },
+    "red_mushroom_block": {
+        "blockshape": "block"
+    },
+    "iron_bars": {
+        "blockshape": "iron_fence"
+    },
+    "glass_pane": {
+        "blockshape": "iron_fence"
+    },
+    "melon_block": {
+        "blockshape": "block"
+    },
+    "pumpkin_stem": {
+        "blockshape": "stem"
+    },
+    "melon_stem": {
+        "blockshape": "stem"
+    },
+    "vine": {
+        "blockshape": "vine"
+    },
+    "fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "brick_stairs": {
+        "blockshape": "stairs"
+    },
+    "mycelium": {
+        "blockshape": "block"
+    },
+    "waterlily": {
+        "blockshape": "lilypad"
+    },
+    "brewing_stand": {
+        "blockshape": "brewing_stand"
+    },
+    "cauldron": {
+        "blockshape": "cauldron"
+    },
+    "end_portal_frame": {
+        "blockshape": "portal_frame"
+    },
+    "end_stone": {
+        "blockshape": "block"
+    },
+    "end_rod": {
+        "blockshape": "end_rod"
+    },
+    "end_bricks": {
+        "blockshape": "block"
+    },
+    "redstone_lamp": {
+        "blockshape": "block"
+    },
+    "lit_redstone_lamp": {
+        "blockshape": "block"
+    },
+    "cocoa": {
+        "blockshape": "cocoa"
+    },
+    "emerald_ore": {
+        "blockshape": "block"
+    },
+    "emerald_block": {
+        "blockshape": "block"
+    },
+    "spruce_stairs": {
+        "blockshape": "stairs"
+    },
+    "birch_stairs": {
+        "blockshape": "stairs"
+    },
+    "jungle_stairs": {
+        "blockshape": "stairs"
+    },
+    "beacon": {
+        "blockshape": "beacon"
+    },
+    "wooden_button": {
+        "blockshape": "block"
+    },
+    "stone_brick_stairs": {
+        "blockshape": "stairs"
+    },
+    "nether_brick": {
+        "blockshape": "block"
+    },
+    "nether_brick_stairs": {
+        "blockshape": "stairs"
+    },
+    "nether_wart": {
+        "blockshape": "rows"
+    },
+    "enchanting_table": {
+        "blockshape": "block_half"
+    },
+    "dropper": {
+        "blockshape": "block"
+    },
+    "activator_rail": {
+        "blockshape": "rail"
+    },
+    "sandstone_stairs": {
+        "blockshape": "stairs"
+    },
+    "tripwire_hook": {
+        "blockshape": "tripwire_hook"
+    },
+    "tripWire": {
+        "blockshape": "tripwire"
+    },
+    "cobblestone_wall": {
+        "blockshape": "wall"
+    },
+    "flower_pot": {
+        "blockshape": "flower_pot"
+    },
+    "carrots": {
+        "blockshape": "rows"
+    },
+    "potatoes": {
+        "blockshape": "rows"
+    },
+    "skull": {
+        "blockshape": "invisible"
+    },
+    "anvil": {
+        "blockshape": "anvil"
+    },
+    "trapped_chest": {
+        "blockshape": "chest"
+    },
+    "light_weighted_pressure_plate": {
+        "blockshape": "block"
+    },
+    "heavy_weighted_pressure_plate": {
+        "blockshape": "block"
+    },
+    "unpowered_comparator": {
+        "blockshape": "comparator"
+    },
+    "powered_comparator": {
+        "blockshape": "comparator"
+    },
+    "daylight_detector": {
+        "blockshape": "block"
+    },
+    "redstone_block": {
+        "blockshape": "block"
+    },
+    "structure_block": {
+        "blockshape": "block"
+    },
+    "structure_void": {
+        "blockshape": "structure_void"
+    },
+    "quartz_ore": {
+        "blockshape": "block"
+    },
+    "hopper": {
+        "blockshape": "hopper"
+    },
+    "quartz_block": {
+        "blockshape": "tree"
+    },
+    "quartz_stairs": {
+        "blockshape": "stairs"
+    },
+    "purpur_block": {
+        "blockshape": "tree"
+    },
+    "purpur_stairs": {
+        "blockshape": "stairs"
+    },
+    "chorus_plant": {
+        "blockshape": "chorus_plant"
+    },
+    "chorus_flower": {
+        "blockshape": "chorus_flower"
+    },
+    "double_wooden_slab": {
+        "blockshape": "block"
+    },
+    "wooden_slab": {
+        "blockshape": "block_half"
+    },
+    "stained_hardened_clay": {
+        "blockshape": "block"
+    },
+    "leaves2": {
+        "blockshape": "block"
+    },
+    "log2": {
+        "blockshape": "tree"
+    },
+    "acacia_stairs": {
+        "blockshape": "stairs"
+    },
+    "dark_oak_stairs": {
+        "blockshape": "stairs"
+    },
+    "slime": {
+        "blockshape": "slime_block"
+    },
+    "iron_trapdoor": {
+        "blockshape": "block_half"
+    },
+    "hay_block": {
+        "blockshape": "tree"
+    },
+    "carpet": {
+        "blockshape": "block"
+    },
+    "hardened_clay": {
+        "blockshape": "block"
+    },
+    "coal_block": {
+        "blockshape": "block"
+    },
+    "packed_ice": {
+        "blockshape": "block"
+    },
+    "dragon_egg": {
+        "blockshape": "dragon_egg"
+    },
+    "double_plant": {
+        "blockshape": "double_plant_poly"
+    },
+    "daylight_detector_inverted": {
+        "blockshape": "block"
+    },
+    "red_sandstone": {
+        "blockshape": "block"
+    },
+    "red_sandstone_stairs": {
+        "blockshape": "stairs"
+    },
+    "double_stone_slab2": {
+        "blockshape": "block"
+    },
+    "stone_slab2": {
+        "blockshape": "block_half"
+    },
+    "spruce_fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "birch_fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "jungle_fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "dark_oak_fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "acacia_fence_gate": {
+        "blockshape": "fence_gate"
+    },
+    "spruce_door": {
+        "blockshape": "door"
+    },
+    "birch_door": {
+        "blockshape": "door"
+    },
+    "jungle_door": {
+        "blockshape": "door"
+    },
+    "acacia_door": {
+        "blockshape": "door"
+    },
+    "dark_oak_door": {
+        "blockshape": "door"
+    },
+    "grass_path": {
+        "blockshape": "block"
+    },
+    "frame": {
+        "blockshape": "invisible"
+    },
+    "podzol": {
+        "blockshape": "block"
+    },
+    "beetroot": {
+        "blockshape": "rows"
+    },
+    "stonecutter": {
+        "blockshape": "block"
+    },
+    "glowingobsidian": {
+        "blockshape": "block"
+    },
+    "netherreactor": {
+        "blockshape": "block"
+    },
+    "info_update": {
+        "blockshape": "block"
+    },
+    "info_update2": {
+        "blockshape": "block"
+    },
+    "movingBlock": {
+        "blockshape": "invisible"
+    },
+    "observer": {
+        "blockshape": "facing_block"
+    },
+    "reserved6": {
+        "blockshape": "block"
+    },
+    "fire": {
+        "blockshape": "fire"
+    },
+    "prismarine": {
+        "blockshape": "block"
+    },
+    "seaLantern": {
+        "blockshape": "block"
+    },
+    "ender_chest": {
+        "blockshape": "chest"
+    },
+    "stained_glass": {
+        "blockshape": "block"
+    },
+    "stained_glass_pane": {
+        "blockshape": "iron_fence"
+    },
+    "shulker_box": {
+        "blockshape": "chest"
+    },
+    "command_block": {
+        "blockshape": "command_block"
+    },
+    "repeating_command_block": {
+        "blockshape": "command_block"
+    },
+    "chain_command_block": {
+        "blockshape": "command_block"
+    },
+    "concrete": {
+        "blockshape": "block"
+    },
+    "concretePowder": {
+        "blockshape": "block"
+    },
+    "black_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "blue_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "brown_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "cyan_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "gray_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "green_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "light_blue_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "lime_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "magenta_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "orange_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "pink_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "purple_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "red_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "silver_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "white_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "yellow_glazed_terracotta": {
+        "blockshape": "terracotta"
+    },
+    "frosted_ice": {
+        "blockshape": "block"
+    }
+}
