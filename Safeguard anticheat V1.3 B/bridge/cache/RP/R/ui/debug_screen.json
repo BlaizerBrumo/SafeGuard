@@ -1,0 +1,153 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_resource_packs\\Safeguard anti-cheat R\\ui\\debug_screen.json",
+	"file_type": "unknown",
+	"format_version": 1,
+	"file_uuid": "f209b6e5_61d3_43a9_9805_49068cad992a",
+	"file_version": 5,
+	"cache_content": {
+		"children": [
+			{
+				"key": "New_Player_Animation_UI",
+				"is_minified": true,
+				"children": {
+					"type": "label",
+					"text": "§f[Server Name]",
+					"shadow": true,
+					"font_size": "left",
+					"offset": [
+						33,
+						7
+					],
+					"anchor_from": "top_left",
+					"anchor_to": "top_left"
+				}
+			},
+			{
+				"open": {
+					"New_Player_Animation_UI": {
+						"type": "label",
+						"text": "§f[Server Name]",
+						"shadow": true,
+						"font_size": "left",
+						"offset": [
+							33,
+							7
+						],
+						"anchor_from": "top_left",
+						"anchor_to": "top_left"
+					},
+					"New_Player_Animation_UI1": {
+						"type": "label",
+						"text": "§bAnticheat by Blazer#1692 §eV1.2",
+						"shadow": true,
+						"font_size": "left",
+						"offset": [
+							33,
+							17
+						],
+						"anchor_from": "top_left",
+						"anchor_to": "top_left"
+					},
+					"New_Player_Animation_Image": {
+						"type": "image",
+						"texture": "textures/image",
+						"anchor_from": "top_left",
+						"anchor_to": "top_left",
+						"offset": [
+							5,
+							5
+						],
+						"size": [
+							23,
+							23
+						],
+						"layer": 3
+					},
+					"special_render": {
+						"type": "custome",
+						"renderer": "debug_screen_renderer"
+					},
+					"content_panel": {
+						"type": "panel",
+						"controls": [
+							{
+								"New_Player_Animation_UI@debug_screen.New_Player_Animation_UI": {}
+							},
+							{
+								"New_Player_Animation_UI1@debug_screen.New_Player_Animation_UI1": {}
+							},
+							{
+								"New_Player_Animation_Image@debug_screen.New_Player_Animation_Image": {}
+							},
+							{
+								"special_render@debug_screen.special_render": {}
+							}
+						]
+					}
+				},
+				"key": "New_Player_Animation_UI1",
+				"is_minified": true,
+				"children": {
+					"type": "label",
+					"text": "§bAnticheat by Blazer#1692 §eV1.2",
+					"shadow": true,
+					"font_size": "left",
+					"offset": [
+						33,
+						17
+					],
+					"anchor_from": "top_left",
+					"anchor_to": "top_left"
+				}
+			},
+			{
+				"key": "New_Player_Animation_Image",
+				"is_minified": true,
+				"children": {
+					"type": "image",
+					"texture": "textures/image",
+					"anchor_from": "top_left",
+					"anchor_to": "top_left",
+					"offset": [
+						5,
+						5
+					],
+					"size": [
+						23,
+						23
+					],
+					"layer": 3
+				}
+			},
+			{
+				"key": "special_render",
+				"is_minified": true,
+				"children": {
+					"type": "custome",
+					"renderer": "debug_screen_renderer"
+				}
+			},
+			{
+				"key": "content_panel",
+				"is_minified": true,
+				"children": {
+					"type": "panel",
+					"controls": [
+						{
+							"New_Player_Animation_UI@debug_screen.New_Player_Animation_UI": {}
+						},
+						{
+							"New_Player_Animation_UI1@debug_screen.New_Player_Animation_UI1": {}
+						},
+						{
+							"New_Player_Animation_Image@debug_screen.New_Player_Animation_Image": {}
+						},
+						{
+							"special_render@debug_screen.special_render": {}
+						}
+					]
+				}
+			}
+		]
+	}
+}

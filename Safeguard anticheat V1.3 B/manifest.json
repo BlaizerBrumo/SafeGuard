@@ -1,0 +1,46 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "SafeGuard anticheat",
+		"description": "Made by  Blazer#1692 V1.3",
+		"uuid": "82b3037f-a80a-49e1-88b8-941479b49a40",
+		"version": [
+			1,
+			0,
+			0
+		],
+		"min_engine_version": [
+			1,
+			17,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "f687bbec-ee45-42c5-8ce2-957153ca9557",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"metadata": {
+		"generated_with": {
+			"bridge": [
+				"1.8.4"
+			]
+		}
+	},
+	"dependencies": [
+		{
+			"version": [
+				1,
+				0,
+				0
+			],
+			"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad"
+		}
+	]
+}

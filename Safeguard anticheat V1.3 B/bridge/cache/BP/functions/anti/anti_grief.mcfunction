@@ -1,0 +1,8 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_behavior_packs\\Safeguard anti-cheat\\functions\\anti\\anti_grief.mcfunction",
+	"file_type": "function",
+	"format_version": 0,
+	"file_uuid": "af03a49c_eaf9_48c3_b322_bed5bed053c6",
+	"file_version": 27,
+	"cache_content": "#gamerule\r\nexecute @a[scores={grief_on=0}] ~~~ gamerule tntexplodes false\r\nexecute @a[scores={grief_on=0}] ~~~ gamerule respawnblocksexplode false\r\n#detect\r\nexecute @a[scores={grief_on=0}] ~~~ execute @e[type=tnt , tag=!admin] ~~~tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@p[tag=!admin]\"},{\"text\":\" §r§4Was detected summoning a §l§cTNT!§r\"}]}\r\n#clear inventory\r\nexecute @a[scores={grief_on=0}] ~~~ clear @a[tag=!admin] tnt 0\r\nexecute @a[scores={grief_on=0}] ~~~ clear @a[tag=!admin] tnt_minecart 0\r\nexecute @a[scores={grief_on=0}] ~~~ clear @a[tag=!admin] end_crystal 0\r\n#Kill tnt\r\nexecute @a[scores={grief_on=0}] ~~~ execute @a ~ ~ ~ kill @e[type=tnt]\r\nexecute @a[scores={grief_on=0}] ~~~ execute @a ~ ~ ~ kill @e[type=tnt_minecart]\r\n#Replace tnt and other explosive blocks as a security measure\r\nexecute @a[scores={grief_on=0}] ~~~ execute @a[tag=!admin] ~ ~ ~ fill ~8 ~5 ~8 ~-8 ~-5 ~-8 air 0 replace tnt\r\nexecute @a[scores={grief_on=0}] ~~~ execute @a[tag=!admin] ~ ~ ~ fill ~8 ~5 ~8 ~-8 ~-5 ~-8 air 0 replace fire"
+}
