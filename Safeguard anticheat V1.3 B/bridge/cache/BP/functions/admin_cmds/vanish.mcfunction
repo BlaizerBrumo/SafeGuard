@@ -1,8 +1,0 @@
-{
-	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_behavior_packs\\Safeguard anti-cheat\\functions\\admin_cmds\\vanish.mcfunction",
-	"file_type": "function",
-	"format_version": 0,
-	"file_uuid": "b7c9473b_369a_4be5_a6f2_27ccead9e190",
-	"file_version": 24,
-	"cache_content": "scoreboard players add @s[tag=admin] vanish 1\nscoreboard players set @s[tag=admin,scores={vanish=2..}] vanish 0\neffect @s[tag=admin,scores={vanish=0}] invisibility 0 0\neffect @s[tag=admin,scores={vanish=0}] night_vision 0 0\neffect @s[tag=admin,scores={vanish=1}] invisibility 99999 0 true\neffect @s[tag=admin,scores={vanish=1}] night_vision 99999 10 true\ntellraw @s[tag=admin,scores={vanish=1}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r §7Poof! You vanished!§r\"}]}\ntellraw @s[tag=admin,scores={vanish=0}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r §7Poof! You re-appeared!§r\"}]}\ntellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r §4You need admin tag to run this!§r\"}]}\nplaysound random.anvil_land @s[tag=!admin] ~~~\nplaysound note.bass @s[tag=admin] ~~~\n#notify\nexecute @s[scores={vanish=1}] ~~~ tellraw @a[tag=admin,scores={notify=1}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard Notify§6]§5§l \"},{\"selector\":\"@s[scores={vanish=1}]\"},{\"text\":\" §bvanished!§r\"}]}\nexecute @s[scores={vanish=0}] ~~~ tellraw @a[tag=admin,scores={notify=1}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard Notify§6]§5§l \"},{\"selector\":\"@s[scores={vanish=0}]\"},{\"text\":\" §bre-appeared from vanish!§r\"}]}"
-}
