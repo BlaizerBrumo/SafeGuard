@@ -1,5 +1,0 @@
-##bridge-file-version: #13
-pack.name=SafeGuard anticheat
-pack.description=made by Blazer#1692
-map.position=Coordinates: §4X: %s, §aY: %s, §bZ: %s§r
-disconnectionScreen.unexpectedPacket=§6[§eSafeGuard§6]§l Banned or obtained illegal item
