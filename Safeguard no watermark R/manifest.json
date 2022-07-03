@@ -1,0 +1,36 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "SafeGuard anticheat RES no watermark",
+		"description": "Made by  Blazer#9677 V1.3.5",
+		"uuid": "0120e9d8-3c3f-44e4-bb3c-838b7a9dfe54",
+		"version": [
+			1,
+			0,
+			0
+		],
+		"min_engine_version": [
+			1,
+			13,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "373e02ef-10e6-43ea-97bb-7e96317b31b0",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"metadata": {
+		"generated_with": {
+			"bridge": [
+				"1.8.4"
+			]
+		}
+	}
+}
