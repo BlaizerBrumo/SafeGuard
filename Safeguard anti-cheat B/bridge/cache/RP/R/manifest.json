@@ -1,0 +1,96 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_resource_packs\\Safeguard anti-cheat R\\manifest.json",
+	"file_type": "manifest_rp",
+	"format_version": 1,
+	"file_uuid": "195944ad_c3b1_4c68_bd57_fdc5e8f83e7f",
+	"file_version": 2,
+	"cache_content": {
+		"children": [
+			{
+				"data": "2",
+				"key": "format_version"
+			},
+			{
+				"open": {
+					"format_version": 2,
+					"header": {
+						"name": "SafeGuard anticheat",
+						"description": "Made by  Blazer#1692 V1.2",
+						"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad",
+						"version": [
+							1,
+							0,
+							0
+						],
+						"min_engine_version": [
+							1,
+							13,
+							0
+						]
+					},
+					"modules": [
+						{
+							"type": "resources",
+							"uuid": "e9b20740-0ca8-40b2-83df-9df02cd18ca8",
+							"version": [
+								1,
+								0,
+								0
+							]
+						}
+					],
+					"metadata": {
+						"generated_with": {
+							"bridge": [
+								"1.8.4"
+							]
+						}
+					}
+				},
+				"key": "header",
+				"is_minified": true,
+				"children": {
+					"name": "SafeGuard anticheat",
+					"description": "Made by  Blazer#1692 V1.2",
+					"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad",
+					"version": [
+						1,
+						0,
+						0
+					],
+					"min_engine_version": [
+						1,
+						13,
+						0
+					]
+				}
+			},
+			{
+				"key": "modules",
+				"is_minified": true,
+				"children": [
+					{
+						"type": "resources",
+						"uuid": "e9b20740-0ca8-40b2-83df-9df02cd18ca8",
+						"version": [
+							1,
+							0,
+							0
+						]
+					}
+				]
+			},
+			{
+				"key": "metadata",
+				"is_minified": true,
+				"children": {
+					"generated_with": {
+						"bridge": [
+							"1.8.4"
+						]
+					}
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,762 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_behavior_packs\\Safeguard anti-cheat\\entities\\command_block_minecart.json",
+	"file_type": "entity",
+	"format_version": 1,
+	"file_uuid": "73d5059d_9e35_40d1_916a_629b2bab0d91",
+	"file_version": 5,
+	"cache_content": {
+		"children": [
+			{
+				"data": "1.12.0",
+				"key": "format_version"
+			},
+			{
+				"open": {
+					"format_version": "1.12.0",
+					"minecraft:entity": {
+						"description": {
+							"identifier": "minecraft:command_block_minecart",
+							"is_spawnable": false,
+							"is_summonable": false,
+							"is_experimental": false
+						},
+						"component_groups": {
+							"minecraft:command_block_active": {
+								"minecraft:rail_sensor": {
+									"check_block_types": true,
+									"eject_on_activate": false,
+									"eject_on_deactivate": false,
+									"tick_command_block_on_activate": true,
+									"tick_command_block_on_deactivate": false,
+									"on_deactivate": {
+										"event": "minecraft:command_block_deactivate"
+									}
+								}
+							},
+							"minecraft:command_block_inactive": {
+								"minecraft:rail_sensor": {
+									"check_block_types": false,
+									"eject_on_activate": true,
+									"eject_on_deactivate": false,
+									"tick_command_block_on_activate": true,
+									"tick_command_block_on_deactivate": false,
+									"on_activate": {
+										"event": "minecraft:command_block_activate"
+									}
+								}
+							}
+						},
+						"components": {
+							"minecraft:type_family": {
+								"family": [
+									"minecart",
+									"inanimate"
+								]
+							},
+							"minecraft:collision_box": {
+								"width": 0.98,
+								"height": 0.7
+							},
+							"minecraft:rail_movement": {},
+							"minecraft:physics": {},
+							"minecraft:pushable": {
+								"is_pushable": true,
+								"is_pushable_by_piston": true
+							},
+							"minecraft:conditional_bandwidth_optimization": {
+								"default_values": {
+									"max_optimized_distance": 60,
+									"max_dropped_ticks": 20,
+									"use_motion_prediction_hints": true
+								},
+								"conditional_values": [
+									{
+										"max_optimized_distance": 0,
+										"max_dropped_ticks": 0,
+										"conditional_values": [
+											{
+												"test": "is_moving",
+												"subject": "self",
+												"operator": "==",
+												"value": true
+											}
+										]
+									}
+								]
+							},
+							"minecraft:instant_despawn": {}
+						},
+						"events": {
+							"minecraft:entity_spawned": {
+								"add": {
+									"component_groups": [
+										"minecraft:command_block_inactive"
+									]
+								},
+								"execute": {
+									"commands": [
+										"/function anti/anti_cbe"
+									]
+								}
+							},
+							"minecraft:command_block_deactivate": {
+								"remove": {
+									"component_groups": [
+										"minecraft:command_block_active"
+									]
+								},
+								"add": {
+									"component_groups": [
+										"minecraft:command_block_inactive"
+									]
+								}
+							}
+						}
+					}
+				},
+				"key": "minecraft:entity",
+				"children": [
+					{
+						"key": "description",
+						"is_minified": true,
+						"children": {
+							"identifier": "minecraft:command_block_minecart",
+							"is_spawnable": false,
+							"is_summonable": false,
+							"is_experimental": false
+						}
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "minecraft:command_block_minecart",
+								"is_spawnable": false,
+								"is_summonable": false,
+								"is_experimental": false
+							},
+							"component_groups": {
+								"minecraft:command_block_active": {
+									"minecraft:rail_sensor": {
+										"check_block_types": true,
+										"eject_on_activate": false,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_deactivate": {
+											"event": "minecraft:command_block_deactivate"
+										}
+									}
+								},
+								"minecraft:command_block_inactive": {
+									"minecraft:rail_sensor": {
+										"check_block_types": false,
+										"eject_on_activate": true,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_activate": {
+											"event": "minecraft:command_block_activate"
+										}
+									}
+								}
+							},
+							"components": {
+								"minecraft:type_family": {
+									"family": [
+										"minecart",
+										"inanimate"
+									]
+								},
+								"minecraft:collision_box": {
+									"width": 0.98,
+									"height": 0.7
+								},
+								"minecraft:rail_movement": {},
+								"minecraft:physics": {},
+								"minecraft:pushable": {
+									"is_pushable": true,
+									"is_pushable_by_piston": true
+								},
+								"minecraft:conditional_bandwidth_optimization": {
+									"default_values": {
+										"max_optimized_distance": 60,
+										"max_dropped_ticks": 20,
+										"use_motion_prediction_hints": true
+									},
+									"conditional_values": [
+										{
+											"max_optimized_distance": 0,
+											"max_dropped_ticks": 0,
+											"conditional_values": [
+												{
+													"test": "is_moving",
+													"subject": "self",
+													"operator": "==",
+													"value": true
+												}
+											]
+										}
+									]
+								},
+								"minecraft:instant_despawn": {}
+							},
+							"events": {
+								"minecraft:entity_spawned": {
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									},
+									"execute": {
+										"commands": [
+											"/function anti/anti_cbe"
+										]
+									}
+								},
+								"minecraft:command_block_deactivate": {
+									"remove": {
+										"component_groups": [
+											"minecraft:command_block_active"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									}
+								}
+							}
+						},
+						"key": "component_groups",
+						"children": [
+							{
+								"key": "minecraft:command_block_active",
+								"is_minified": true,
+								"children": {
+									"minecraft:rail_sensor": {
+										"check_block_types": true,
+										"eject_on_activate": false,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_deactivate": {
+											"event": "minecraft:command_block_deactivate"
+										}
+									}
+								}
+							},
+							{
+								"key": "minecraft:command_block_inactive",
+								"children": [
+									{
+										"open": {
+											"minecraft:rail_sensor": {
+												"check_block_types": false,
+												"eject_on_activate": true,
+												"eject_on_deactivate": false,
+												"tick_command_block_on_activate": true,
+												"tick_command_block_on_deactivate": false,
+												"on_activate": {
+													"event": "minecraft:command_block_activate"
+												}
+											}
+										},
+										"key": "minecraft:rail_sensor",
+										"children": [
+											{
+												"data": "false",
+												"key": "check_block_types"
+											},
+											{
+												"data": "true",
+												"key": "eject_on_activate"
+											},
+											{
+												"data": "false",
+												"key": "eject_on_deactivate"
+											},
+											{
+												"open": {
+													"check_block_types": false,
+													"eject_on_activate": true,
+													"eject_on_deactivate": false,
+													"tick_command_block_on_activate": true,
+													"tick_command_block_on_deactivate": false,
+													"on_activate": {
+														"event": "minecraft:command_block_activate"
+													}
+												},
+												"data": "true",
+												"key": "tick_command_block_on_activate"
+											},
+											{
+												"data": "false",
+												"key": "tick_command_block_on_deactivate"
+											},
+											{
+												"open": {
+													"check_block_types": false,
+													"eject_on_activate": true,
+													"eject_on_deactivate": false,
+													"tick_command_block_on_activate": true,
+													"tick_command_block_on_deactivate": false,
+													"on_activate": {
+														"event": "minecraft:command_block_activate"
+													}
+												},
+												"key": "on_activate",
+												"is_minified": true,
+												"children": {
+													"event": "minecraft:command_block_activate"
+												}
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "minecraft:command_block_minecart",
+								"is_spawnable": false,
+								"is_summonable": false,
+								"is_experimental": false
+							},
+							"component_groups": {
+								"minecraft:command_block_active": {
+									"minecraft:rail_sensor": {
+										"check_block_types": true,
+										"eject_on_activate": false,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_deactivate": {
+											"event": "minecraft:command_block_deactivate"
+										}
+									}
+								},
+								"minecraft:command_block_inactive": {
+									"minecraft:rail_sensor": {
+										"check_block_types": false,
+										"eject_on_activate": true,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_activate": {
+											"event": "minecraft:command_block_activate"
+										}
+									}
+								}
+							},
+							"components": {
+								"minecraft:type_family": {
+									"family": [
+										"minecart",
+										"inanimate"
+									]
+								},
+								"minecraft:collision_box": {
+									"width": 0.98,
+									"height": 0.7
+								},
+								"minecraft:rail_movement": {},
+								"minecraft:physics": {},
+								"minecraft:pushable": {
+									"is_pushable": true,
+									"is_pushable_by_piston": true
+								},
+								"minecraft:conditional_bandwidth_optimization": {
+									"default_values": {
+										"max_optimized_distance": 60,
+										"max_dropped_ticks": 20,
+										"use_motion_prediction_hints": true
+									},
+									"conditional_values": [
+										{
+											"max_optimized_distance": 0,
+											"max_dropped_ticks": 0,
+											"conditional_values": [
+												{
+													"test": "is_moving",
+													"subject": "self",
+													"operator": "==",
+													"value": true
+												}
+											]
+										}
+									]
+								},
+								"minecraft:instant_despawn": {}
+							},
+							"events": {
+								"minecraft:entity_spawned": {
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									},
+									"execute": {
+										"commands": [
+											"/function anti/anti_cbe"
+										]
+									}
+								},
+								"minecraft:command_block_deactivate": {
+									"remove": {
+										"component_groups": [
+											"minecraft:command_block_active"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									}
+								}
+							}
+						},
+						"key": "components",
+						"children": [
+							{
+								"key": "minecraft:type_family",
+								"children": [
+									{
+										"open": {
+											"family": [
+												"minecart",
+												"inanimate"
+											]
+										},
+										"key": "family",
+										"is_minified": true,
+										"children": [
+											"minecart",
+											"inanimate"
+										]
+									}
+								]
+							},
+							{
+								"key": "minecraft:collision_box",
+								"is_minified": true,
+								"children": {
+									"width": 0.98,
+									"height": 0.7
+								}
+							},
+							{
+								"key": "minecraft:rail_movement",
+								"is_minified": true,
+								"children": {}
+							},
+							{
+								"key": "minecraft:physics",
+								"is_minified": true,
+								"children": {}
+							},
+							{
+								"key": "minecraft:pushable",
+								"is_minified": true,
+								"children": {
+									"is_pushable": true,
+									"is_pushable_by_piston": true
+								}
+							},
+							{
+								"key": "minecraft:conditional_bandwidth_optimization",
+								"is_minified": true,
+								"children": {
+									"default_values": {
+										"max_optimized_distance": 60,
+										"max_dropped_ticks": 20,
+										"use_motion_prediction_hints": true
+									},
+									"conditional_values": [
+										{
+											"max_optimized_distance": 0,
+											"max_dropped_ticks": 0,
+											"conditional_values": [
+												{
+													"test": "is_moving",
+													"subject": "self",
+													"operator": "==",
+													"value": true
+												}
+											]
+										}
+									]
+								}
+							},
+							{
+								"key": "minecraft:instant_despawn",
+								"is_minified": true,
+								"children": {}
+							}
+						]
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "minecraft:command_block_minecart",
+								"is_spawnable": false,
+								"is_summonable": false,
+								"is_experimental": false
+							},
+							"component_groups": {
+								"minecraft:command_block_active": {
+									"minecraft:rail_sensor": {
+										"check_block_types": true,
+										"eject_on_activate": false,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_deactivate": {
+											"event": "minecraft:command_block_deactivate"
+										}
+									}
+								},
+								"minecraft:command_block_inactive": {
+									"minecraft:rail_sensor": {
+										"check_block_types": false,
+										"eject_on_activate": true,
+										"eject_on_deactivate": false,
+										"tick_command_block_on_activate": true,
+										"tick_command_block_on_deactivate": false,
+										"on_activate": {
+											"event": "minecraft:command_block_activate"
+										}
+									}
+								}
+							},
+							"components": {
+								"minecraft:type_family": {
+									"family": [
+										"minecart",
+										"inanimate"
+									]
+								},
+								"minecraft:collision_box": {
+									"width": 0.98,
+									"height": 0.7
+								},
+								"minecraft:rail_movement": {},
+								"minecraft:physics": {},
+								"minecraft:pushable": {
+									"is_pushable": true,
+									"is_pushable_by_piston": true
+								},
+								"minecraft:conditional_bandwidth_optimization": {
+									"default_values": {
+										"max_optimized_distance": 60,
+										"max_dropped_ticks": 20,
+										"use_motion_prediction_hints": true
+									},
+									"conditional_values": [
+										{
+											"max_optimized_distance": 0,
+											"max_dropped_ticks": 0,
+											"conditional_values": [
+												{
+													"test": "is_moving",
+													"subject": "self",
+													"operator": "==",
+													"value": true
+												}
+											]
+										}
+									]
+								},
+								"minecraft:instant_despawn": {}
+							},
+							"events": {
+								"minecraft:entity_spawned": {
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									},
+									"execute": {
+										"commands": [
+											"/function anti/anti_cbe"
+										]
+									}
+								},
+								"minecraft:command_block_deactivate": {
+									"remove": {
+										"component_groups": [
+											"minecraft:command_block_active"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:command_block_inactive"
+										]
+									}
+								}
+							}
+						},
+						"key": "events",
+						"children": [
+							{
+								"open": {
+									"minecraft:entity_spawned": {
+										"add": {
+											"component_groups": [
+												"minecraft:command_block_inactive"
+											]
+										},
+										"execute": {
+											"commands": [
+												"/function anti/anti_cbe"
+											]
+										}
+									},
+									"minecraft:command_block_deactivate": {
+										"remove": {
+											"component_groups": [
+												"minecraft:command_block_active"
+											]
+										},
+										"add": {
+											"component_groups": [
+												"minecraft:command_block_inactive"
+											]
+										}
+									}
+								},
+								"key": "minecraft:entity_spawned",
+								"children": [
+									{
+										"key": "add",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"minecraft:command_block_inactive"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"minecraft:command_block_inactive"
+												]
+											}
+										]
+									},
+									{
+										"open": {
+											"add": {
+												"component_groups": [
+													"minecraft:command_block_inactive"
+												]
+											},
+											"execute": {
+												"commands": [
+													"/function anti/anti_cbe"
+												]
+											}
+										},
+										"key": "execute",
+										"children": [
+											{
+												"open": {
+													"commands": [
+														"/function anti/anti_cbe"
+													]
+												},
+												"key": "commands",
+												"is_minified": true,
+												"children": [
+													"/function anti/anti_cbe"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"open": {
+									"minecraft:entity_spawned": {
+										"add": {
+											"component_groups": [
+												"minecraft:command_block_inactive"
+											]
+										},
+										"execute": {
+											"commands": [
+												"/function anti/anti_cbe"
+											]
+										}
+									},
+									"minecraft:command_block_deactivate": {
+										"remove": {
+											"component_groups": [
+												"minecraft:command_block_active"
+											]
+										},
+										"add": {
+											"component_groups": [
+												"minecraft:command_block_inactive"
+											]
+										}
+									}
+								},
+								"key": "minecraft:command_block_deactivate",
+								"children": [
+									{
+										"key": "remove",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"minecraft:command_block_active"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"minecraft:command_block_active"
+												]
+											}
+										]
+									},
+									{
+										"open": {
+											"remove": {
+												"component_groups": [
+													"minecraft:command_block_active"
+												]
+											},
+											"add": {
+												"component_groups": [
+													"minecraft:command_block_inactive"
+												]
+											}
+										},
+										"key": "add",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"minecraft:command_block_inactive"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"minecraft:command_block_inactive"
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}

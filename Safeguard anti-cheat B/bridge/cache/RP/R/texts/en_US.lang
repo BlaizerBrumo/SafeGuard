@@ -1,0 +1,8 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_resource_packs\\Safeguard anti-cheat R\\texts\\en_US.lang",
+	"file_type": "client_lang",
+	"format_version": 0,
+	"file_uuid": "80651c5b_35ed_4560_b458_932a4085b7bd",
+	"file_version": 13,
+	"cache_content": "pack.name=SafeGuard anticheat\r\npack.description=made by Blazer#1692\r\nmap.position=Coordinates: §4X: %s, §aY: %s, §bZ: %s§r\r\ndisconnectionScreen.unexpectedPacket=§6[§eSafeGuard§6]§l Banned or obtained illegal item"
+}
