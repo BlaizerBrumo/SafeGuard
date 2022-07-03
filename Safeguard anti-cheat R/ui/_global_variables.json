@@ -1,0 +1,6 @@
+{
+//This is the npc textbox var
+  "$npc_dialog_text_color": [ 1.0, 1.0, 1.0 ]
+
+
+}
