@@ -3,16 +3,12 @@
 	"file_type": "entity",
 	"format_version": 1,
 	"file_uuid": "e8d8140f_8f72_471b_9c87_64452388a21f",
-	"file_version": 6,
+	"file_version": 60,
 	"cache_content": {
 		"children": [
 			{
-				"data": "1.16.0",
-				"key": "format_version"
-			},
-			{
 				"open": {
-					"format_version": "1.16.0",
+					"format_version": "1.17.0",
 					"minecraft:entity": {
 						"description": {
 							"identifier": "minecraft:player",
@@ -20,11 +16,13 @@
 							"is_summonable": false,
 							"is_experimental": false,
 							"animations": {
-								"death_effect": "controller.animation.death_effect"
+								"death_effect": "controller.animation.death_effect",
+								"admin_panel": "controller.animation.settings"
 							},
 							"scripts": {
 								"animate": [
-									"death_effect"
+									"death_effect",
+									"admin_panel"
 								]
 							}
 						},
@@ -63,6 +61,19 @@
 								},
 								"minecraft:spell_effects": {
 									"remove_effects": "bad_omen"
+								}
+							},
+							"safeguard:kick": {
+								"minecraft:instant_despawn": {
+									"remove_child_entities": true
+								}
+							},
+							"safeguard:dialogue": {
+								"minecraft:npc": {}
+							},
+							"safeguard:perm_ban": {
+								"minecraft:instant_despawn": {
+									"remove_child_entities": true
 								}
 							}
 						},
@@ -167,7 +178,6 @@
 								]
 							},
 							"minecraft:conditional_bandwidth_optimization": {},
-							"minecraft:scaffolding_climber": {},
 							"minecraft:environment_sensor": {
 								"triggers": {
 									"filters": {
@@ -187,212 +197,9 @@
 									"event": "minecraft:trigger_raid"
 								}
 							},
-							"events": {
-								"minecraft:gain_bad_omen": {
-									"add": {
-										"component_groups": [
-											"minecraft:add_bad_omen"
-										]
-									}
-								},
-								"minecraft:clear_add_bad_omen": {
-									"remove": {
-										"component_groups": [
-											"minecraft:add_bad_omen"
-										]
-									},
-									"add": {
-										"component_groups": [
-											"minecraft:clear_bad_omen_spell_effect"
-										]
-									}
-								},
-								"minecraft:trigger_raid": {
-									"add": {
-										"component_groups": [
-											"minecraft:raid_trigger"
-										]
-									}
-								},
-								"minecraft:remove_raid_trigger": {
-									"remove": {
-										"component_groups": [
-											"minecraft:raid_trigger"
-										]
-									}
-								}
-							},
 							"minecraft:despawn": {
 								"filters": {
 									"any_of": [
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:movingblock"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"value": "minecraft:movingBlock",
-													"domain": "any"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:fire"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:portal"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:lava"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:water"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:end_portal"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:end_gateway"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:soul_fire"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:invisiblebedrock"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:invisibleBedrock"
-												}
-											]
-										},
-										{
-											"all_of": [
-												{
-													"test": "has_tag",
-													"value": "admin",
-													"operator": "!="
-												},
-												{
-													"test": "has_equipment",
-													"domain": "any",
-													"value": "minecraft:glowingobsidian"
-												}
-											]
-										},
 										{
 											"all_of": [
 												{
@@ -407,6 +214,187 @@
 											]
 										}
 									]
+								}
+							},
+							"minecraft:scaffolding_climber": {},
+							"minecraft:timer": {
+								"looping": true,
+								"time": 0.1,
+								"time_down_event": {
+									"filters": {
+										"any_of": [
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:movingblock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"value": "minecraft:movingBlock",
+														"domain": "any"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:fire"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:lava"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:water"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:end_portal"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:end_gateway"
+													},
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:soul_fire"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:invisiblebedrock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:invisibleBedrock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:glowingobsidian"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:portal"
+													}
+												]
+											}
+										]
+									},
+									"event": "safeguard:item",
+									"target": "self"
 								}
 							}
 						},
@@ -443,522 +431,88 @@
 										"minecraft:raid_trigger"
 									]
 								}
+							},
+							"safeguard:setup": {
+								"run_command": {
+									"command": [
+										"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+									]
+								}
+							},
+							"safeguard:item": {
+								"run_command": {
+									"command": [
+										"function assets/illegal_item"
+									]
+								}
+							},
+							"safeguard:kick": {
+								"add": {
+									"component_groups": [
+										"safeguard:kick"
+									]
+								}
+							},
+							"safeguard:remove_kick": {
+								"remove": {
+									"component_groups": [
+										"safeguard:kick"
+									]
+								}
+							},
+							"safeguard:open_dialogue": {
+								"add": {
+									"component_groups": [
+										"safeguard:dialogue"
+									]
+								}
+							},
+							"safeguard:close_dialogue": {
+								"remove": {
+									"component_groups": [
+										"safeguard:dialogue"
+									]
+								}
+							},
+							"safeguard:perm_ban": {
+								"add": {
+									"component_groups": [
+										"safeguard:perm_ban"
+									]
+								},
+								"run_command": {
+									"command": [
+										"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+									]
+								}
 							}
 						}
 					}
 				},
-				"key": "minecraft:entity",
-				"children": [
-					{
-						"open": {
-							"description": {
-								"identifier": "minecraft:player",
-								"is_spawnable": false,
-								"is_summonable": false,
-								"is_experimental": false,
-								"animations": {
-									"death_effect": "controller.animation.death_effect"
-								},
-								"scripts": {
-									"animate": [
-										"death_effect"
-									]
-								}
+				"data": "1.17.0",
+				"key": "format_version"
+			},
+			{
+				"open": {
+					"format_version": "1.17.0",
+					"minecraft:entity": {
+						"description": {
+							"identifier": "minecraft:player",
+							"is_spawnable": false,
+							"is_summonable": false,
+							"is_experimental": false,
+							"animations": {
+								"death_effect": "controller.animation.death_effect",
+								"admin_panel": "controller.animation.settings"
 							},
-							"component_groups": {
-								"minecraft:add_bad_omen": {
-									"minecraft:spell_effects": {
-										"add_effects": [
-											{
-												"effect": "bad_omen",
-												"duration": 6000,
-												"display_on_screen_animation": true
-											}
-										]
-									},
-									"minecraft:timer": {
-										"time": [
-											0,
-											0
-										],
-										"looping": false,
-										"time_down_event": {
-											"event": "minecraft:clear_add_bad_omen",
-											"target": "self"
-										}
-									}
-								},
-								"minecraft:clear_bad_omen_spell_effect": {
-									"minecraft:spell_effects": {}
-								},
-								"minecraft:raid_trigger": {
-									"minecraft:raid_trigger": {
-										"triggered_event": {
-											"event": "minecraft:remove_raid_trigger",
-											"target": "self"
-										}
-									},
-									"minecraft:spell_effects": {
-										"remove_effects": "bad_omen"
-									}
-								}
-							},
-							"components": {
-								"minecraft:experience_reward": {
-									"on_death": "Math.Min(query.player_level * 7, 100)"
-								},
-								"minecraft:type_family": {
-									"family": [
-										"player"
-									]
-								},
-								"minecraft:is_hidden_when_invisible": {},
-								"minecraft:loot": {
-									"table": "loot_tables/empty.json"
-								},
-								"minecraft:collision_box": {
-									"width": 0.6,
-									"height": 1.8
-								},
-								"minecraft:can_climb": {},
-								"minecraft:movement": {
-									"value": 0.1
-								},
-								"minecraft:hurt_on_condition": {
-									"damage_conditions": [
-										{
-											"filters": {
-												"test": "in_lava",
-												"subject": "self",
-												"operator": "==",
-												"value": true
-											},
-											"cause": "lava",
-											"damage_per_tick": 4
-										}
-									]
-								},
-								"minecraft:attack": {
-									"damage": 1
-								},
-								"minecraft:player.saturation": {
-									"value": 20
-								},
-								"minecraft:player.exhaustion": {
-									"value": 0,
-									"max": 4
-								},
-								"minecraft:player.level": {
-									"value": 0,
-									"max": 24791
-								},
-								"minecraft:player.experience": {
-									"value": 0,
-									"max": 1
-								},
-								"minecraft:breathable": {
-									"total_supply": 15,
-									"suffocate_time": -1,
-									"inhale_time": 3.75,
-									"generates_bubbles": false
-								},
-								"minecraft:nameable": {
-									"always_show": true,
-									"allow_name_tag_renaming": false
-								},
-								"minecraft:physics": {},
-								"minecraft:pushable": {
-									"is_pushable": false,
-									"is_pushable_by_piston": true
-								},
-								"minecraft:insomnia": {
-									"days_until_insomnia": 3
-								},
-								"minecraft:rideable": {
-									"seat_count": 2,
-									"family_types": [
-										"parrot_tame"
-									],
-									"pull_in_entities": true,
-									"seats": [
-										{
-											"position": [
-												0.4,
-												-0.2,
-												-0.1
-											],
-											"min_rider_count": 0,
-											"max_rider_count": 0,
-											"lock_rider_rotation": 0
-										},
-										{
-											"position": [
-												-0.4,
-												-0.2,
-												-0.1
-											],
-											"min_rider_count": 1,
-											"max_rider_count": 2,
-											"lock_rider_rotation": 0
-										}
-									]
-								},
-								"minecraft:conditional_bandwidth_optimization": {},
-								"minecraft:scaffolding_climber": {},
-								"minecraft:environment_sensor": {
-									"triggers": {
-										"filters": {
-											"all_of": [
-												{
-													"test": "has_mob_effect",
-													"subject": "self",
-													"value": "bad_omen"
-												},
-												{
-													"test": "is_in_village",
-													"subject": "self",
-													"value": true
-												}
-											]
-										},
-										"event": "minecraft:trigger_raid"
-									}
-								},
-								"events": {
-									"minecraft:gain_bad_omen": {
-										"add": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										}
-									},
-									"minecraft:clear_add_bad_omen": {
-										"remove": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										},
-										"add": {
-											"component_groups": [
-												"minecraft:clear_bad_omen_spell_effect"
-											]
-										}
-									},
-									"minecraft:trigger_raid": {
-										"add": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									},
-									"minecraft:remove_raid_trigger": {
-										"remove": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									}
-								},
-								"minecraft:despawn": {
-									"filters": {
-										"any_of": [
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:movingblock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"value": "minecraft:movingBlock",
-														"domain": "any"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:fire"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:portal"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:lava"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:water"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:end_portal"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:end_gateway"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:soul_fire"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:invisiblebedrock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:invisibleBedrock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:glowingobsidian"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_tag",
-														"value": "Ban"
-													}
-												]
-											}
-										]
-									}
-								}
-							},
-							"events": {
-								"minecraft:gain_bad_omen": {
-									"add": {
-										"component_groups": [
-											"minecraft:add_bad_omen"
-										]
-									}
-								},
-								"minecraft:clear_add_bad_omen": {
-									"remove": {
-										"component_groups": [
-											"minecraft:add_bad_omen"
-										]
-									},
-									"add": {
-										"component_groups": [
-											"minecraft:clear_bad_omen_spell_effect"
-										]
-									}
-								},
-								"minecraft:trigger_raid": {
-									"add": {
-										"component_groups": [
-											"minecraft:raid_trigger"
-										]
-									}
-								},
-								"minecraft:remove_raid_trigger": {
-									"remove": {
-										"component_groups": [
-											"minecraft:raid_trigger"
-										]
-									}
-								}
-							}
-						},
-						"key": "description",
-						"children": [
-							{
-								"data": "minecraft:player",
-								"key": "identifier"
-							},
-							{
-								"data": "false",
-								"key": "is_spawnable"
-							},
-							{
-								"data": "false",
-								"key": "is_summonable"
-							},
-							{
-								"data": "false",
-								"key": "is_experimental"
-							},
-							{
-								"open": {
-									"identifier": "minecraft:player",
-									"is_spawnable": false,
-									"is_summonable": false,
-									"is_experimental": false,
-									"animations": {
-										"death_effect": "controller.animation.death_effect"
-									},
-									"scripts": {
-										"animate": [
-											"death_effect"
-										]
-									}
-								},
-								"key": "animations",
-								"is_minified": true,
-								"children": {
-									"death_effect": "controller.animation.death_effect"
-								}
-							},
-							{
-								"open": {
-									"identifier": "minecraft:player",
-									"is_spawnable": false,
-									"is_summonable": false,
-									"is_experimental": false,
-									"animations": {
-										"death_effect": "controller.animation.death_effect"
-									},
-									"scripts": {
-										"animate": [
-											"death_effect"
-										]
-									}
-								},
-								"key": "scripts",
-								"children": [
-									{
-										"open": {
-											"animate": [
-												"death_effect"
-											]
-										},
-										"key": "animate",
-										"is_minified": true,
-										"children": [
-											"death_effect"
-										]
-									}
+							"scripts": {
+								"animate": [
+									"death_effect",
+									"admin_panel"
 								]
 							}
-						]
-					},
-					{
-						"key": "component_groups",
-						"is_minified": true,
-						"children": {
+						},
+						"component_groups": {
 							"minecraft:add_bad_omen": {
 								"minecraft:spell_effects": {
 									"add_effects": [
@@ -994,8 +548,482 @@
 								"minecraft:spell_effects": {
 									"remove_effects": "bad_omen"
 								}
+							},
+							"safeguard:kick": {
+								"minecraft:instant_despawn": {
+									"remove_child_entities": true
+								}
+							},
+							"safeguard:dialogue": {
+								"minecraft:npc": {}
+							},
+							"safeguard:perm_ban": {
+								"minecraft:instant_despawn": {
+									"remove_child_entities": true
+								}
+							}
+						},
+						"components": {
+							"minecraft:experience_reward": {
+								"on_death": "Math.Min(query.player_level * 7, 100)"
+							},
+							"minecraft:type_family": {
+								"family": [
+									"player"
+								]
+							},
+							"minecraft:is_hidden_when_invisible": {},
+							"minecraft:loot": {
+								"table": "loot_tables/empty.json"
+							},
+							"minecraft:collision_box": {
+								"width": 0.6,
+								"height": 1.8
+							},
+							"minecraft:can_climb": {},
+							"minecraft:movement": {
+								"value": 0.1
+							},
+							"minecraft:hurt_on_condition": {
+								"damage_conditions": [
+									{
+										"filters": {
+											"test": "in_lava",
+											"subject": "self",
+											"operator": "==",
+											"value": true
+										},
+										"cause": "lava",
+										"damage_per_tick": 4
+									}
+								]
+							},
+							"minecraft:attack": {
+								"damage": 1
+							},
+							"minecraft:player.saturation": {
+								"value": 20
+							},
+							"minecraft:player.exhaustion": {
+								"value": 0,
+								"max": 4
+							},
+							"minecraft:player.level": {
+								"value": 0,
+								"max": 24791
+							},
+							"minecraft:player.experience": {
+								"value": 0,
+								"max": 1
+							},
+							"minecraft:breathable": {
+								"total_supply": 15,
+								"suffocate_time": -1,
+								"inhale_time": 3.75,
+								"generates_bubbles": false
+							},
+							"minecraft:nameable": {
+								"always_show": true,
+								"allow_name_tag_renaming": false
+							},
+							"minecraft:physics": {},
+							"minecraft:pushable": {
+								"is_pushable": false,
+								"is_pushable_by_piston": true
+							},
+							"minecraft:insomnia": {
+								"days_until_insomnia": 3
+							},
+							"minecraft:rideable": {
+								"seat_count": 2,
+								"family_types": [
+									"parrot_tame"
+								],
+								"pull_in_entities": true,
+								"seats": [
+									{
+										"position": [
+											0.4,
+											-0.2,
+											-0.1
+										],
+										"min_rider_count": 0,
+										"max_rider_count": 0,
+										"lock_rider_rotation": 0
+									},
+									{
+										"position": [
+											-0.4,
+											-0.2,
+											-0.1
+										],
+										"min_rider_count": 1,
+										"max_rider_count": 2,
+										"lock_rider_rotation": 0
+									}
+								]
+							},
+							"minecraft:conditional_bandwidth_optimization": {},
+							"minecraft:environment_sensor": {
+								"triggers": {
+									"filters": {
+										"all_of": [
+											{
+												"test": "has_mob_effect",
+												"subject": "self",
+												"value": "bad_omen"
+											},
+											{
+												"test": "is_in_village",
+												"subject": "self",
+												"value": true
+											}
+										]
+									},
+									"event": "minecraft:trigger_raid"
+								}
+							},
+							"minecraft:despawn": {
+								"filters": {
+									"any_of": [
+										{
+											"all_of": [
+												{
+													"test": "has_tag",
+													"value": "admin",
+													"operator": "!="
+												},
+												{
+													"test": "has_tag",
+													"value": "Ban"
+												}
+											]
+										}
+									]
+								}
+							},
+							"minecraft:scaffolding_climber": {},
+							"minecraft:timer": {
+								"looping": true,
+								"time": 0.1,
+								"time_down_event": {
+									"filters": {
+										"any_of": [
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:movingblock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"value": "minecraft:movingBlock",
+														"domain": "any"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:fire"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:lava"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:water"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:end_portal"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:end_gateway"
+													},
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:soul_fire"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:invisiblebedrock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:invisibleBedrock"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:glowingobsidian"
+													}
+												]
+											},
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_equipment",
+														"domain": "any",
+														"value": "minecraft:portal"
+													}
+												]
+											}
+										]
+									},
+									"event": "safeguard:item",
+									"target": "self"
+								}
+							}
+						},
+						"events": {
+							"minecraft:gain_bad_omen": {
+								"add": {
+									"component_groups": [
+										"minecraft:add_bad_omen"
+									]
+								}
+							},
+							"minecraft:clear_add_bad_omen": {
+								"remove": {
+									"component_groups": [
+										"minecraft:add_bad_omen"
+									]
+								},
+								"add": {
+									"component_groups": [
+										"minecraft:clear_bad_omen_spell_effect"
+									]
+								}
+							},
+							"minecraft:trigger_raid": {
+								"add": {
+									"component_groups": [
+										"minecraft:raid_trigger"
+									]
+								}
+							},
+							"minecraft:remove_raid_trigger": {
+								"remove": {
+									"component_groups": [
+										"minecraft:raid_trigger"
+									]
+								}
+							},
+							"safeguard:setup": {
+								"run_command": {
+									"command": [
+										"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+									]
+								}
+							},
+							"safeguard:item": {
+								"run_command": {
+									"command": [
+										"function assets/illegal_item"
+									]
+								}
+							},
+							"safeguard:kick": {
+								"add": {
+									"component_groups": [
+										"safeguard:kick"
+									]
+								}
+							},
+							"safeguard:remove_kick": {
+								"remove": {
+									"component_groups": [
+										"safeguard:kick"
+									]
+								}
+							},
+							"safeguard:open_dialogue": {
+								"add": {
+									"component_groups": [
+										"safeguard:dialogue"
+									]
+								}
+							},
+							"safeguard:close_dialogue": {
+								"remove": {
+									"component_groups": [
+										"safeguard:dialogue"
+									]
+								}
+							},
+							"safeguard:perm_ban": {
+								"add": {
+									"component_groups": [
+										"safeguard:perm_ban"
+									]
+								},
+								"run_command": {
+									"command": [
+										"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+									]
+								}
 							}
 						}
+					}
+				},
+				"key": "minecraft:entity",
+				"children": [
+					{
+						"key": "description",
+						"children": [
+							{
+								"data": "minecraft:player",
+								"key": "identifier"
+							},
+							{
+								"data": "false",
+								"key": "is_spawnable"
+							},
+							{
+								"data": "false",
+								"key": "is_summonable"
+							},
+							{
+								"data": "false",
+								"key": "is_experimental"
+							},
+							{
+								"key": "animations",
+								"is_minified": true,
+								"children": {
+									"death_effect": "controller.animation.death_effect",
+									"admin_panel": "controller.animation.settings"
+								}
+							},
+							{
+								"key": "scripts",
+								"children": [
+									{
+										"open": {
+											"animate": [
+												"death_effect",
+												"admin_panel"
+											]
+										},
+										"key": "animate",
+										"is_minified": true,
+										"children": [
+											"death_effect",
+											"admin_panel"
+										]
+									}
+								]
+							}
+						]
 					},
 					{
 						"open": {
@@ -1005,11 +1033,13 @@
 								"is_summonable": false,
 								"is_experimental": false,
 								"animations": {
-									"death_effect": "controller.animation.death_effect"
+									"death_effect": "controller.animation.death_effect",
+									"admin_panel": "controller.animation.settings"
 								},
 								"scripts": {
 									"animate": [
-										"death_effect"
+										"death_effect",
+										"admin_panel"
 									]
 								}
 							},
@@ -1048,6 +1078,19 @@
 									},
 									"minecraft:spell_effects": {
 										"remove_effects": "bad_omen"
+									}
+								},
+								"safeguard:kick": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								},
+								"safeguard:dialogue": {
+									"minecraft:npc": {}
+								},
+								"safeguard:perm_ban": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
 									}
 								}
 							},
@@ -1152,7 +1195,6 @@
 									]
 								},
 								"minecraft:conditional_bandwidth_optimization": {},
-								"minecraft:scaffolding_climber": {},
 								"minecraft:environment_sensor": {
 									"triggers": {
 										"filters": {
@@ -1172,212 +1214,9 @@
 										"event": "minecraft:trigger_raid"
 									}
 								},
-								"events": {
-									"minecraft:gain_bad_omen": {
-										"add": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										}
-									},
-									"minecraft:clear_add_bad_omen": {
-										"remove": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										},
-										"add": {
-											"component_groups": [
-												"minecraft:clear_bad_omen_spell_effect"
-											]
-										}
-									},
-									"minecraft:trigger_raid": {
-										"add": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									},
-									"minecraft:remove_raid_trigger": {
-										"remove": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									}
-								},
 								"minecraft:despawn": {
 									"filters": {
 										"any_of": [
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:movingblock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"value": "minecraft:movingBlock",
-														"domain": "any"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:fire"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:portal"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:lava"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:water"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:end_portal"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:end_gateway"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:soul_fire"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:invisiblebedrock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:invisibleBedrock"
-													}
-												]
-											},
-											{
-												"all_of": [
-													{
-														"test": "has_tag",
-														"value": "admin",
-														"operator": "!="
-													},
-													{
-														"test": "has_equipment",
-														"domain": "any",
-														"value": "minecraft:glowingobsidian"
-													}
-												]
-											},
 											{
 												"all_of": [
 													{
@@ -1392,6 +1231,187 @@
 												]
 											}
 										]
+									}
+								},
+								"minecraft:scaffolding_climber": {},
+								"minecraft:timer": {
+									"looping": true,
+									"time": 0.1,
+									"time_down_event": {
+										"filters": {
+											"any_of": [
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:movingblock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"value": "minecraft:movingBlock",
+															"domain": "any"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:lava"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:water"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_portal"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_gateway"
+														},
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:soul_fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisiblebedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisibleBedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:glowingobsidian"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:portal"
+														}
+													]
+												}
+											]
+										},
+										"event": "safeguard:item",
+										"target": "self"
 									}
 								}
 							},
@@ -1426,6 +1446,751 @@
 									"remove": {
 										"component_groups": [
 											"minecraft:raid_trigger"
+										]
+									}
+								},
+								"safeguard:setup": {
+									"run_command": {
+										"command": [
+											"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+										]
+									}
+								},
+								"safeguard:item": {
+									"run_command": {
+										"command": [
+											"function assets/illegal_item"
+										]
+									}
+								},
+								"safeguard:kick": {
+									"add": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:remove_kick": {
+									"remove": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:open_dialogue": {
+									"add": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:close_dialogue": {
+									"remove": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:perm_ban": {
+									"add": {
+										"component_groups": [
+											"safeguard:perm_ban"
+										]
+									},
+									"run_command": {
+										"command": [
+											"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+										]
+									}
+								}
+							}
+						},
+						"key": "component_groups",
+						"children": [
+							{
+								"key": "minecraft:add_bad_omen",
+								"children": [
+									{
+										"key": "minecraft:spell_effects",
+										"is_minified": true,
+										"children": {
+											"add_effects": [
+												{
+													"effect": "bad_omen",
+													"duration": 6000,
+													"display_on_screen_animation": true
+												}
+											]
+										}
+									},
+									{
+										"open": {
+											"minecraft:spell_effects": {
+												"add_effects": [
+													{
+														"effect": "bad_omen",
+														"duration": 6000,
+														"display_on_screen_animation": true
+													}
+												]
+											},
+											"minecraft:timer": {
+												"time": [
+													0,
+													0
+												],
+												"looping": false,
+												"time_down_event": {
+													"event": "minecraft:clear_add_bad_omen",
+													"target": "self"
+												}
+											}
+										},
+										"key": "minecraft:timer",
+										"children": [
+											{
+												"key": "time",
+												"is_minified": true,
+												"children": [
+													0,
+													0
+												]
+											},
+											{
+												"data": "false",
+												"key": "looping"
+											},
+											{
+												"open": {
+													"time": [
+														0,
+														0
+													],
+													"looping": false,
+													"time_down_event": {
+														"event": "minecraft:clear_add_bad_omen",
+														"target": "self"
+													}
+												},
+												"key": "time_down_event",
+												"is_minified": true,
+												"children": {
+													"event": "minecraft:clear_add_bad_omen",
+													"target": "self"
+												}
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "minecraft:clear_bad_omen_spell_effect",
+								"is_minified": true,
+								"children": {
+									"minecraft:spell_effects": {}
+								}
+							},
+							{
+								"key": "minecraft:raid_trigger",
+								"is_minified": true,
+								"children": {
+									"minecraft:raid_trigger": {
+										"triggered_event": {
+											"event": "minecraft:remove_raid_trigger",
+											"target": "self"
+										}
+									},
+									"minecraft:spell_effects": {
+										"remove_effects": "bad_omen"
+									}
+								}
+							},
+							{
+								"open": {
+									"minecraft:add_bad_omen": {
+										"minecraft:spell_effects": {
+											"add_effects": [
+												{
+													"effect": "bad_omen",
+													"duration": 6000,
+													"display_on_screen_animation": true
+												}
+											]
+										},
+										"minecraft:timer": {
+											"time": [
+												0,
+												0
+											],
+											"looping": false,
+											"time_down_event": {
+												"event": "minecraft:clear_add_bad_omen",
+												"target": "self"
+											}
+										}
+									},
+									"minecraft:clear_bad_omen_spell_effect": {
+										"minecraft:spell_effects": {}
+									},
+									"minecraft:raid_trigger": {
+										"minecraft:raid_trigger": {
+											"triggered_event": {
+												"event": "minecraft:remove_raid_trigger",
+												"target": "self"
+											}
+										},
+										"minecraft:spell_effects": {
+											"remove_effects": "bad_omen"
+										}
+									},
+									"safeguard:kick": {
+										"minecraft:instant_despawn": {
+											"remove_child_entities": true
+										}
+									},
+									"safeguard:dialogue": {
+										"minecraft:npc": {}
+									},
+									"safeguard:perm_ban": {
+										"minecraft:instant_despawn": {
+											"remove_child_entities": true
+										}
+									}
+								},
+								"key": "safeguard:kick",
+								"children": [
+									{
+										"key": "minecraft:instant_despawn",
+										"is_minified": true,
+										"children": {
+											"remove_child_entities": true
+										}
+									},
+									{
+										"open": {
+											"minecraft:instant_despawn": {
+												"remove_child_entities": true
+											}
+										},
+										"key": "minecraft:timer",
+										"is_active": false,
+										"children": [
+											{
+												"data": "0.1",
+												"key": "time"
+											},
+											{
+												"open": {
+													"time": 0.1,
+													"time_down_event": {
+														"event": "safeguard:remove_kick",
+														"target": "self"
+													}
+												},
+												"key": "time_down_event",
+												"is_minified": true,
+												"children": {
+													"event": "safeguard:remove_kick",
+													"target": "self"
+												}
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:dialogue",
+								"is_minified": true,
+								"children": {
+									"minecraft:npc": {}
+								}
+							},
+							{
+								"key": "safeguard:perm_ban",
+								"is_minified": true,
+								"children": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								}
+							}
+						]
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "minecraft:player",
+								"is_spawnable": false,
+								"is_summonable": false,
+								"is_experimental": false,
+								"animations": {
+									"death_effect": "controller.animation.death_effect",
+									"admin_panel": "controller.animation.settings"
+								},
+								"scripts": {
+									"animate": [
+										"death_effect",
+										"admin_panel"
+									]
+								}
+							},
+							"component_groups": {
+								"minecraft:add_bad_omen": {
+									"minecraft:spell_effects": {
+										"add_effects": [
+											{
+												"effect": "bad_omen",
+												"duration": 6000,
+												"display_on_screen_animation": true
+											}
+										]
+									},
+									"minecraft:timer": {
+										"time": [
+											0,
+											0
+										],
+										"looping": false,
+										"time_down_event": {
+											"event": "minecraft:clear_add_bad_omen",
+											"target": "self"
+										}
+									}
+								},
+								"minecraft:clear_bad_omen_spell_effect": {
+									"minecraft:spell_effects": {}
+								},
+								"minecraft:raid_trigger": {
+									"minecraft:raid_trigger": {
+										"triggered_event": {
+											"event": "minecraft:remove_raid_trigger",
+											"target": "self"
+										}
+									},
+									"minecraft:spell_effects": {
+										"remove_effects": "bad_omen"
+									}
+								},
+								"safeguard:kick": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								},
+								"safeguard:dialogue": {
+									"minecraft:npc": {}
+								},
+								"safeguard:perm_ban": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								}
+							},
+							"components": {
+								"minecraft:experience_reward": {
+									"on_death": "Math.Min(query.player_level * 7, 100)"
+								},
+								"minecraft:type_family": {
+									"family": [
+										"player"
+									]
+								},
+								"minecraft:is_hidden_when_invisible": {},
+								"minecraft:loot": {
+									"table": "loot_tables/empty.json"
+								},
+								"minecraft:collision_box": {
+									"width": 0.6,
+									"height": 1.8
+								},
+								"minecraft:can_climb": {},
+								"minecraft:movement": {
+									"value": 0.1
+								},
+								"minecraft:hurt_on_condition": {
+									"damage_conditions": [
+										{
+											"filters": {
+												"test": "in_lava",
+												"subject": "self",
+												"operator": "==",
+												"value": true
+											},
+											"cause": "lava",
+											"damage_per_tick": 4
+										}
+									]
+								},
+								"minecraft:attack": {
+									"damage": 1
+								},
+								"minecraft:player.saturation": {
+									"value": 20
+								},
+								"minecraft:player.exhaustion": {
+									"value": 0,
+									"max": 4
+								},
+								"minecraft:player.level": {
+									"value": 0,
+									"max": 24791
+								},
+								"minecraft:player.experience": {
+									"value": 0,
+									"max": 1
+								},
+								"minecraft:breathable": {
+									"total_supply": 15,
+									"suffocate_time": -1,
+									"inhale_time": 3.75,
+									"generates_bubbles": false
+								},
+								"minecraft:nameable": {
+									"always_show": true,
+									"allow_name_tag_renaming": false
+								},
+								"minecraft:physics": {},
+								"minecraft:pushable": {
+									"is_pushable": false,
+									"is_pushable_by_piston": true
+								},
+								"minecraft:insomnia": {
+									"days_until_insomnia": 3
+								},
+								"minecraft:rideable": {
+									"seat_count": 2,
+									"family_types": [
+										"parrot_tame"
+									],
+									"pull_in_entities": true,
+									"seats": [
+										{
+											"position": [
+												0.4,
+												-0.2,
+												-0.1
+											],
+											"min_rider_count": 0,
+											"max_rider_count": 0,
+											"lock_rider_rotation": 0
+										},
+										{
+											"position": [
+												-0.4,
+												-0.2,
+												-0.1
+											],
+											"min_rider_count": 1,
+											"max_rider_count": 2,
+											"lock_rider_rotation": 0
+										}
+									]
+								},
+								"minecraft:conditional_bandwidth_optimization": {},
+								"minecraft:environment_sensor": {
+									"triggers": {
+										"filters": {
+											"all_of": [
+												{
+													"test": "has_mob_effect",
+													"subject": "self",
+													"value": "bad_omen"
+												},
+												{
+													"test": "is_in_village",
+													"subject": "self",
+													"value": true
+												}
+											]
+										},
+										"event": "minecraft:trigger_raid"
+									}
+								},
+								"minecraft:despawn": {
+									"filters": {
+										"any_of": [
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_tag",
+														"value": "Ban"
+													}
+												]
+											}
+										]
+									}
+								},
+								"minecraft:scaffolding_climber": {},
+								"minecraft:timer": {
+									"looping": true,
+									"time": 0.1,
+									"time_down_event": {
+										"filters": {
+											"any_of": [
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:movingblock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"value": "minecraft:movingBlock",
+															"domain": "any"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:lava"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:water"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_portal"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_gateway"
+														},
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:soul_fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisiblebedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisibleBedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:glowingobsidian"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:portal"
+														}
+													]
+												}
+											]
+										},
+										"event": "safeguard:item",
+										"target": "self"
+									}
+								}
+							},
+							"events": {
+								"minecraft:gain_bad_omen": {
+									"add": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									}
+								},
+								"minecraft:clear_add_bad_omen": {
+									"remove": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:clear_bad_omen_spell_effect"
+										]
+									}
+								},
+								"minecraft:trigger_raid": {
+									"add": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								},
+								"minecraft:remove_raid_trigger": {
+									"remove": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								},
+								"safeguard:setup": {
+									"run_command": {
+										"command": [
+											"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+										]
+									}
+								},
+								"safeguard:item": {
+									"run_command": {
+										"command": [
+											"function assets/illegal_item"
+										]
+									}
+								},
+								"safeguard:kick": {
+									"add": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:remove_kick": {
+									"remove": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:open_dialogue": {
+									"add": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:close_dialogue": {
+									"remove": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:perm_ban": {
+									"add": {
+										"component_groups": [
+											"safeguard:perm_ban"
+										]
+									},
+									"run_command": {
+										"command": [
+											"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
 										]
 									}
 								}
@@ -1614,765 +2379,374 @@
 								"children": {}
 							},
 							{
-								"key": "minecraft:scaffolding_climber",
-								"is_minified": true,
-								"children": {}
-							},
-							{
-								"open": {
-									"minecraft:experience_reward": {
-										"on_death": "Math.Min(query.player_level * 7, 100)"
-									},
-									"minecraft:type_family": {
-										"family": [
-											"player"
-										]
-									},
-									"minecraft:is_hidden_when_invisible": {},
-									"minecraft:loot": {
-										"table": "loot_tables/empty.json"
-									},
-									"minecraft:collision_box": {
-										"width": 0.6,
-										"height": 1.8
-									},
-									"minecraft:can_climb": {},
-									"minecraft:movement": {
-										"value": 0.1
-									},
-									"minecraft:hurt_on_condition": {
-										"damage_conditions": [
-											{
-												"filters": {
-													"test": "in_lava",
-													"subject": "self",
-													"operator": "==",
-													"value": true
-												},
-												"cause": "lava",
-												"damage_per_tick": 4
-											}
-										]
-									},
-									"minecraft:attack": {
-										"damage": 1
-									},
-									"minecraft:player.saturation": {
-										"value": 20
-									},
-									"minecraft:player.exhaustion": {
-										"value": 0,
-										"max": 4
-									},
-									"minecraft:player.level": {
-										"value": 0,
-										"max": 24791
-									},
-									"minecraft:player.experience": {
-										"value": 0,
-										"max": 1
-									},
-									"minecraft:breathable": {
-										"total_supply": 15,
-										"suffocate_time": -1,
-										"inhale_time": 3.75,
-										"generates_bubbles": false
-									},
-									"minecraft:nameable": {
-										"always_show": true,
-										"allow_name_tag_renaming": false
-									},
-									"minecraft:physics": {},
-									"minecraft:pushable": {
-										"is_pushable": false,
-										"is_pushable_by_piston": true
-									},
-									"minecraft:insomnia": {
-										"days_until_insomnia": 3
-									},
-									"minecraft:rideable": {
-										"seat_count": 2,
-										"family_types": [
-											"parrot_tame"
-										],
-										"pull_in_entities": true,
-										"seats": [
-											{
-												"position": [
-													0.4,
-													-0.2,
-													-0.1
-												],
-												"min_rider_count": 0,
-												"max_rider_count": 0,
-												"lock_rider_rotation": 0
-											},
-											{
-												"position": [
-													-0.4,
-													-0.2,
-													-0.1
-												],
-												"min_rider_count": 1,
-												"max_rider_count": 2,
-												"lock_rider_rotation": 0
-											}
-										]
-									},
-									"minecraft:conditional_bandwidth_optimization": {},
-									"minecraft:scaffolding_climber": {},
-									"minecraft:environment_sensor": {
-										"triggers": {
-											"filters": {
-												"all_of": [
-													{
-														"test": "has_mob_effect",
-														"subject": "self",
-														"value": "bad_omen"
-													},
-													{
-														"test": "is_in_village",
-														"subject": "self",
-														"value": true
-													}
-												]
-											},
-											"event": "minecraft:trigger_raid"
-										}
-									},
-									"events": {
-										"minecraft:gain_bad_omen": {
-											"add": {
-												"component_groups": [
-													"minecraft:add_bad_omen"
-												]
-											}
-										},
-										"minecraft:clear_add_bad_omen": {
-											"remove": {
-												"component_groups": [
-													"minecraft:add_bad_omen"
-												]
-											},
-											"add": {
-												"component_groups": [
-													"minecraft:clear_bad_omen_spell_effect"
-												]
-											}
-										},
-										"minecraft:trigger_raid": {
-											"add": {
-												"component_groups": [
-													"minecraft:raid_trigger"
-												]
-											}
-										},
-										"minecraft:remove_raid_trigger": {
-											"remove": {
-												"component_groups": [
-													"minecraft:raid_trigger"
-												]
-											}
-										}
-									},
-									"minecraft:despawn": {
-										"filters": {
-											"any_of": [
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:movingblock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"value": "minecraft:movingBlock",
-															"domain": "any"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:fire"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:portal"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:lava"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:water"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:end_portal"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:end_gateway"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:soul_fire"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:invisiblebedrock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:invisibleBedrock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:glowingobsidian"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_tag",
-															"value": "Ban"
-														}
-													]
-												}
-											]
-										}
-									}
-								},
 								"key": "minecraft:environment_sensor",
-								"is_minified": true,
-								"children": {
-									"triggers": {
-										"filters": {
-											"all_of": [
-												{
-													"test": "has_mob_effect",
-													"subject": "self",
-													"value": "bad_omen"
-												},
-												{
-													"test": "is_in_village",
-													"subject": "self",
-													"value": true
-												}
-											]
-										},
-										"event": "minecraft:trigger_raid"
-									}
-								}
-							},
-							{
-								"key": "events",
-								"is_minified": true,
-								"children": {
-									"minecraft:gain_bad_omen": {
-										"add": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										}
-									},
-									"minecraft:clear_add_bad_omen": {
-										"remove": {
-											"component_groups": [
-												"minecraft:add_bad_omen"
-											]
-										},
-										"add": {
-											"component_groups": [
-												"minecraft:clear_bad_omen_spell_effect"
-											]
-										}
-									},
-									"minecraft:trigger_raid": {
-										"add": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									},
-									"minecraft:remove_raid_trigger": {
-										"remove": {
-											"component_groups": [
-												"minecraft:raid_trigger"
-											]
-										}
-									}
-								}
-							},
-							{
-								"open": {
-									"minecraft:experience_reward": {
-										"on_death": "Math.Min(query.player_level * 7, 100)"
-									},
-									"minecraft:type_family": {
-										"family": [
-											"player"
-										]
-									},
-									"minecraft:is_hidden_when_invisible": {},
-									"minecraft:loot": {
-										"table": "loot_tables/empty.json"
-									},
-									"minecraft:collision_box": {
-										"width": 0.6,
-										"height": 1.8
-									},
-									"minecraft:can_climb": {},
-									"minecraft:movement": {
-										"value": 0.1
-									},
-									"minecraft:hurt_on_condition": {
-										"damage_conditions": [
-											{
+								"children": [
+									{
+										"open": {
+											"triggers": {
 												"filters": {
-													"test": "in_lava",
-													"subject": "self",
-													"operator": "==",
-													"value": true
+													"all_of": [
+														{
+															"test": "has_mob_effect",
+															"subject": "self",
+															"value": "bad_omen"
+														},
+														{
+															"test": "is_in_village",
+															"subject": "self",
+															"value": true
+														}
+													]
 												},
-												"cause": "lava",
-												"damage_per_tick": 4
+												"event": "minecraft:trigger_raid"
 											}
-										]
-									},
-									"minecraft:attack": {
-										"damage": 1
-									},
-									"minecraft:player.saturation": {
-										"value": 20
-									},
-									"minecraft:player.exhaustion": {
-										"value": 0,
-										"max": 4
-									},
-									"minecraft:player.level": {
-										"value": 0,
-										"max": 24791
-									},
-									"minecraft:player.experience": {
-										"value": 0,
-										"max": 1
-									},
-									"minecraft:breathable": {
-										"total_supply": 15,
-										"suffocate_time": -1,
-										"inhale_time": 3.75,
-										"generates_bubbles": false
-									},
-									"minecraft:nameable": {
-										"always_show": true,
-										"allow_name_tag_renaming": false
-									},
-									"minecraft:physics": {},
-									"minecraft:pushable": {
-										"is_pushable": false,
-										"is_pushable_by_piston": true
-									},
-									"minecraft:insomnia": {
-										"days_until_insomnia": 3
-									},
-									"minecraft:rideable": {
-										"seat_count": 2,
-										"family_types": [
-											"parrot_tame"
-										],
-										"pull_in_entities": true,
-										"seats": [
+										},
+										"key": "triggers",
+										"children": [
 											{
-												"position": [
-													0.4,
-													-0.2,
-													-0.1
-												],
-												"min_rider_count": 0,
-												"max_rider_count": 0,
-												"lock_rider_rotation": 0
-											},
-											{
-												"position": [
-													-0.4,
-													-0.2,
-													-0.1
-												],
-												"min_rider_count": 1,
-												"max_rider_count": 2,
-												"lock_rider_rotation": 0
-											}
-										]
-									},
-									"minecraft:conditional_bandwidth_optimization": {},
-									"minecraft:scaffolding_climber": {},
-									"minecraft:environment_sensor": {
-										"triggers": {
-											"filters": {
-												"all_of": [
-													{
-														"test": "has_mob_effect",
-														"subject": "self",
-														"value": "bad_omen"
+												"open": {
+													"filters": {
+														"all_of": [
+															{
+																"test": "has_mob_effect",
+																"subject": "self",
+																"value": "bad_omen"
+															},
+															{
+																"test": "is_in_village",
+																"subject": "self",
+																"value": true
+															}
+														]
 													},
+													"event": "minecraft:trigger_raid"
+												},
+												"key": "filters",
+												"children": [
 													{
-														"test": "is_in_village",
-														"subject": "self",
-														"value": true
+														"open": {
+															"all_of": [
+																{
+																	"test": "has_mob_effect",
+																	"subject": "self",
+																	"value": "bad_omen"
+																},
+																{
+																	"test": "is_in_village",
+																	"subject": "self",
+																	"value": true
+																}
+															]
+														},
+														"key": "all_of",
+														"children": [
+															{
+																"open": [
+																	{
+																		"test": "has_mob_effect",
+																		"subject": "self",
+																		"value": "bad_omen"
+																	},
+																	{
+																		"test": "is_in_village",
+																		"subject": "self",
+																		"value": true
+																	}
+																],
+																"is_minified": true,
+																"children": {
+																	"test": "has_mob_effect",
+																	"subject": "self",
+																	"value": "bad_omen"
+																}
+															},
+															{
+																"open": [
+																	{
+																		"test": "has_mob_effect",
+																		"subject": "self",
+																		"value": "bad_omen"
+																	},
+																	{
+																		"test": "is_in_village",
+																		"subject": "self",
+																		"value": true
+																	}
+																],
+																"is_minified": true,
+																"children": {
+																	"test": "is_in_village",
+																	"subject": "self",
+																	"value": true
+																}
+															}
+														]
 													}
 												]
 											},
-											"event": "minecraft:trigger_raid"
-										}
-									},
-									"events": {
-										"minecraft:gain_bad_omen": {
-											"add": {
-												"component_groups": [
-													"minecraft:add_bad_omen"
-												]
+											{
+												"data": "minecraft:trigger_raid",
+												"key": "event"
 											}
-										},
-										"minecraft:clear_add_bad_omen": {
-											"remove": {
-												"component_groups": [
-													"minecraft:add_bad_omen"
-												]
-											},
-											"add": {
-												"component_groups": [
-													"minecraft:clear_bad_omen_spell_effect"
-												]
-											}
-										},
-										"minecraft:trigger_raid": {
-											"add": {
-												"component_groups": [
-													"minecraft:raid_trigger"
-												]
-											}
-										},
-										"minecraft:remove_raid_trigger": {
-											"remove": {
-												"component_groups": [
-													"minecraft:raid_trigger"
-												]
-											}
-										}
-									},
-									"minecraft:despawn": {
-										"filters": {
-											"any_of": [
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:movingblock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"value": "minecraft:movingBlock",
-															"domain": "any"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:fire"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:portal"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:lava"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:water"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:end_portal"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:end_gateway"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:soul_fire"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:invisiblebedrock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:invisibleBedrock"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_equipment",
-															"domain": "any",
-															"value": "minecraft:glowingobsidian"
-														}
-													]
-												},
-												{
-													"all_of": [
-														{
-															"test": "has_tag",
-															"value": "admin",
-															"operator": "!="
-														},
-														{
-															"test": "has_tag",
-															"value": "Ban"
-														}
-													]
-												}
-											]
-										}
+										]
 									}
-								},
+								]
+							},
+							{
 								"key": "minecraft:despawn",
 								"children": [
 									{
 										"open": {
+											"filters": {
+												"any_of": [
+													{
+														"all_of": [
+															{
+																"test": "has_tag",
+																"value": "admin",
+																"operator": "!="
+															},
+															{
+																"test": "has_tag",
+																"value": "Ban"
+															}
+														]
+													}
+												]
+											}
+										},
+										"key": "filters",
+										"children": [
+											{
+												"open": {
+													"any_of": [
+														{
+															"all_of": [
+																{
+																	"test": "has_tag",
+																	"value": "admin",
+																	"operator": "!="
+																},
+																{
+																	"test": "has_tag",
+																	"value": "Ban"
+																}
+															]
+														}
+													]
+												},
+												"key": "any_of",
+												"children": [
+													{
+														"children": [
+															{
+																"open": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_tag",
+																			"value": "Ban"
+																		}
+																	]
+																},
+																"key": "all_of",
+																"children": [
+																	{
+																		"open": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_tag",
+																				"value": "Ban"
+																			}
+																		],
+																		"is_minified": true,
+																		"children": {
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		}
+																	},
+																	{
+																		"open": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_tag",
+																				"value": "Ban"
+																			}
+																		],
+																		"is_minified": true,
+																		"children": {
+																			"test": "has_tag",
+																			"value": "Ban"
+																		}
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"open": {
+									"minecraft:experience_reward": {
+										"on_death": "Math.Min(query.player_level * 7, 100)"
+									},
+									"minecraft:type_family": {
+										"family": [
+											"player"
+										]
+									},
+									"minecraft:is_hidden_when_invisible": {},
+									"minecraft:loot": {
+										"table": "loot_tables/empty.json"
+									},
+									"minecraft:collision_box": {
+										"width": 0.6,
+										"height": 1.8
+									},
+									"minecraft:can_climb": {},
+									"minecraft:movement": {
+										"value": 0.1
+									},
+									"minecraft:hurt_on_condition": {
+										"damage_conditions": [
+											{
+												"filters": {
+													"test": "in_lava",
+													"subject": "self",
+													"operator": "==",
+													"value": true
+												},
+												"cause": "lava",
+												"damage_per_tick": 4
+											}
+										]
+									},
+									"minecraft:attack": {
+										"damage": 1
+									},
+									"minecraft:player.saturation": {
+										"value": 20
+									},
+									"minecraft:player.exhaustion": {
+										"value": 0,
+										"max": 4
+									},
+									"minecraft:player.level": {
+										"value": 0,
+										"max": 24791
+									},
+									"minecraft:player.experience": {
+										"value": 0,
+										"max": 1
+									},
+									"minecraft:breathable": {
+										"total_supply": 15,
+										"suffocate_time": -1,
+										"inhale_time": 3.75,
+										"generates_bubbles": false
+									},
+									"minecraft:nameable": {
+										"always_show": true,
+										"allow_name_tag_renaming": false
+									},
+									"minecraft:physics": {},
+									"minecraft:pushable": {
+										"is_pushable": false,
+										"is_pushable_by_piston": true
+									},
+									"minecraft:insomnia": {
+										"days_until_insomnia": 3
+									},
+									"minecraft:rideable": {
+										"seat_count": 2,
+										"family_types": [
+											"parrot_tame"
+										],
+										"pull_in_entities": true,
+										"seats": [
+											{
+												"position": [
+													0.4,
+													-0.2,
+													-0.1
+												],
+												"min_rider_count": 0,
+												"max_rider_count": 0,
+												"lock_rider_rotation": 0
+											},
+											{
+												"position": [
+													-0.4,
+													-0.2,
+													-0.1
+												],
+												"min_rider_count": 1,
+												"max_rider_count": 2,
+												"lock_rider_rotation": 0
+											}
+										]
+									},
+									"minecraft:conditional_bandwidth_optimization": {},
+									"minecraft:environment_sensor": {
+										"triggers": {
+											"filters": {
+												"all_of": [
+													{
+														"test": "has_mob_effect",
+														"subject": "self",
+														"value": "bad_omen"
+													},
+													{
+														"test": "is_in_village",
+														"subject": "self",
+														"value": true
+													}
+												]
+											},
+											"event": "minecraft:trigger_raid"
+										}
+									},
+									"minecraft:despawn": {
+										"filters": {
+											"any_of": [
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_tag",
+															"value": "Ban"
+														}
+													]
+												}
+											]
+										}
+									},
+									"minecraft:scaffolding_climber": {},
+									"minecraft:timer": {
+										"looping": true,
+										"time": 0.1,
+										"time_down_event": {
 											"filters": {
 												"any_of": [
 													{
@@ -2427,20 +2801,6 @@
 															{
 																"test": "has_equipment",
 																"domain": "any",
-																"value": "minecraft:portal"
-															}
-														]
-													},
-													{
-														"all_of": [
-															{
-																"test": "has_tag",
-																"value": "admin",
-																"operator": "!="
-															},
-															{
-																"test": "has_equipment",
-																"domain": "any",
 																"value": "minecraft:lava"
 															}
 														]
@@ -2476,14 +2836,14 @@
 													{
 														"all_of": [
 															{
-																"test": "has_tag",
-																"value": "admin",
-																"operator": "!="
-															},
-															{
 																"test": "has_equipment",
 																"domain": "any",
 																"value": "minecraft:end_gateway"
+															},
+															{
+																"test": "has_tag",
+																"value": "admin",
+																"operator": "!="
 															}
 														]
 													},
@@ -2551,18 +2911,40 @@
 																"operator": "!="
 															},
 															{
-																"test": "has_tag",
-																"value": "Ban"
+																"test": "has_equipment",
+																"domain": "any",
+																"value": "minecraft:portal"
 															}
 														]
 													}
 												]
-											}
-										},
-										"key": "filters",
-										"children": [
-											{
-												"open": {
+											},
+											"event": "safeguard:item",
+											"target": "self"
+										}
+									}
+								},
+								"key": "minecraft:scaffolding_climber",
+								"is_minified": true,
+								"children": {}
+							},
+							{
+								"key": "minecraft:timer",
+								"children": [
+									{
+										"data": "true",
+										"key": "looping"
+									},
+									{
+										"data": "0.1",
+										"key": "time"
+									},
+									{
+										"open": {
+											"looping": true,
+											"time": 0.1,
+											"time_down_event": {
+												"filters": {
 													"any_of": [
 														{
 															"all_of": [
@@ -2616,20 +2998,6 @@
 																{
 																	"test": "has_equipment",
 																	"domain": "any",
-																	"value": "minecraft:portal"
-																}
-															]
-														},
-														{
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
 																	"value": "minecraft:lava"
 																}
 															]
@@ -2665,14 +3033,14 @@
 														{
 															"all_of": [
 																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
 																	"test": "has_equipment",
 																	"domain": "any",
 																	"value": "minecraft:end_gateway"
+																},
+																{
+																	"test": "has_tag",
+																	"value": "admin",
+																	"operator": "!="
 																}
 															]
 														},
@@ -2740,406 +3108,27 @@
 																	"operator": "!="
 																},
 																{
-																	"test": "has_tag",
-																	"value": "Ban"
+																	"test": "has_equipment",
+																	"domain": "any",
+																	"value": "minecraft:portal"
 																}
 															]
 														}
 													]
 												},
-												"key": "any_of",
+												"event": "safeguard:item",
+												"target": "self"
+											}
+										},
+										"key": "time_down_event",
+										"children": [
+											{
+												"key": "filters",
 												"children": [
 													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
+														"open": {
+															"any_of": [
 																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:movingblock"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"value": "minecraft:movingBlock",
-																	"domain": "any"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:fire"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:portal"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:lava"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:water"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:end_portal"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:end_gateway"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:soul_fire"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:invisiblebedrock"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:invisibleBedrock"
-																}
-															]
-														}
-													},
-													{
-														"is_minified": true,
-														"children": {
-															"all_of": [
-																{
-																	"test": "has_tag",
-																	"value": "admin",
-																	"operator": "!="
-																},
-																{
-																	"test": "has_equipment",
-																	"domain": "any",
-																	"value": "minecraft:glowingobsidian"
-																}
-															]
-														}
-													},
-													{
-														"open": [
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:movingblock"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"value": "minecraft:movingBlock",
-																		"domain": "any"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:fire"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:portal"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:lava"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:water"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:end_portal"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:end_gateway"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:soul_fire"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:invisiblebedrock"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:invisibleBedrock"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_equipment",
-																		"domain": "any",
-																		"value": "minecraft:glowingobsidian"
-																	}
-																]
-															},
-															{
-																"all_of": [
-																	{
-																		"test": "has_tag",
-																		"value": "admin",
-																		"operator": "!="
-																	},
-																	{
-																		"test": "has_tag",
-																		"value": "Ban"
-																	}
-																]
-															}
-														],
-														"children": [
-															{
-																"open": {
 																	"all_of": [
 																		{
 																			"test": "has_tag",
@@ -3147,55 +3136,795 @@
 																			"operator": "!="
 																		},
 																		{
-																			"test": "has_tag",
-																			"value": "Ban"
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:movingblock"
 																		}
 																	]
 																},
-																"key": "all_of",
-																"children": [
-																	{
-																		"open": [
-																			{
-																				"test": "has_tag",
-																				"value": "admin",
-																				"operator": "!="
-																			},
-																			{
-																				"test": "has_tag",
-																				"value": "Ban"
-																			}
-																		],
-																		"is_minified": true,
-																		"children": {
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"value": "minecraft:movingBlock",
+																			"domain": "any"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:fire"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:lava"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:water"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:end_portal"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:end_gateway"
+																		},
+																		{
 																			"test": "has_tag",
 																			"value": "admin",
 																			"operator": "!="
 																		}
-																	},
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:soul_fire"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:invisiblebedrock"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:invisibleBedrock"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:glowingobsidian"
+																		}
+																	]
+																},
+																{
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:portal"
+																		}
+																	]
+																}
+															]
+														},
+														"key": "any_of",
+														"children": [
+															{
+																"children": [
 																	{
-																		"open": [
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				},
+																				{
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:movingblock"
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:movingblock"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:movingblock"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:movingblock"
+																				}
+																			}
+																		]
+																	}
+																]
+															},
+															{
+																"children": [
+																	{
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				},
+																				{
+																					"test": "has_equipment",
+																					"value": "minecraft:movingBlock",
+																					"domain": "any"
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"value": "minecraft:movingBlock",
+																						"domain": "any"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"value": "minecraft:movingBlock",
+																						"domain": "any"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"value": "minecraft:movingBlock",
+																					"domain": "any"
+																				}
+																			}
+																		]
+																	}
+																]
+															},
+															{
+																"children": [
+																	{
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				},
+																				{
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:fire"
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:fire"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:fire"
+																				}
+																			}
+																		]
+																	}
+																]
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:lava"
+																		}
+																	]
+																}
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:water"
+																		}
+																	]
+																}
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:end_portal"
+																		}
+																	]
+																}
+															},
+															{
+																"open": [
+																	{
+																		"all_of": [
 																			{
 																				"test": "has_tag",
 																				"value": "admin",
 																				"operator": "!="
 																			},
 																			{
-																				"test": "has_tag",
-																				"value": "Ban"
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:movingblock"
 																			}
-																		],
-																		"is_minified": true,
-																		"children": {
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"value": "minecraft:movingBlock",
+																				"domain": "any"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:fire"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:lava"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:water"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:end_portal"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:end_gateway"
+																			},
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:soul_fire"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:invisiblebedrock"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:invisibleBedrock"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:glowingobsidian"
+																			}
+																		]
+																	},
+																	{
+																		"all_of": [
+																			{
+																				"test": "has_tag",
+																				"value": "admin",
+																				"operator": "!="
+																			},
+																			{
+																				"test": "has_equipment",
+																				"domain": "any",
+																				"value": "minecraft:portal"
+																			}
+																		]
+																	}
+																],
+																"children": [
+																	{
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:end_gateway"
+																				},
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:end_gateway"
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:end_gateway"
+																					},
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			}
+																		]
+																	}
+																]
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
 																			"test": "has_tag",
-																			"value": "Ban"
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:soul_fire"
 																		}
+																	]
+																}
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:invisiblebedrock"
+																		}
+																	]
+																}
+															},
+															{
+																"is_minified": true,
+																"children": {
+																	"all_of": [
+																		{
+																			"test": "has_tag",
+																			"value": "admin",
+																			"operator": "!="
+																		},
+																		{
+																			"test": "has_equipment",
+																			"domain": "any",
+																			"value": "minecraft:invisibleBedrock"
+																		}
+																	]
+																}
+															},
+															{
+																"children": [
+																	{
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				},
+																				{
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:glowingobsidian"
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:glowingobsidian"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:glowingobsidian"
+																				}
+																			}
+																		]
+																	}
+																]
+															},
+															{
+																"children": [
+																	{
+																		"open": {
+																			"all_of": [
+																				{
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				},
+																				{
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:portal"
+																				}
+																			]
+																		},
+																		"key": "all_of",
+																		"children": [
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:portal"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_tag",
+																					"value": "admin",
+																					"operator": "!="
+																				}
+																			},
+																			{
+																				"open": [
+																					{
+																						"test": "has_tag",
+																						"value": "admin",
+																						"operator": "!="
+																					},
+																					{
+																						"test": "has_equipment",
+																						"domain": "any",
+																						"value": "minecraft:portal"
+																					}
+																				],
+																				"is_minified": true,
+																				"children": {
+																					"test": "has_equipment",
+																					"domain": "any",
+																					"value": "minecraft:portal"
+																				}
+																			}
+																		]
 																	}
 																]
 															}
 														]
 													}
 												]
+											},
+											{
+												"data": "safeguard:item",
+												"key": "event"
+											},
+											{
+												"data": "self",
+												"key": "target"
 											}
 										]
 									}
@@ -3204,43 +3933,816 @@
 						]
 					},
 					{
-						"key": "events",
-						"is_minified": true,
-						"children": {
-							"minecraft:gain_bad_omen": {
-								"add": {
-									"component_groups": [
-										"minecraft:add_bad_omen"
+						"open": {
+							"description": {
+								"identifier": "minecraft:player",
+								"is_spawnable": false,
+								"is_summonable": false,
+								"is_experimental": false,
+								"animations": {
+									"death_effect": "controller.animation.death_effect",
+									"admin_panel": "controller.animation.settings"
+								},
+								"scripts": {
+									"animate": [
+										"death_effect",
+										"admin_panel"
 									]
 								}
 							},
-							"minecraft:clear_add_bad_omen": {
-								"remove": {
-									"component_groups": [
-										"minecraft:add_bad_omen"
+							"component_groups": {
+								"minecraft:add_bad_omen": {
+									"minecraft:spell_effects": {
+										"add_effects": [
+											{
+												"effect": "bad_omen",
+												"duration": 6000,
+												"display_on_screen_animation": true
+											}
+										]
+									},
+									"minecraft:timer": {
+										"time": [
+											0,
+											0
+										],
+										"looping": false,
+										"time_down_event": {
+											"event": "minecraft:clear_add_bad_omen",
+											"target": "self"
+										}
+									}
+								},
+								"minecraft:clear_bad_omen_spell_effect": {
+									"minecraft:spell_effects": {}
+								},
+								"minecraft:raid_trigger": {
+									"minecraft:raid_trigger": {
+										"triggered_event": {
+											"event": "minecraft:remove_raid_trigger",
+											"target": "self"
+										}
+									},
+									"minecraft:spell_effects": {
+										"remove_effects": "bad_omen"
+									}
+								},
+								"safeguard:kick": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								},
+								"safeguard:dialogue": {
+									"minecraft:npc": {}
+								},
+								"safeguard:perm_ban": {
+									"minecraft:instant_despawn": {
+										"remove_child_entities": true
+									}
+								}
+							},
+							"components": {
+								"minecraft:experience_reward": {
+									"on_death": "Math.Min(query.player_level * 7, 100)"
+								},
+								"minecraft:type_family": {
+									"family": [
+										"player"
 									]
 								},
-								"add": {
-									"component_groups": [
-										"minecraft:clear_bad_omen_spell_effect"
+								"minecraft:is_hidden_when_invisible": {},
+								"minecraft:loot": {
+									"table": "loot_tables/empty.json"
+								},
+								"minecraft:collision_box": {
+									"width": 0.6,
+									"height": 1.8
+								},
+								"minecraft:can_climb": {},
+								"minecraft:movement": {
+									"value": 0.1
+								},
+								"minecraft:hurt_on_condition": {
+									"damage_conditions": [
+										{
+											"filters": {
+												"test": "in_lava",
+												"subject": "self",
+												"operator": "==",
+												"value": true
+											},
+											"cause": "lava",
+											"damage_per_tick": 4
+										}
 									]
+								},
+								"minecraft:attack": {
+									"damage": 1
+								},
+								"minecraft:player.saturation": {
+									"value": 20
+								},
+								"minecraft:player.exhaustion": {
+									"value": 0,
+									"max": 4
+								},
+								"minecraft:player.level": {
+									"value": 0,
+									"max": 24791
+								},
+								"minecraft:player.experience": {
+									"value": 0,
+									"max": 1
+								},
+								"minecraft:breathable": {
+									"total_supply": 15,
+									"suffocate_time": -1,
+									"inhale_time": 3.75,
+									"generates_bubbles": false
+								},
+								"minecraft:nameable": {
+									"always_show": true,
+									"allow_name_tag_renaming": false
+								},
+								"minecraft:physics": {},
+								"minecraft:pushable": {
+									"is_pushable": false,
+									"is_pushable_by_piston": true
+								},
+								"minecraft:insomnia": {
+									"days_until_insomnia": 3
+								},
+								"minecraft:rideable": {
+									"seat_count": 2,
+									"family_types": [
+										"parrot_tame"
+									],
+									"pull_in_entities": true,
+									"seats": [
+										{
+											"position": [
+												0.4,
+												-0.2,
+												-0.1
+											],
+											"min_rider_count": 0,
+											"max_rider_count": 0,
+											"lock_rider_rotation": 0
+										},
+										{
+											"position": [
+												-0.4,
+												-0.2,
+												-0.1
+											],
+											"min_rider_count": 1,
+											"max_rider_count": 2,
+											"lock_rider_rotation": 0
+										}
+									]
+								},
+								"minecraft:conditional_bandwidth_optimization": {},
+								"minecraft:environment_sensor": {
+									"triggers": {
+										"filters": {
+											"all_of": [
+												{
+													"test": "has_mob_effect",
+													"subject": "self",
+													"value": "bad_omen"
+												},
+												{
+													"test": "is_in_village",
+													"subject": "self",
+													"value": true
+												}
+											]
+										},
+										"event": "minecraft:trigger_raid"
+									}
+								},
+								"minecraft:despawn": {
+									"filters": {
+										"any_of": [
+											{
+												"all_of": [
+													{
+														"test": "has_tag",
+														"value": "admin",
+														"operator": "!="
+													},
+													{
+														"test": "has_tag",
+														"value": "Ban"
+													}
+												]
+											}
+										]
+									}
+								},
+								"minecraft:scaffolding_climber": {},
+								"minecraft:timer": {
+									"looping": true,
+									"time": 0.1,
+									"time_down_event": {
+										"filters": {
+											"any_of": [
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:movingblock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"value": "minecraft:movingBlock",
+															"domain": "any"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:lava"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:water"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_portal"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:end_gateway"
+														},
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:soul_fire"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisiblebedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:invisibleBedrock"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:glowingobsidian"
+														}
+													]
+												},
+												{
+													"all_of": [
+														{
+															"test": "has_tag",
+															"value": "admin",
+															"operator": "!="
+														},
+														{
+															"test": "has_equipment",
+															"domain": "any",
+															"value": "minecraft:portal"
+														}
+													]
+												}
+											]
+										},
+										"event": "safeguard:item",
+										"target": "self"
+									}
 								}
 							},
-							"minecraft:trigger_raid": {
-								"add": {
-									"component_groups": [
-										"minecraft:raid_trigger"
-									]
-								}
-							},
-							"minecraft:remove_raid_trigger": {
-								"remove": {
-									"component_groups": [
-										"minecraft:raid_trigger"
-									]
+							"events": {
+								"minecraft:gain_bad_omen": {
+									"add": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									}
+								},
+								"minecraft:clear_add_bad_omen": {
+									"remove": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:clear_bad_omen_spell_effect"
+										]
+									}
+								},
+								"minecraft:trigger_raid": {
+									"add": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								},
+								"minecraft:remove_raid_trigger": {
+									"remove": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								},
+								"safeguard:setup": {
+									"run_command": {
+										"command": [
+											"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+										]
+									}
+								},
+								"safeguard:item": {
+									"run_command": {
+										"command": [
+											"function assets/illegal_item"
+										]
+									}
+								},
+								"safeguard:kick": {
+									"add": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:remove_kick": {
+									"remove": {
+										"component_groups": [
+											"safeguard:kick"
+										]
+									}
+								},
+								"safeguard:open_dialogue": {
+									"add": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:close_dialogue": {
+									"remove": {
+										"component_groups": [
+											"safeguard:dialogue"
+										]
+									}
+								},
+								"safeguard:perm_ban": {
+									"add": {
+										"component_groups": [
+											"safeguard:perm_ban"
+										]
+									},
+									"run_command": {
+										"command": [
+											"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+										]
+									}
 								}
 							}
-						}
+						},
+						"key": "events",
+						"children": [
+							{
+								"key": "minecraft:gain_bad_omen",
+								"is_minified": true,
+								"children": {
+									"add": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									}
+								}
+							},
+							{
+								"key": "minecraft:clear_add_bad_omen",
+								"is_minified": true,
+								"children": {
+									"remove": {
+										"component_groups": [
+											"minecraft:add_bad_omen"
+										]
+									},
+									"add": {
+										"component_groups": [
+											"minecraft:clear_bad_omen_spell_effect"
+										]
+									}
+								}
+							},
+							{
+								"key": "minecraft:trigger_raid",
+								"is_minified": true,
+								"children": {
+									"add": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								}
+							},
+							{
+								"key": "minecraft:remove_raid_trigger",
+								"is_minified": true,
+								"children": {
+									"remove": {
+										"component_groups": [
+											"minecraft:raid_trigger"
+										]
+									}
+								}
+							},
+							{
+								"key": "safeguard:setup",
+								"children": [
+									{
+										"open": {
+											"run_command": {
+												"command": [
+													"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+												]
+											}
+										},
+										"key": "run_command",
+										"children": [
+											{
+												"open": {
+													"command": [
+														"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+													]
+												},
+												"key": "command",
+												"is_minified": true,
+												"children": [
+													"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"open": {
+									"minecraft:gain_bad_omen": {
+										"add": {
+											"component_groups": [
+												"minecraft:add_bad_omen"
+											]
+										}
+									},
+									"minecraft:clear_add_bad_omen": {
+										"remove": {
+											"component_groups": [
+												"minecraft:add_bad_omen"
+											]
+										},
+										"add": {
+											"component_groups": [
+												"minecraft:clear_bad_omen_spell_effect"
+											]
+										}
+									},
+									"minecraft:trigger_raid": {
+										"add": {
+											"component_groups": [
+												"minecraft:raid_trigger"
+											]
+										}
+									},
+									"minecraft:remove_raid_trigger": {
+										"remove": {
+											"component_groups": [
+												"minecraft:raid_trigger"
+											]
+										}
+									},
+									"safeguard:setup": {
+										"run_command": {
+											"command": [
+												"scoreboard players set @a[scores={setup_success=0}] setup_success 1"
+											]
+										}
+									},
+									"safeguard:item": {
+										"run_command": {
+											"command": [
+												"function assets/illegal_item"
+											]
+										}
+									},
+									"safeguard:kick": {
+										"add": {
+											"component_groups": [
+												"safeguard:kick"
+											]
+										}
+									},
+									"safeguard:remove_kick": {
+										"remove": {
+											"component_groups": [
+												"safeguard:kick"
+											]
+										}
+									},
+									"safeguard:open_dialogue": {
+										"add": {
+											"component_groups": [
+												"safeguard:dialogue"
+											]
+										}
+									},
+									"safeguard:close_dialogue": {
+										"remove": {
+											"component_groups": [
+												"safeguard:dialogue"
+											]
+										}
+									},
+									"safeguard:perm_ban": {
+										"add": {
+											"component_groups": [
+												"safeguard:perm_ban"
+											]
+										},
+										"run_command": {
+											"command": [
+												"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+											]
+										}
+									}
+								},
+								"key": "safeguard:item",
+								"children": [
+									{
+										"open": {
+											"run_command": {
+												"command": [
+													"function assets/illegal_item"
+												]
+											}
+										},
+										"key": "run_command",
+										"children": [
+											{
+												"open": {
+													"command": [
+														"function assets/illegal_item"
+													]
+												},
+												"key": "command",
+												"is_minified": true,
+												"children": [
+													"function assets/illegal_item"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:kick",
+								"children": [
+									{
+										"open": {
+											"add": {
+												"component_groups": [
+													"safeguard:kick"
+												]
+											}
+										},
+										"key": "add",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"safeguard:kick"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"safeguard:kick"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:remove_kick",
+								"children": [
+									{
+										"open": {
+											"remove": {
+												"component_groups": [
+													"safeguard:kick"
+												]
+											}
+										},
+										"key": "remove",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"safeguard:kick"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"safeguard:kick"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:open_dialogue",
+								"children": [
+									{
+										"open": {
+											"add": {
+												"component_groups": [
+													"safeguard:dialogue"
+												]
+											}
+										},
+										"key": "add",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"safeguard:dialogue"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"safeguard:dialogue"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:close_dialogue",
+								"children": [
+									{
+										"open": {
+											"remove": {
+												"component_groups": [
+													"safeguard:dialogue"
+												]
+											}
+										},
+										"key": "remove",
+										"children": [
+											{
+												"open": {
+													"component_groups": [
+														"safeguard:dialogue"
+													]
+												},
+												"key": "component_groups",
+												"is_minified": true,
+												"children": [
+													"safeguard:dialogue"
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"key": "safeguard:perm_ban",
+								"is_minified": true,
+								"children": {
+									"add": {
+										"component_groups": [
+											"safeguard:perm_ban"
+										]
+									},
+									"run_command": {
+										"command": [
+											"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+										]
+									}
+								}
+							}
+						]
 					}
 				]
 			}

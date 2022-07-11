@@ -2,8 +2,8 @@
 	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_behavior_packs\\Safeguard anti-cheat\\manifest.json",
 	"file_type": "manifest_bp",
 	"format_version": 1,
-	"file_uuid": "db8bea4d_5e6e_43e6_9b07_d50f42ece3c8",
-	"file_version": 0,
+	"file_uuid": "23897a52_10e0_4f09_b483_be6f73bf33a0",
+	"file_version": 8,
 	"cache_content": {
 		"children": [
 			{
@@ -14,8 +14,8 @@
 				"open": {
 					"format_version": 2,
 					"header": {
-						"name": "SafeGuard anticheat",
-						"description": "Made by  Blazer#9677 V1.3.5",
+						"name": "§l§eSafe§6Guard §fAntiCheat",
+						"description": "§l§fMade by  §eBlazer#9677 §6V1.4",
 						"uuid": "82b3037f-a80a-49e1-88b8-941479b49a40",
 						"version": [
 							1,
@@ -24,8 +24,8 @@
 						],
 						"min_engine_version": [
 							1,
-							17,
-							0
+							19,
+							2
 						]
 					},
 					"modules": [
@@ -45,23 +45,13 @@
 								"1.8.4"
 							]
 						}
-					},
-					"dependencies": [
-						{
-							"version": [
-								1,
-								0,
-								0
-							],
-							"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad"
-						}
-					]
+					}
 				},
 				"key": "header",
 				"is_minified": true,
 				"children": {
-					"name": "SafeGuard anticheat",
-					"description": "Made by  Blazer#9677 V1.3.5",
+					"name": "§l§eSafe§6Guard §fAntiCheat",
+					"description": "§l§fMade by  §eBlazer#9677 §6V1.4",
 					"uuid": "82b3037f-a80a-49e1-88b8-941479b49a40",
 					"version": [
 						1,
@@ -70,58 +60,12 @@
 					],
 					"min_engine_version": [
 						1,
-						17,
-						0
+						19,
+						2
 					]
 				}
 			},
 			{
-				"open": {
-					"format_version": 2,
-					"header": {
-						"name": "SafeGuard anticheat",
-						"description": "Made by  Blazer#9677 V1.3.5",
-						"uuid": "82b3037f-a80a-49e1-88b8-941479b49a40",
-						"version": [
-							1,
-							0,
-							0
-						],
-						"min_engine_version": [
-							1,
-							17,
-							0
-						]
-					},
-					"modules": [
-						{
-							"type": "data",
-							"uuid": "f687bbec-ee45-42c5-8ce2-957153ca9557",
-							"version": [
-								1,
-								0,
-								0
-							]
-						}
-					],
-					"metadata": {
-						"generated_with": {
-							"bridge": [
-								"1.8.4"
-							]
-						}
-					},
-					"dependencies": [
-						{
-							"version": [
-								1,
-								0,
-								0
-							],
-							"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad"
-						}
-					]
-				},
 				"key": "modules",
 				"children": [
 					{
@@ -159,20 +103,6 @@
 						]
 					}
 				}
-			},
-			{
-				"key": "dependencies",
-				"is_minified": true,
-				"children": [
-					{
-						"version": [
-							1,
-							0,
-							0
-						],
-						"uuid": "509ba677-28c5-4bc8-a216-1ad636b9c4ad"
-					}
-				]
 			}
 		]
 	}

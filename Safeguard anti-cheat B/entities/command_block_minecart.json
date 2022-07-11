@@ -1,4 +1,4 @@
-//bridge-file-version: #5
+//bridge-file-version: #12
 {
 	"format_version": "1.12.0",
 	"minecraft:entity": {
@@ -6,51 +6,7 @@
 			"identifier": "minecraft:command_block_minecart",
 			"is_spawnable": false,
 			"is_summonable": false,
-			"is_experimental": false,
-			"scripts": {
-				"animate": [
-					"bridge_execute_commands"
-				]
-			},
-			"animations": {
-				"bridge_execute_commands": "controller.animation.bridge_command_block_minecart.execute_commands"
-			}
-		},
-		"component_groups": {
-			"minecraft:command_block_active": {
-				"minecraft:rail_sensor": {
-					"check_block_types": true,
-					"eject_on_activate": false,
-					"eject_on_deactivate": false,
-					"tick_command_block_on_activate": true,
-					"tick_command_block_on_deactivate": false,
-					"on_deactivate": {
-						"event": "minecraft:command_block_deactivate"
-					}
-				}
-			},
-			"minecraft:command_block_inactive": {
-				"minecraft:rail_sensor": {
-					"check_block_types": false,
-					"eject_on_activate": true,
-					"eject_on_deactivate": false,
-					"tick_command_block_on_activate": true,
-					"tick_command_block_on_deactivate": false,
-					"on_activate": {
-						"event": "minecraft:command_block_activate"
-					}
-				}
-			},
-			"bridge:execute_command_id_1": {
-				"minecraft:skin_id": {
-					"value": 1
-				}
-			},
-			"bridge:execute_no_command": {
-				"minecraft:skin_id": {
-					"value": 0
-				}
-			}
+			"is_experimental": false
 		},
 		"components": {
 			"minecraft:type_family": {
@@ -90,41 +46,11 @@
 					}
 				]
 			},
-			"minecraft:instant_despawn": {}
-		},
-		"events": {
-			"minecraft:entity_spawned": {
-				"add": {
-					"component_groups": [
-						"minecraft:command_block_inactive",
-						"bridge:execute_command_id_1"
-					]
-				}
-			},
-			"minecraft:command_block_deactivate": {
-				"remove": {
-					"component_groups": [
-						"minecraft:command_block_active"
-					]
-				},
-				"add": {
-					"component_groups": [
-						"minecraft:command_block_inactive"
-					]
-				}
-			},
-			"bridge:remove_command_id_1": {
-				"add": {
-					"component_groups": [
-						"bridge:execute_no_command"
-					]
-				},
-				"remove": {
-					"component_groups": [
-						"bridge:execute_command_id_1"
-					]
-				}
+			"minecraft:instant_despawn": {
+				"remove_child_entities": true
 			}
-		}
+		},
+		"events": {},
+		"component_groups": {}
 	}
 }

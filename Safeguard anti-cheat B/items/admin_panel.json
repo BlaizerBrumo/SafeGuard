@@ -1,0 +1,45 @@
+//bridge-file-version: #16
+{
+	"format_version": "1.16.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "safeguard:admin_panel"
+		},
+		"components": {
+			"minecraft:max_stack_size": 1,
+			"minecraft:display_name": {
+				"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+			},
+			"minecraft:on_use": {
+				"on_use": {
+					"event": "safeguard:panel_use"
+				}
+			},
+			"minecraft:foil": true,
+			"minecraft:render_offsets": {
+				"main_hand": {
+					"third_person": {
+						"scale": [
+							0,
+							0,
+							0
+						]
+					}
+				}
+			},
+			"minecraft:icon": {
+				"texture": "banner_pattern"
+			}
+		},
+		"events": {
+			"safeguard:panel_use": {
+				"run_command": {
+					"command": [
+						"dialogue open @s @s[tag=admin] panel_home",
+						"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+					]
+				}
+			}
+		}
+	}
+}

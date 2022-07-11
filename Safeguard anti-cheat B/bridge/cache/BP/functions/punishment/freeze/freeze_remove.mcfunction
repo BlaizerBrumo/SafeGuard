@@ -3,6 +3,6 @@
 	"file_type": "function",
 	"format_version": 0,
 	"file_uuid": "0547cede_0c39_434e_8d50_e32782d911a7",
-	"file_version": 11,
-	"cache_content": "#unfreezes person\ntag @a[tag=unfreeze] remove freeze\neffect @a[tag=unfreeze] clear\ntellraw @a[tag=unfreeze] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6] §aFreeze was removed!!\"}]}\nexecute @a[tag=unfreeze] ~~~ tellraw @a[tag=admin,scores={notify=1}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard Notify§6]§5§l \"},{\"selector\":\"@a[tag=unfreeze]\"},{\"text\":\" §bwas unfreezed! §r\"}]}\ntag @a[tag=unfreeze] remove unfreeze"
+	"file_version": 12,
+	"cache_content": "#unfreezes person\ntellraw @s {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"text\":\"ERROR: §r§4This function shouldn't be ran manually§r\"}]}\ntag @a[tag=unfreeze] remove freeze\neffect @a[tag=unfreeze] clear\ntellraw @a[tag=unfreeze] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6] §aFreeze was removed!!\"}]}\nexecute @a[tag=unfreeze] ~~~ tellraw @a[tag=admin,scores={notify=1}] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard Notify§6]§5§l \"},{\"selector\":\"@a[tag=unfreeze]\"},{\"text\":\" §bwas unfreezed! §r\"}]}\ntag @a[tag=unfreeze] remove unfreeze"
 }

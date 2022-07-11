@@ -1,0 +1,484 @@
+{
+	"file_path": "C:\\Users\\ilyas\\AppData\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\development_behavior_packs\\Safeguard anti-cheat\\items\\admin_panel.json",
+	"file_type": "item",
+	"format_version": 1,
+	"file_uuid": "ed569b15_339f_4aed_8bde_dd046d429cde",
+	"file_version": 16,
+	"cache_content": {
+		"children": [
+			{
+				"open": {
+					"format_version": "1.16.100",
+					"minecraft:item": {
+						"description": {
+							"identifier": "safeguard:admin_panel"
+						},
+						"components": {
+							"minecraft:max_stack_size": 1,
+							"minecraft:display_name": {
+								"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+							},
+							"minecraft:on_use": {
+								"on_use": {
+									"event": "safeguard:panel_use"
+								}
+							},
+							"minecraft:foil": true,
+							"minecraft:render_offsets": {
+								"main_hand": {
+									"third_person": {
+										"scale": [
+											0,
+											0,
+											0
+										]
+									}
+								}
+							},
+							"minecraft:icon": {
+								"texture": "banner_pattern"
+							}
+						},
+						"events": {
+							"safeguard:panel_use": {
+								"run_command": {
+									"command": [
+										"dialogue open @s @s[tag=admin] panel_home",
+										"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+									]
+								}
+							}
+						}
+					}
+				},
+				"data": "1.16.100",
+				"key": "format_version"
+			},
+			{
+				"open": {
+					"format_version": "1.16.100",
+					"minecraft:item": {
+						"description": {
+							"identifier": "safeguard:admin_panel"
+						},
+						"components": {
+							"minecraft:max_stack_size": 1,
+							"minecraft:display_name": {
+								"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+							},
+							"minecraft:on_use": {
+								"on_use": {
+									"event": "safeguard:panel_use"
+								}
+							},
+							"minecraft:foil": true,
+							"minecraft:render_offsets": {
+								"main_hand": {
+									"third_person": {
+										"scale": [
+											0,
+											0,
+											0
+										]
+									}
+								}
+							},
+							"minecraft:icon": {
+								"texture": "banner_pattern"
+							}
+						},
+						"events": {
+							"safeguard:panel_use": {
+								"run_command": {
+									"command": [
+										"dialogue open @s @s[tag=admin] panel_home",
+										"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+									]
+								}
+							}
+						}
+					}
+				},
+				"key": "minecraft:item",
+				"children": [
+					{
+						"open": {
+							"description": {
+								"identifier": "safeguard:admin_panel"
+							},
+							"components": {
+								"minecraft:max_stack_size": 1,
+								"minecraft:display_name": {
+									"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+								},
+								"minecraft:on_use": {
+									"on_use": {
+										"event": "safeguard:panel_use"
+									}
+								},
+								"minecraft:foil": true,
+								"minecraft:render_offsets": {
+									"main_hand": {
+										"third_person": {
+											"scale": [
+												0,
+												0,
+												0
+											]
+										}
+									}
+								},
+								"minecraft:icon": {
+									"texture": "banner_pattern"
+								}
+							},
+							"events": {
+								"safeguard:panel_use": {
+									"run_command": {
+										"command": [
+											"dialogue open @s @s[tag=admin] panel_home",
+											"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+										]
+									}
+								}
+							}
+						},
+						"key": "description",
+						"is_minified": true,
+						"children": {
+							"identifier": "safeguard:admin_panel"
+						}
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "safeguard:admin_panel"
+							},
+							"components": {
+								"minecraft:max_stack_size": 1,
+								"minecraft:display_name": {
+									"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+								},
+								"minecraft:on_use": {
+									"on_use": {
+										"event": "safeguard:panel_use"
+									}
+								},
+								"minecraft:foil": true,
+								"minecraft:render_offsets": {
+									"main_hand": {
+										"third_person": {
+											"scale": [
+												0,
+												0,
+												0
+											]
+										}
+									}
+								},
+								"minecraft:icon": {
+									"texture": "banner_pattern"
+								}
+							},
+							"events": {
+								"safeguard:panel_use": {
+									"run_command": {
+										"command": [
+											"dialogue open @s @s[tag=admin] panel_home",
+											"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+										]
+									}
+								}
+							}
+						},
+						"key": "components",
+						"children": [
+							{
+								"data": "1",
+								"key": "minecraft:max_stack_size"
+							},
+							{
+								"open": {
+									"minecraft:max_stack_size": 1,
+									"minecraft:display_name": {
+										"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+									},
+									"minecraft:on_use": {
+										"on_use": {
+											"event": "safeguard:panel_use"
+										}
+									},
+									"minecraft:foil": true,
+									"minecraft:render_offsets": {
+										"main_hand": {
+											"third_person": {
+												"scale": [
+													0,
+													0,
+													0
+												]
+											}
+										}
+									},
+									"minecraft:icon": {
+										"texture": "banner_pattern"
+									}
+								},
+								"key": "minecraft:display_name",
+								"is_minified": true,
+								"children": {
+									"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+								}
+							},
+							{
+								"open": {
+									"minecraft:max_stack_size": 1,
+									"minecraft:display_name": {
+										"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+									},
+									"minecraft:on_use": {
+										"on_use": {
+											"event": "safeguard:panel_use"
+										}
+									},
+									"minecraft:foil": true,
+									"minecraft:render_offsets": {
+										"main_hand": {
+											"third_person": {
+												"scale": [
+													0,
+													0,
+													0
+												]
+											}
+										}
+									},
+									"minecraft:icon": {
+										"texture": "banner_pattern"
+									}
+								},
+								"key": "minecraft:on_use",
+								"children": [
+									{
+										"open": {
+											"on_use": {
+												"event": "safeguard:panel_use"
+											}
+										},
+										"key": "on_use",
+										"is_minified": true,
+										"children": {
+											"event": "safeguard:panel_use"
+										}
+									}
+								]
+							},
+							{
+								"open": {
+									"minecraft:max_stack_size": 1,
+									"minecraft:display_name": {
+										"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+									},
+									"minecraft:on_use": {
+										"on_use": {
+											"event": "safeguard:panel_use"
+										}
+									},
+									"minecraft:foil": true,
+									"minecraft:render_offsets": {
+										"main_hand": {
+											"third_person": {
+												"scale": [
+													0,
+													0,
+													0
+												]
+											}
+										}
+									},
+									"minecraft:icon": {
+										"texture": "banner_pattern"
+									}
+								},
+								"data": "true",
+								"key": "minecraft:foil"
+							},
+							{
+								"key": "minecraft:render_offsets",
+								"children": [
+									{
+										"open": {
+											"main_hand": {
+												"third_person": {
+													"scale": [
+														0,
+														0,
+														0
+													]
+												}
+											}
+										},
+										"key": "main_hand",
+										"children": [
+											{
+												"open": {
+													"third_person": {
+														"scale": [
+															0,
+															0,
+															0
+														]
+													}
+												},
+												"key": "third_person",
+												"children": [
+													{
+														"open": {
+															"scale": [
+																0,
+																0,
+																0
+															]
+														},
+														"key": "scale",
+														"is_minified": true,
+														"children": [
+															0,
+															0,
+															0
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"open": {
+									"minecraft:max_stack_size": 1,
+									"minecraft:display_name": {
+										"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+									},
+									"minecraft:on_use": {
+										"on_use": {
+											"event": "safeguard:panel_use"
+										}
+									},
+									"minecraft:foil": true,
+									"minecraft:render_offsets": {
+										"main_hand": {
+											"third_person": {
+												"scale": [
+													0,
+													0,
+													0
+												]
+											}
+										}
+									},
+									"minecraft:icon": {
+										"texture": "banner_pattern"
+									}
+								},
+								"key": "minecraft:icon",
+								"is_minified": true,
+								"children": {
+									"texture": "banner_pattern"
+								}
+							}
+						]
+					},
+					{
+						"open": {
+							"description": {
+								"identifier": "safeguard:admin_panel"
+							},
+							"components": {
+								"minecraft:max_stack_size": 1,
+								"minecraft:display_name": {
+									"value": "§l§6Admin Panel §7Click and Crouch to §aOpen"
+								},
+								"minecraft:on_use": {
+									"on_use": {
+										"event": "safeguard:panel_use"
+									}
+								},
+								"minecraft:foil": true,
+								"minecraft:render_offsets": {
+									"main_hand": {
+										"third_person": {
+											"scale": [
+												0,
+												0,
+												0
+											]
+										}
+									}
+								},
+								"minecraft:icon": {
+									"texture": "banner_pattern"
+								}
+							},
+							"events": {
+								"safeguard:panel_use": {
+									"run_command": {
+										"command": [
+											"dialogue open @s @s[tag=admin] panel_home",
+											"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+										]
+									}
+								}
+							}
+						},
+						"key": "events",
+						"children": [
+							{
+								"open": {
+									"safeguard:panel_use": {
+										"run_command": {
+											"command": [
+												"dialogue open @s @s[tag=admin] panel_home",
+												"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+											]
+										}
+									}
+								},
+								"key": "safeguard:panel_use",
+								"children": [
+									{
+										"open": {
+											"run_command": {
+												"command": [
+													"dialogue open @s @s[tag=admin] panel_home",
+													"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+												]
+											}
+										},
+										"key": "run_command",
+										"children": [
+											{
+												"open": {
+													"command": [
+														"dialogue open @s @s[tag=admin] panel_home",
+														"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+													]
+												},
+												"key": "command",
+												"is_minified": true,
+												"children": [
+													"dialogue open @s @s[tag=admin] panel_home",
+													"tellraw @s[tag=!admin] {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§4 You need admin tag to use this!§r\"}]}"
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}
