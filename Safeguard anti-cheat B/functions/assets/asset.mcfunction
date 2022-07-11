@@ -1,4 +1,8 @@
-#bridge-file-version: #75
+#bridge-file-version: #88
+#Testing if the function responds
+scoreboard players add @a setup_success 0
+scoreboard players set @a[scores={setup_success=1}] setup_success 2
+#Scoreboards
 scoreboard players add @a end_lock 0
 scoreboard players add @a barrel_lock 0
 scoreboard players add @a shulk_lock 0
@@ -19,12 +23,17 @@ scoreboard players add @a grief_on 0
 scoreboard players add @a grief_off 0
 scoreboard players add @a item_on 0
 scoreboard players add @a item_off 0
+scoreboard players add @a welcome_on 0
+scoreboard players add @a welcome_off 0
+#Welcomer toggle
+execute @a[scores={welcome_off=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] welcome 0
+execute @a[scores={welcome_on=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] welcome 1
 #admin things(end lock)
 execute @a[scores={end_lock=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] endnether_toggle 1
 execute @a[scores={end_yes=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] endnether_toggle 0
 #anti cbe(admin stuff)
-execute @a[scores={anti_cbe_off=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] anti_cbe_toggle 1
-execute @a[scores={anti_cbe_on=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] anti_cbe_toggle 0
+execute @a[scores={anti_cbe_off=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] anti_cbe_toggle 0
+execute @a[scores={anti_cbe_on=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] anti_cbe_toggle 1
 #Shulker and barrel(still admin)
 execute @a[scores={shulkbarrel_yes=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] shulkBarrel_lock 0
 execute @a[scores={barrel_lock=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] shulkBarrel_lock 1
@@ -79,3 +88,4 @@ execute @a[scores={anti_lag=200}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSaf
 execute @a[scores={anti_lag=200}] ~~~ gamerule domobloot true
 execute @a[scores={anti_lag=200..}] ~~~ scoreboard players reset @a anti_lag
 #I'M MAKING THINGS SO MUCH HARDER THAN THEY SHOULD BE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
+ 

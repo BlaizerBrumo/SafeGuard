@@ -1,4 +1,4 @@
-#bridge-file-version: #22
+#bridge-file-version: #24
 gamerule mobgriefing false
 execute @s[scores={death_effect=0}] ~~~ summon minecraft:lightning_bolt ~ ~3~
 execute @s[scores={death_effect=0}] ~~~ playsound random.levelup @s

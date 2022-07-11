@@ -1,5 +1,6 @@
-#bridge-file-version: #22
+#bridge-file-version: #24
 #These are punishments and similar
+tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 function assets/welcomer
 function punishment/flag/flagged
 function punishment/echest_ban/echest_wipe
@@ -23,3 +24,4 @@ function anti/anti_cbe
 function anti/anti_gmc
 function anti/anti_grief
 function anti/anti_items
+function anti/anti_crash
