@@ -1,4 +1,5 @@
-#bridge-file-version: #1
+#bridge-file-version: #2
+tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 scoreboard objectives add softhour dummy
 scoreboard players add @a[tag=softban_hour] softhour 1
 scoreboard players add @a[scores={softhour=1..71999}] softhour 1

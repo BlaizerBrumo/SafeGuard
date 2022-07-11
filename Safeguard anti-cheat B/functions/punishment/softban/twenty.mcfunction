@@ -1,4 +1,5 @@
-#bridge-file-version: #2
+#bridge-file-version: #3
+tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 scoreboard objectives add softtwen dummy
 scoreboard players add @a[tag=softban_twen] softtwen 1
 scoreboard players add @a[scores={softtwen=1..23999}] softtwen 1

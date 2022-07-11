@@ -1,4 +1,5 @@
-#bridge-file-version: #6
+#bridge-file-version: #7
+tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 title @a[tag=softban] times 1 1 1
 gamemode adventure @a[tag=softban]
 effect @a[tag=softban] slowness 1000 10 true
