@@ -1,4 +1,5 @@
-#bridge-file-version: #27
+#bridge-file-version: #28
+tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 #gamerule
 execute @a[scores={grief_on=0}] ~~~ gamerule tntexplodes false
 execute @a[scores={grief_on=0}] ~~~ gamerule respawnblocksexplode false
