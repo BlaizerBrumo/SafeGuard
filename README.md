@@ -48,7 +48,8 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 - Ban- Bans people forever, cannot unban people yet | /tag [name] add ban
 
-- Softbans- Is the same as flag, but auto and bans them at a certain time. 5 minutes: /tag [name] add softban_five10 minutes: /tag [name] add softban_ten20 minutes: /tag [name] add softban_twen60 minutes: /tag [name] add softban_hour
+- Softbans- Is the same as flag, but auto and bans them at a certain time. 
+5 minutes: /tag [name] add softban_five10 minutes: /tag [name] add softban_ten20 minutes: /tag [name] add softban_twen60 minutes: /tag [name] add softban_hour
 
 ## =====Helpful Features=====
 
@@ -86,7 +87,7 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 
 
-=====How to Use=====
+## =====How to Use=====
 
 1. Download the files from gihub or files below
 2. If you want to customize, change the .mcpack to .zip, unzip files, change the things you want, zip it, and change .zip to .mcpack
