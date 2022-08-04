@@ -1,4 +1,4 @@
-//bridge-file-version: #60
+//bridge-file-version: #3
 {
 	"format_version": "1.17.0",
 	"minecraft:entity": {
@@ -7,15 +7,23 @@
 			"is_spawnable": false,
 			"is_summonable": false,
 			"is_experimental": false,
-			"animations": {
-				"death_effect": "controller.animation.death_effect",
-				"admin_panel": "controller.animation.settings"
-			},
 			"scripts": {
 				"animate": [
 					"death_effect",
-					"admin_panel"
+					"admin_panel",
+					"is_jumping",
+					"is_levitating",
+					"is_on_ground",
+					"is_gliding"
 				]
+			},
+			"animations": {
+				"death_effect": "controller.animation.death_effect",
+				"admin_panel": "controller.animation.settings",
+				"is_jumping": "controller.animation.is_jumping",
+				"is_levitating": "controller.animation.is_levitating",
+				"is_on_ground": "controller.animation.is_on_ground",
+				"is_gliding": "controller.animation.is_gliding"
 			}
 		},
 		"component_groups": {
@@ -62,11 +70,6 @@
 			},
 			"safeguard:dialogue": {
 				"minecraft:npc": {}
-			},
-			"safeguard:perm_ban": {
-				"minecraft:instant_despawn": {
-					"remove_child_entities": true
-				}
 			}
 		},
 		"components": {
@@ -434,19 +437,13 @@
 			"safeguard:item": {
 				"run_command": {
 					"command": [
-						"function assets/illegal_item"
+						"function assets/illegal_item",
+						"function punishment/warning/ill_warning"
 					]
 				}
 			},
 			"safeguard:kick": {
 				"add": {
-					"component_groups": [
-						"safeguard:kick"
-					]
-				}
-			},
-			"safeguard:remove_kick": {
-				"remove": {
 					"component_groups": [
 						"safeguard:kick"
 					]
@@ -466,15 +463,11 @@
 					]
 				}
 			},
-			"safeguard:perm_ban": {
-				"add": {
-					"component_groups": [
-						"safeguard:perm_ban"
-					]
-				},
+			"minecraft:has_levitation": {
 				"run_command": {
+					"target": "self",
 					"command": [
-						"tellraw @a {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§r§c§l \"},{\"selector\":\"@s\"},{\"text\":\"§r got banned!\"}]}"
+						"tag @s add Effect:Levitation"
 					]
 				}
 			}
