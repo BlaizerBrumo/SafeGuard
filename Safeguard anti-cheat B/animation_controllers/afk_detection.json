@@ -1,0 +1,46 @@
+//bridge-file-version: #1
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.afk_detection": {
+			"initial_state": "default",
+			"states": {
+				"default": {
+					"transitions": [
+						{
+							"moving": "q.is_moving"
+						},
+						{
+							"notMoving": "!(q.is_moving)"
+						}
+					]
+				},
+				"moving": {
+					"transitions": [
+						{
+							"default": "(1.0)"
+						}
+					],
+					"on_entry": [
+						"/scoreboard players reset @s afk"
+					]
+				},
+				"notMoving": {
+					"transitions": [
+						{
+							"default": "(1.0)"
+						}
+					],
+					"on_entry": [
+						"/scoreboard players add @s afk 1",
+						"/execute @s[scores={afk=2350}] ~~~ tellraw @s {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§ §d\"},{\"selector\":\"@s\"},{\"text\":\" §bRemoved for inactivity in §7: §c4\"}]}",
+						"/execute @s[scores={afk=2380}] ~~~ tellraw @s {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§ §d\"},{\"selector\":\"@s\"},{\"text\":\" §bRemoved for inactivity in §7: §c3\"}]}",
+						"/execute @s[scores={afk=2420}] ~~~ tellraw @s {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§ §d\"},{\"selector\":\"@s\"},{\"text\":\" §bRemoved for inactivity in §7: §c2\"}]}",
+						"/execute @s[scores={afk=2460}] ~~~ tellraw @s {\"rawtext\":[{\"text\":\"§6[§eSafeGuard§6]§ §d\"},{\"selector\":\"@s\"},{\"text\":\" §bRemoved for inactivity in §7: §c1\"}]}",
+						"/execute @s[scores={afk=2500..}] ~~~ event entity @s safeguard:kick"
+					]
+				}
+			}
+		}
+	}
+}
