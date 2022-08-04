@@ -58,7 +58,7 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 - Illegal items crash- Kick people if they obtain items like movingblock or fire
 
-
+- Warnings- Can be checked through `/tag <name> add admin` and are used to auto ban
 
 - Help Command- Gives a quick guide on the anticheat | /function setup/help
 
