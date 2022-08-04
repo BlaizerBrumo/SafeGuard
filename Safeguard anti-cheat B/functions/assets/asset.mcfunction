@@ -1,8 +1,9 @@
-#bridge-file-version: #88
+#bridge-file-version: #109
 #Testing if the function responds
 scoreboard players add @a setup_success 0
 scoreboard players set @a[scores={setup_success=1}] setup_success 2
 #Scoreboards
+scoreboard objectives add afk dummy
 scoreboard players add @a end_lock 0
 scoreboard players add @a barrel_lock 0
 scoreboard players add @a shulk_lock 0
@@ -25,6 +26,11 @@ scoreboard players add @a item_on 0
 scoreboard players add @a item_off 0
 scoreboard players add @a welcome_on 0
 scoreboard players add @a welcome_off 0
+scoreboard players add @a warning 0
+scoreboard players add @a ill_warning 0
+scoreboard players add @a cbe_warning 0
+scoreboard players add @a gmc_warning 0
+scoreboard players add @a grief_warning 0
 #Welcomer toggle
 execute @a[scores={welcome_off=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] welcome 0
 execute @a[scores={welcome_on=0},tag=admin] ~~~ scoreboard players set @a[tag=admin] welcome 1
@@ -81,11 +87,40 @@ execute @a[scores={anti_lag=120}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSaf
 execute @a[scores={anti_lag=140}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 3 seconds..."}]}
 execute @a[scores={anti_lag=160}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 2 seconds..."}]}
 execute @a[scores={anti_lag=180}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 1 seconds..."}]}
-execute @a[scores={anti_lag=200}] ~~~ kill @e[type=!wolf,type=!cat,type=!parrot,type=!pig,type=!cow,type=!sheep,type=!horse,family=!player,tag=!friend]
-execute @a[scores={anti_lag=200}] ~~~ kill @e[type=xp_orb]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=arrow]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=polar_bear]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=minecraft:area_effect_cloud]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=minecraft:fox]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=minecraft:vex]
 execute @a[scores={anti_lag=200}] ~~~ kill @e[type=item]
+execute @a[scores={anti_lag=200}] ~~~ kill @e[type=xp_orb]
 execute @a[scores={anti_lag=200}] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Lag cleared!"}]}
 execute @a[scores={anti_lag=200}] ~~~ gamerule domobloot true
 execute @a[scores={anti_lag=200..}] ~~~ scoreboard players reset @a anti_lag
-#I'M MAKING THINGS SO MUCH HARDER THAN THEY SHOULD BE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
- 
+#Warning Check
+scoreboard objectives add warn_check dummy
+execute @a ~~~  scoreboard players add @s warn_check 0
+scoreboard players add @a[tag=warn_check] warn_check 1
+scoreboard players add @a[scores={warn_check=1..}] warn_check 1
+execute @a[scores={warn_check=10..6000},tag=warn_check] ~~~ tag @s add warn_fast
+scoreboard players reset @a[scores={warn_check=6001..}] warn_check
+tag @a[tag=warn_check] remove warn_check
+#warning check2
+execute @a[tag=warn_fast] ~~~ tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§c "},{"selector": "@s"},{"text":" §4is reaching warnings too fast and was softbanned!s"}]}
+execute @a[tag=warn_fast] ~~~ tag @s add softban_ten
+execute @a[tag=warn_fast] ~~~ tag @s add warning
+execute @a[tag=warn_fast] ~~~ scoreboard players reset @s warn_check
+execute @a[tag=warn_fast] ~~~ tag @s remove warn_fast
+#████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+#█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░███
+#█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀░░░░█
+#█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░░░▄▀░░███░░▄▀░░░░▄▀▄▀░░█
+#█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█░░▄▀░░█████████░░▄▀░░█████████░░▄▀░░█████████░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░████░░▄▀░░███░░▄▀░░██░░▄▀░░█
+#█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░░░▄▀░░███░░▄▀░░██░░▄▀░░█
+#█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░░░░░█░░▄▀░░██░░▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀░░██░░▄▀░░█
+#█░░░░░░░░░░▄▀░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░▄▀░░░░███░░▄▀░░██░░▄▀░░█
+#█████████░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░█████████░░▄▀░░█████████░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░█████░░▄▀░░██░░▄▀░░█
+#█░░░░░░░░░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░█████████░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░░░░░▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀░░░░░░█░░▄▀░░░░▄▀▄▀░░█
+#█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀░░░░█
+#█░░░░░░░░░░░░░░█░░░░░░██░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░█░░░░░░██░░░░░░░░░░█░░░░░░░░░░░░███
+#████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
