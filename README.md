@@ -20,7 +20,9 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 
 - Anti Grief- Clears all tnt and respawn anchors from player's inventory
 
+- Anti 32k- Clears items with illegal enchants from non staff members
 
+- Anti Crasher- Prevents crashes from horion users
 
 ## =====Admin Commands=====
 
@@ -91,6 +93,7 @@ SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and cu
 1. Download the files from gihub or files below
 2. If you want to customize, change the .mcpack to .zip, unzip files, change the things you want, zip it, and change .zip to .mcpack
 3. Add the add-on to world/realm
-4. Run /function setup/setup
-5. Toggle on all the modules you want in /function settings/
-6. Enjoy!
+4. Turn on Holiday Creator Features & Gametest framework
+5. Run /function setup/setup
+6. Toggle on all the modules you want in /function settings/
+7. Enjoy!
