@@ -1,5 +1,6 @@
+<img src="https://img.shields.io/github/downloads/BlaizerBrumo/SafeGuard/total?style=for-the-badge" alt="Downloads"/><br>
 SafeGuard is a minecraft bedrock anti-cheat add-on with simple protection and customizable functions to use against hackers, it includes such things as:
- <br><img src="https://img.shields.io/github/downloads/BlaizerBrumo/SafeGuard/total?style=for-the-badge" alt="Downloads"/>
+
 ## ======Modules======
 
 - Anti CBE- Kills NPCs and command block minecarts to stop hackers from using command block exploit.
