@@ -1,4 +1,3 @@
-//bridge-file-version: #37
 {
 	"format_version": "1.17.20",
 	"minecraft:npc_dialogue": {
@@ -55,6 +54,12 @@
 						"name": "FK Leave",
 						"commands": [
 							"/function admin_cmds/fake_leave"
+						]
+					},
+										{
+						"name": "Lag Clear",
+						"commands": [
+							"/function anti/anti_lag"
 						]
 					}
 				]
@@ -160,6 +165,24 @@
 						"name": "Welcomer",
 						"commands": [
 							"/function settings/welcomer"
+						]
+					},
+					{
+						"name": "Anti 32k",
+						"commands": [
+							"/function settings/32k"
+						]
+					},
+					{
+						"name": "Anti Crasher",
+						"commands": [
+							"/function settings/crasher"
+						]
+					},
+					{
+						"name": "Anti Namespoof",
+						"commands": [
+							"/function settings/namespoof"
 						]
 					}
 				]
