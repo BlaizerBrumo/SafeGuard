@@ -1,4 +1,3 @@
-#bridge-file-version: #91
 #scoreboard
 scoreboard objectives add vanish dummy
 scoreboard objectives add welcomer dummy
@@ -16,6 +15,9 @@ scoreboard objectives add welcome dummy
 scoreboard objectives add setup_success dummy
 scoreboard objectives add banned dummy
 scoreboard objectives add ac_banned dummy
+scoreboard objectives add 32k_toggle dummy
+scoreboard objectives add nocrash_toggle dummy
+scoreboard objectives add nmspf_toggle dummy
 scoreboard players add @a setup_success 0
 #warning scoreboard setup
 scoreboard objectives add ill_warning dummy
@@ -33,13 +35,13 @@ gamerule sendcommandfeedback false
 gamerule commandblockoutput false
 tag @e[type=npc] add friend
 #message
-execute @s[scores={setup_success=3}] ~~~ function credit
+execute as @s[scores={setup_success=3}] run function credit
 tellraw @s[scores={setup_success=3}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r Add tag §eadmin§r to all the staff §o/tag NAME add admin§r"}]}
 tellraw @s[scores={setup_success=3}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r §aSuccessfully setup the anti-cheat!§r"}]}
 #errors
 tellraw @s[scores={setup_success=1}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"FATAL ERROR:§r§4 Function §aassets/asset§4 didn't respond, contact §aBlazer#9677§4 or join the discord server for help! §adiscord.gg/JP65Fhk9f6§r"}]}
 tellraw @s[scores={setup_success=0}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"SETUP ERROR: §r§4File §aplayer.json§4 isn't responding, turn on §7holiday creator features§r"}]}
-tellraw @s[scores={setup_success=2}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"SETUP ERROR: §r§4Experiments Required, turn on §7gametest framework§r"}]}
+tellraw @s[scores={setup_success=2}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"SETUP ERROR: §r§4Experiments Required, turn on §7gametest framework§r§4(if this message shows up 2+ times after running command)"}]}
 playsound random.levelup @s[scores={setup_success=3}]
 playsound random.anvil_land @s[scores={setup_success=0..2}]
 tellraw @s[scores={setup_success=4}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"SETUP ERROR: §r§4AntiCheat already setup!§r"}]}

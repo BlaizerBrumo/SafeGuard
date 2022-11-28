@@ -1,3 +1,3 @@
-#bridge-file-version: #0
+#bridge-file-version: #1
 particle minecraft:huge_explosion_emitter ~~~
-playsound random.break @s
+playsound mob.wither.break_block

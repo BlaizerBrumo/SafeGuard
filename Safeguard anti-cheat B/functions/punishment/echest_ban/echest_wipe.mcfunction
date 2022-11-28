@@ -1,4 +1,4 @@
-#bridge-file-version: #13
+#bridge-file-version: #14
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 0 air
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 1 air
@@ -28,5 +28,5 @@ replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 24 air
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 25 air
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 26 air
 tellraw @a[tag=echest_wipe] {"rawtext":[{"text":"§4"},{"text":"§6[§eSafeGuard§6]§4 Your enderchest was wiped by admin"}]}
-execute @a[tag=echest_wipe] ~~~ tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[tag=echest_wipe]"},{"text":"'s §benderchest was wiped! §r"}]}
+execute as @a[tag=echest_wipe] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[tag=echest_wipe]"},{"text":"'s §benderchest was wiped! §r"}]}
 tag @a[tag=echest_wipe] remove echest_wipe
