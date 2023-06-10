@@ -14,8 +14,6 @@ execute as @a[scores={anti_cbe_on=0}] run execute as @a[tag=!admin] run kill @e[
 execute as @a[scores={anti_cbe_on=0}] run execute as @a[tag=!admin] run kill @e[type=item,name="§g§lBee Nest NPC Command"]
 execute as @a[scores={anti_cbe_on=0}] run execute as @a[tag=!admin] run kill @e[type=item,name="§g§lMovingBlock BeeNest NPC Command"]
 execute as @a[scores={anti_cbe_on=0}] run execute as @a[tag=!admin] run kill @e[type=item,name="§g§lInvisible Beehive NPC Command"]
-execute as @a[scores={anti_cbe_on=0}] run execute as @a[tag=!admin] run kill @e[r=10,type=moving_block]
-execute as @a[scores={anti_cbe_on=0}] run execute as @e[type=moving_block] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"selector":"@a[r=10,tag=!admin]"},{"text":" §r§4Was detected placing a §l§cMoving Block!§r"}]}
 #Warning
 execute as @a[scores={anti_cbe_on=0}] run execute as @e[type=command_block_minecart,tag=!admin] run execute as @a[r=10,tag=!admin] run function punishment/warning/cbe_warning
 execute as @a[scores={anti_cbe_on=0}] run execute as @e[type=npc,tag=!admin,tag=!friend] run execute as @a[r=10,tag=!admin] run function punishment/warning/cbe_warning

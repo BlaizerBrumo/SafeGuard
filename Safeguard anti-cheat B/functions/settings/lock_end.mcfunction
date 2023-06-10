@@ -14,5 +14,5 @@ playsound note.bass @s[tag=admin] ~~~
 tellraw @s[tag=!admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r §4You need admin tag to run this!§r"}]}
 playsound random.anvil_land @s[tag=!admin]
 #Notify
-execute as @s[scores={endnether_toggle=0}] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[scores={endnether_toggle=1}]"},{"text":" §bturned on§l§5 End Lock! §r"}]}
-execute as @s[scores={endnether_toggle=1}] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[scores={endnether_toggle=0}]"},{"text":" §bturned off§l§5 End Lock! §r"}]}
+execute as @s[scores={endnether_toggle=0}] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[scores={endnether_toggle=1}]"},{"text":" §bturned off§l§5 End Lock! §r"}]}
+execute as @s[scores={endnether_toggle=1}] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@s[scores={endnether_toggle=0}]"},{"text":" §bturned on§l§5 End Lock! §r"}]}

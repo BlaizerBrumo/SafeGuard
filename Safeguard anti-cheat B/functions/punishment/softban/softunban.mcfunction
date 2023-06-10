@@ -8,7 +8,7 @@ tag @a[tag=softunban] remove softban_hour
 gamemode survival @a[tag=softunban]
 effect @a[tag=softunban] clear
 tellraw @a[tag=softunban] {"rawtext":[{"text":"§6[§eSafeGuard§6] §aSoftban was removed!!"}]}
-execute as @a[tag=softunban] run tp @p[tag=softunban] ~ 140 ~
+execute as @a[tag=softunban] run tp @p[tag=softunban] ~ 300 ~
 effect @a[tag=softunban] slow_falling 60 0 true
 execute as @a[tag=softunban] run tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"selector":"@a[tag=softunban]"},{"text":" §bwas softunbanned! §r"}]}
 scoreboard players reset @a[tag=softunban,scores={softfive=1..}] softfive

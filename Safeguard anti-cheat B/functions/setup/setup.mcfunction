@@ -1,4 +1,3 @@
-#scoreboard
 scoreboard objectives add vanish dummy
 scoreboard objectives add welcomer dummy
 scoreboard objectives add endnether_toggle dummy
@@ -16,9 +15,11 @@ scoreboard objectives add setup_success dummy
 scoreboard objectives add banned dummy
 scoreboard objectives add ac_banned dummy
 scoreboard objectives add 32k_toggle dummy
+scoreboard objectives add kod_toggle dummy
 scoreboard objectives add nocrash_toggle dummy
 scoreboard objectives add nmspf_toggle dummy
 scoreboard players add @a setup_success 0
+event entity @s safeguard:setup
 #warning scoreboard setup
 scoreboard objectives add ill_warning dummy
 scoreboard objectives add gmc_warning dummy

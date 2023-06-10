@@ -30,12 +30,10 @@ scoreboard players add @a ill_warning 0
 scoreboard players add @a cbe_warning 0
 scoreboard players add @a gmc_warning 0
 scoreboard players add @a grief_warning 0
-scoreboard players add @a 32k_on 0
-scoreboard players add @a 32k_off 0
+scoreboard players add @a kod_on 0
+scoreboard players add @a kod_off 0
 scoreboard players add @a nocrash_on 0
 scoreboard players add @a nocrash_off 0
-scoreboard players add @a nmspf_on 0
-scoreboard players add @a nmspf_off 0
 #Welcomer toggle
 execute as @a[scores={welcome_off=0}, tag=admin] run scoreboard players set @a[tag=admin] welcome 0
 execute as @a[scores={welcome_on=0}, tag=admin] run scoreboard players set @a[tag=admin] welcome 1
@@ -68,22 +66,14 @@ execute as @a[scores={death_coord_on=0}, tag=admin] run scoreboard players set @
 #Death effect (still admin thing :)
 execute as @a[scores={death_effect_off=0}, tag=admin] run scoreboard players set @a[tag=admin] death_toggle 0
 execute as @a[scores={death_effect=0}, tag=admin] run scoreboard players set @a[tag=admin] death_toggle 1
-#anti 32k (admin thinga majig)
-execute as @a[scores={32k_off=0}, tag=admin] run scoreboard players set @a[tag=admin] 32k_toggle 0
-execute as @a[scores={32k_on=0}, tag=admin] run scoreboard players set @a[tag=admin] 32k_toggle 1
-#anti crasher (admin thingus)
-execute as @a[scores={nocrash_off=0}, tag=admin] run scoreboard players set @a[tag=admin] nocrash_toggle 0
-execute as @a[scores={nocrash_on=0}, tag=admin] run scoreboard players set @a[tag=admin] nocrash_toggle 1
-#anti crasher (admin thingus)
-execute as @a[scores={nmspf_off=0}, tag=admin] run scoreboard players set @a[tag=admin] nmspf_toggle 0
-execute as @a[scores={nmspf_on=0}, tag=admin] run scoreboard players set @a[tag=admin] nmspf_toggle 1
 #Function execute
 tag @a[tag=ban1] add Ban
 execute as @a[scores={death_effect=0}] run execute as @e[type=lightning_bolt] run fill ~-2~-2~-2 ~2~2~2 air 0 replace fire
 #End lock
-execute as @a[scores={end_lock=0}] if block ~~-2~ end_portal 0 run tp @p ~-1~1~
-execute as @a[scores={end_lock=0}] if block ~~-0.1~ end_portal 0 run tp @p ~-1~1~
-execute as @a[scores={end_lock=0}] if block ~~-0.01~ end_portal 0 run tp @p ~-1~1~
+execute at @a[scores={end_lock=0}] if block ~~-2~ end_portal 0 run tp @p ~-1~1~
+execute at @a[scores={end_lock=0}] if block ~~-0.1~ end_portal 0 run tp @p ~-1~1~
+execute at @a[scores={end_lock=0}] if block ~~-0.01~ end_portal 0 run tp @p ~-1~1~
+execute at @a[scores={end_lock=0}] if block ~~-1~ end_portal 0 run tellraw @p {"rawtext":[{"text":"§6[§eSafeGuard§6]§r The end was locked by an admin! Entering it will §4instant kill you§f."}]}
 execute as @a[scores={end_lock=0}] run kill @e[type=eye_of_ender_signal]
 #Shulker box/barrel ban(for anti kit)
 clear @a[scores={barrel_lock=0}] barrel
@@ -101,17 +91,15 @@ execute as @a[scores={anti_lag=120}] run tellraw @a {"rawtext":[{"text":"§6[§e
 execute as @a[scores={anti_lag=140}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 3 seconds...§r"}]}
 execute as @a[scores={anti_lag=160}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 2 seconds...§r"}]}
 execute as @a[scores={anti_lag=180}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 1 seconds...§r"}]}
-execute as @a[scores={anti_lag=180}] run gamerule domobloot true
-execute as @a[scores={anti_lag=200}] run kill @e[type=arrow]
-execute as @a[scores={anti_lag=200}] run kill @e[type=polar_bear]
-execute as @a[scores={anti_lag=200}] run kill @e[type=minecraft:area_effect_cloud]
-execute as @a[scores={anti_lag=200}] run kill @e[type=minecraft:fox]
-execute as @a[scores={anti_lag=200}] run kill @e[type=minecraft:vex]
+execute as @a[scores={anti_lag=200}] run tp @e[type=arrow] ~ -1000 ~
+execute as @a[scores={anti_lag=200}] run tp @e[type=polar_bear] ~ -1000 ~ 
+execute as @a[scores={anti_lag=200}] run tp @e[type=minecraft:area_effect_cloud] ~ -1000 ~
+execute as @a[scores={anti_lag=200}] run tp @e[type=minecraft:fox] ~ -1000 ~
+execute as @a[scores={anti_lag=200}] run tp @e[type=minecraft:vex] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run kill @e[type=item]
-execute as @a[scores={anti_lag=200}] run kill @e[family=monster]
-execute as @a[scores={anti_lag=200}] run kill @e[type=xp_orb]
+execute as @a[scores={anti_lag=200}] run tp @e[family=monster] ~ -1000 ~
+execute as @a[scores={anti_lag=200}] run tp @e[type=xp_orb] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Lag cleared!§r"}]}
-execute as @a[scores={anti_lag=200}] run gamerule domobloot true
 execute as @a[scores={anti_lag=200..}] run scoreboard players reset @a anti_lag
 #Warning Check
 scoreboard objectives add warn_check dummy
