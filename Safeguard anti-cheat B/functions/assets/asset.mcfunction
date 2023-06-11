@@ -1,6 +1,9 @@
 #Testing if the function responds
 scoreboard players add @a setup_success 0
-scoreboard players set @a[scores={setup_success=1}] setup_success 2
+scoreboard players set @a[scores={setup_success=0}] setup_success 1
+#gametest features
+scoreboard players set @a[scores={setup_success=0..}] safeguard:gametest_on 0
+scoreboard players set @a[scores={setup_success=1,safeguard:gametest_on=0}] setup_success 2
 #Scoreboards
 scoreboard players add @a lore_ban 0
 scoreboard players add @a end_lock 0
