@@ -1,8 +1,8 @@
 {
 	"format_version": 2,
 	"header": {
-		"name": "§l§eSafe§6Guard §fAntiCheat §4DEV BUILD§r",
-		"description": "§l§fMade by §eBlazer#9677 §fV1.6.2\nBeta API §cREQUIRED",
+		"name": "§l§eSafe§6Guard §fAntiCheat",
+		"description": "§l§fMade by §eBlazer#9677 §fV1.6.3\nBeta API §cREQUIRED",
 		"uuid": "82b3037f-a80a-49e1-88b8-941479b49a40",
 		"min_engine_version": [
 			1,
@@ -11,8 +11,8 @@
 		],
 		"version": [
 			1,
-			7,
-			2
+			6,
+			3
 		]
 	},
 	"modules": [
