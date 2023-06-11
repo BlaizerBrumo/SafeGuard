@@ -29,7 +29,6 @@ world.beforeEvents.itemUseOn.subscribe((data) => {
 world.beforeEvents.chatSend.subscribe((data) => {
 	const player = data.sender;
 	const message = data.message;
-	const args = message.substring(config.prefix.length).split(" ");
 	const sender = data.sender.name;
 
 	if(player.hasTag('muted') || player.hasTag('Ban')){
@@ -37,6 +36,11 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		data.cancel = true;
 		return;
 	}
+
+	//start commands code
+
+	if(!message.startsWith(config.prefix)) return;
+	const args = message.substring(config.prefix.length).split(" ");
 	if(!player.hasTag("admin")){
 		player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!')
 		data.cancel = true;
@@ -171,7 +175,9 @@ Minecraft.system.runInterval(()  => {
 		})();
 	}
 	//check if gametest if on
-	try { player.runCommandAsync('scoreboard players set @a[scores={setup_success=2}] setup_success 3'); } catch { }
+	if(world.scoreboard.getObjective("safeguard:gametest_on") == undefined){
+		world.scoreboard.addObjective("safeguard:gametest_on","Gamtetest Is On");
+	}
 
 	//end lock
 	if(player.dimension.id == "minecraft:the_end" && world.scoreboard.getObjective('end_lock') !== undefined){
