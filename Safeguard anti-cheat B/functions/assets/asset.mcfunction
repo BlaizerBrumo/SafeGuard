@@ -87,6 +87,7 @@ clear @a[scores={Shulkbarrel_ban=0}] shulker_box
 clear @a[scores={Shulkbarrel_ban=0}] undyed_shulker_box
 #Telling player "you are vanished"
 title @a[scores={vanish=1},tag=admin] actionbar §l§7You are vanished.§r
+playanimation @a[scores={vanish=1},tag=admin] animation.creeper.swelling I 99
 #anti lag
 scoreboard players add @a[scores={anti_lag=1..199}] anti_lag 1
 execute as @a[scores={anti_lag=100}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Ground items cleared in 5 seconds...§r"}]}

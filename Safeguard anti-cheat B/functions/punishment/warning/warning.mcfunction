@@ -1,10 +1,10 @@
 #bridge-file-version: #22
-execute as @a[scores={warning=3..}] run tag @s add ac_ban
+execute as @a[scores={warning=3..},tag=!admin] run tag @s add ac_ban
 #Warning
-execute as @a[tag=warning] run scoreboard players add @s warning 1
-execute as @a[tag=warning] run tellraw @s {"rawtext": [{"text": "§6[§eSafeGuard§6]§r§l§c "},{"text": "§4You were warned!§r"}]}
-execute as @a[tag=warning,scores={warning=2}] run tellraw @s {"rawtext": [{"text": "§6[§eSafeGuard§6]§r§l§c "},{"text": "§4Next warning will result in a permanent ban!§r"}]}
-execute as @a[tag=warning] run tag @s remove warning
+execute as @a[tag=warning,tag=!admin] run scoreboard players add @s warning 1
+execute as @a[tag=warning,tag=!admin] run tellraw @s {"rawtext": [{"text": "§6[§eSafeGuard§6]§r§l§c "},{"text": "§4You were warned!§r"}]}
+execute as @a[tag=warning,scores={warning=2},tag=!admin] run tellraw @s {"rawtext": [{"text": "§6[§eSafeGuard§6]§r§l§c "},{"text": "§4Next warning will result in a permanent ban!§r"}]}
+execute as @a[tag=warning,tag=!admin] run tag @s remove warning
 #Warning Reset
 execute as @a[tag=warning_reset] run scoreboard players reset @s warning
 execute as @a[tag=warning_reset] run scoreboard players reset @s ill_warning
