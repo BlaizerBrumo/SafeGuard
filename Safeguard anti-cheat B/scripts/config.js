@@ -10,6 +10,6 @@ export const cbeItems = ["minecraft:dispenser","minecraft:movingblock", "minecra
 //you can also remove all keywords if you don't want custom keyword detection
 export const bannedKeyWords = ["horion","32k","nbt","hack","nested","cbe","nuker","illegal"];
 
-//change prefix of commands
+//change prefix of chat commands
 export const prefix = "!";
 

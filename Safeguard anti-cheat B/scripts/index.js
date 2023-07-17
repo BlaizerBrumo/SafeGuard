@@ -1,5 +1,9 @@
 import * as Minecraft from '@minecraft/server';
+import { ActionFormData, MessageFormData, ModalFormData } from '@minecraft/server-ui';
+
 import * as config from "./config.js";
+import * as ui from "./assets/ui.js";
+import {invsee, getPlayerByName, canFindPlayer, scoreboardAction} from "./assets/util.js";
 
 console.warn("Script Loaded");
 const world = Minecraft.world;
@@ -30,86 +34,157 @@ world.beforeEvents.chatSend.subscribe((data) => {
 	const player = data.sender;
 	const message = data.message;
 	const sender = data.sender.name;
-
-	if(player.hasTag('muted') || player.hasTag('Ban')){
-		player.sendMessage('§6[§eSafeGuard§6]§r§c You are muted!')
-		data.cancel = true;
-		return;
+  
+	if (player.hasTag('muted') || player.hasTag('Ban')) {
+	  player.sendMessage('§6[§eSafeGuard§6]§r§c You are muted!');
+	  data.cancel = true;
+	  return;
 	}
-
-	//start commands code
-
-	if(!message.startsWith(config.prefix)) return;
+  
+	if (!message.startsWith(config.prefix)) return;
+  
 	const args = message.substring(config.prefix.length).split(" ");
-	if(!player.hasTag("admin")){
-		player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!')
-		data.cancel = true;
-		return;
+  
+	if (!player.hasTag("admin")) {
+	  player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!');
+	  data.cancel = true;
+	  return;
 	}
-	switch(args[0]){
+  
+	switch (args[0]) {
 		case "help":
-			player.sendMessage(`§l§aPREFIX:§2 §r${config.prefix}\n§l§aCOMMANDS:\n§r§eban <player name> §r|| to ban a person || ban Steve\n§einvsee <player name> §r|| see inventory of a player\n§emute <player name> §r|| mute a player || mute Steve\n§eunmute <player name>§r || unmute a player || unmute Steve`);
+			player.sendMessage(`§l§aPREFIX:§2 §r${config.prefix}\n§l§aCOMMANDS:\n§r§eban <player name> §r|| to ban a person\n§einvsee <player name> §r|| see inventory of a player\n§emute <player name> §r|| mute a player\n§eunmute <player name>§r || unmute a player\n§eworldborder [border] §r|| get or set the world border\n§evanish §r|| toggle vanish mode\n§eclearchat §r|| clear the chat\n§efakeleave §r|| simulate leaving the realm\n§efakeleave_server §r|| simulate leaving the server\n§esummon_npc §r|| summon an NPC\n§enotify §r|| toggle anticheat notifications`);
 			data.cancel = true;
 		break;
 
-		case "invsee":
-			data.cancel = true;
-			var setName = data.message.replace(config.prefix + "invsee ", "");
-			setName = setName.replaceAll('"', "").replaceAll('@', "");
-			if(getPlayerByName(setName).hasTag("admin")) return player.sendMessage(`§6[§eSafeGuard§6]§f Can't view inventory of §e${setName}§f, they're an admin.`);
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bviewed inventory of§l§5 ${setName.replace("@","")}! §r"}]}`);
-			invsee(sender, setName);
+  
+	  case "invsee":
+		data.cancel = true;
+		const setNameInvsee = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
+		if (getPlayerByName(setNameInvsee).hasTag("admin")) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't view the inventory of §e${setNameInvsee}§f, they're an admin.`);
+		  return;
+		}
+		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bviewed the inventory of§l§5 ${setNameInvsee.replace("@", "")}! §r"}]}`);
+		invsee(sender, setNameInvsee);
 		break;
-
-		case "ban":
-			var setName = data.message.replace(config.prefix + "ban ", "");
-			setName = setName.replaceAll('"', "").replaceAll('@', "");
-			data.cancel = true;
-			if(!canFindPlayer(setName)) return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setName}§f was not found`);
-			if(getPlayerByName(setName).hasTag("admin")) return player.sendMessage(`§6[§eSafeGuard§6]§f Can't ban §e${setName}§f, they're an admin.`);
-			player.runCommandAsync('tag "' + setName +'" add Ban');
-			player.sendMessage(`§6[§eSafeGuard§6]§f Banned §e${setName}`);
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bbanned§l§5 ${setName}! §r"}]}`);
+  
+	  case "ban":
+		data.cancel = true;
+		const setNameBan = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
+		if (!canFindPlayer(setNameBan)) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameBan}§f was not found`);
+		  return;
+		}
+		if (getPlayerByName(setNameBan).hasTag("admin")) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't ban §e${setNameBan}§f, they're an admin.`);
+		  return;
+		}
+		player.runCommandAsync('tag "' + setNameBan +'" add Ban');
+		player.sendMessage(`§6[§eSafeGuard§6]§f Banned §e${setNameBan}`);
+		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bbanned§l§5 ${setNameBan}! §r"}]}`);
 		break;
-
-		case "mute":
-			var setName = data.message.replace(config.prefix + "mute ", "");
-			setName = setName.replaceAll('"', "").replaceAll('@', "");
-			data.cancel = true;
-			if(!canFindPlayer(setName)) return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setName}§f was not found`);
-			if(getPlayerByName(setName).hasTag("admin")) return player.sendMessage(`§6[§eSafeGuard§6]§f Can't mute §e${setName}§f, they're an admin.`);
-			player.runCommandAsync('tag "' + setName +'" add muted');
-			player.sendMessage(`§6[§eSafeGuard§6]§f Muted §e${setName}`);
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bmuted§l§5 ${setName}! §r"}]}`);
+  
+	  case "mute":
+		data.cancel = true;
+		const setNameMute = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
+		if (!canFindPlayer(setNameMute)) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameMute}§f was not found`);
+		  return;
+		}
+		if (getPlayerByName(setNameMute).hasTag("admin")) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't mute §e${setNameMute}§f, they're an admin.`);
+		  return;
+		}
+		player.runCommandAsync('tag "' + setNameMute +'" add muted');
+		player.sendMessage(`§6[§eSafeGuard§6]§f Muted §e${setNameMute}`);
+		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bmuted§l§5 ${setNameMute}! §r"}]}`);
 		break;
-
-		case "unmute":
-			var setName = data.message.replace(config.prefix + "unmute ", "");
-			setName = setName.replaceAll('"', "").replaceAll('@', "");
-			data.cancel = true;
-			if(!canFindPlayer(setName)) return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setName}§f was not found`);
-			if(!getPlayerByName(setName).hasTag("muted")) return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setName}§f is not muted.`);
-			player.runCommandAsync('tag "' + setName +'" remove muted');
-			player.sendMessage(`§6[§eSafeGuard§6]§f Unmuted §e${setName}`);
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bunmuted§l§5 ${setName}! §r"}]}`);
+  
+	  case "unmute":
+		data.cancel = true;
+		const setNameUnmute = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
+		if (!canFindPlayer(setNameUnmute)) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameUnmute}§f was not found`);
+		  return;
+		}
+		if (!getPlayerByName(setNameUnmute).hasTag("muted")) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameUnmute}§f is not muted.`);
+		  return;
+		}
+		player.runCommandAsync('tag "' + setNameUnmute +'" remove muted');
+		player.sendMessage(`§6[§eSafeGuard§6]§f Unmuted §e${setNameUnmute}`);
+		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bunmuted§l§5 ${setNameUnmute}! §r"}]}`);
 		break;
-
-		default:
-			if(!message.startsWith(config.prefix)) return;
-			var splitMsg = data.message.split(config.prefix);
-			var setMsg = splitMsg[1];
-			var splitCmd = setMsg.split(' ');
-			var setCmd = splitCmd[0];
-			if (setCmd == "") {
-				data.cancel = false;
-			}
-			else {
-				player.runCommandAsync('tellraw @s {"rawtext":[{"text":"§cUnknown command: §f' + setCmd + '"}]}');
-				data.cancel = true;
-			}
+  
+	  case "worldborder":
+		data.cancel = true;
+		let oldBorder = null;
+		world.scoreboard.getObjectives().forEach((objective) => {
+		  const objectiveId = objective.id;
+		  if (objectiveId.startsWith("safeguard:worldBorder:")) oldBorder = objectiveId.split("safeguard:worldBorder:")[1];
+		});
+		const border = args[1];
+		if (!border) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f The current border is §e${oldBorder ?? "not set"}§f.`);
+		  return;
+		}
+		if(border === "remove"){
+			if(!oldBorder) return player.sendMessage(`§6[§eSafeGuard§6]§f The world border is §enot set§f.`);
+			scoreboardAction(`safeguard:worldBorder:${oldBorder}`,"remove");
+			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bremoved the world border! §r"}]}`);
+			player.sendMessage(`§6[§eSafeGuard§6]§r Removed the world border.`);
+			return;
+		}
+		if (isNaN(border) || border === "" || border < 500) {
+		  player.sendMessage(`§6[§eSafeGuard§6]§f You need to enter a valid number for the border (must be more than 500).`);
+		  return;
+		}
+		world.scoreboard.getObjectives().forEach((objective) => {
+		  if (objective.id.startsWith("safeguard:worldBorder:")) scoreboardAction(objective.id, "remove");
+		});
+		scoreboardAction(`safeguard:worldBorder:${border}`, "add");
+		player.sendMessage(`§6[§eSafeGuard§6]§f Set world border to §e${border}§f blocks.`);
+		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bset the world border to§5 ${border}§b blocks! §r"}]}`);
+		break;
+  
+	  case "vanish":
+		player.runCommandAsync("function admin_cmds/vanish");
+		data.cancel = true;
+		break;
+  
+	  case "clearchat":
+		player.runCommandAsync("function admin_cmds/clearchat");
+		data.cancel = true;
+		break;
+  
+	  case "fakeleave":
+		player.runCommandAsync("function admin_cmds/fake_leave");
+		data.cancel = true;
+		break;
+  
+	  case "fakeleave_server":
+		player.runCommandAsync("function admin_cmds/fake_leave_server");
+		data.cancel = true;
+		break;
+  
+	  case "summon_npc":
+		player.runCommandAsync("function admin_cmds/summon_npc");
+		data.cancel = true;
+		break;
+  
+	  case "notify":
+		player.runCommandAsync("function admin_cmds/notify");
+		data.cancel = true;
+		break;
+  
+	  default:
+		player.sendMessage(`§cUnknown command: §f${args}`);
+		data.cancel = true;
 		break;
 	}
-})
+  })
+  
 
 Minecraft.system.runInterval(()  => {
 [...world.getPlayers()].forEach(player => {
@@ -167,13 +242,6 @@ Minecraft.system.runInterval(()  => {
 		}
 
 			}
-	if (player.hasTag('Ban')) {
-		(async() => {
-			//wait 2 seconds before kicking for chance to unban
-			await new Promise(resolve => setTimeout(resolve, 2000));
-			player.runCommandAsync('kick "' + plrName + '"§6[§eSafeGuard§6]§r §l§4You are banned!');
-		})();
-	}
 	//check if gametest if on
 	if(world.scoreboard.getObjective("safeguard:gametest_on") == undefined){
 		world.scoreboard.addObjective("safeguard:gametest_on","Gamtetest Is On");
@@ -184,63 +252,59 @@ Minecraft.system.runInterval(()  => {
 		player.kill();
 	}
 
+	world.scoreboard.getObjectives().forEach((objective) => {
+		const objectiveId = objective.id;
+		if(objectiveId.startsWith("safeguard:worldBorder:")){
+			let {x,y,z} = player.location;
+			const border = objectiveId.split("safeguard:worldBorder:")[1];
+			if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
+				player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`)
+				player.teleport({x: 0, y: 325, z: 0},{dimension: player.dimension, rotation: {x: 0, y: 0}, keepVelocity: false});
+				player.addEffect("slow_falling", 1200, { amplifier: 1, showParticle: false })
+			}
+		}
+	});
+
 })
 });
 
 
-function invsee(sender, target) {
-	const senderPlayer = getPlayerByName(sender);
-	const targetPlayer = getPlayerByName(target);
-	if(targetPlayer == undefined) return senderPlayer.sendMessage(`§6[§eSafeGuard§6]§f Player §e${target}§f was not found`);
-	const inv = targetPlayer.getComponent("minecraft:inventory").container;
-	senderPlayer.sendMessage(`§6[§eSafeGuard§6]§f ${targetPlayer.nameTag}'s inventory:\n\n`);
-	for (let i = 0; i < inv.size; i++) {
-		const item = inv.getItem(i)
-		if (!item) continue;
-		const itemName = item.nameTag ?? ''
-		const { amount } = item;
-		if (item.typeId == "undefined") continue;
-		senderPlayer.sendMessage(`§6[§eSafeGuard§6]§f Slot §e${i}§f: §e${item.typeId.replace('minecraft:','')}§f x§e${item.amount} §fItem Name: §r${itemName}`)
+world.afterEvents.playerSpawn.subscribe((data) => {
+	const player = data.player;
+	if(!player.hasTag("Ban")) return;
+	world.runCommandAsync(`kick "${player.name}" You are banned.`);
+})
+
+Minecraft.system.beforeEvents.watchdogTerminate.subscribe((beforeWatchdogTerminate) => {
+	beforeWatchdogTerminate.cancel = true;
+
+	world.sendMessage(`§6[§eSafeGuard§6] §f${new Date()} |§4 A Watchdog Exception has been detected and has been cancelled successfully. Reason: §c${beforeWatchdogTerminate.terminateReason}`);
+});
+
+world.afterEvents.itemUse.subscribe((data) => {
+	if (data.source.typeId !== "minecraft:player") return;
+	const player = data.source;
+	const item = data.itemStack;
+	if(!player.hasTag("admin")){
+		player.playSound("random.anvil_land");
+		player.sendMessage("§6[§eSafeGuard§6]§r §4You need admin tag to use admin panel!§r");
+		return;
 	}
-}
-function canFindPlayer(player){
-	const target = [...world.getPlayers({
-		name: player
-	})][0]
-	if(target == undefined) return false
-	else return true;
-}
-function getPlayerByName(name){
-	const player = [...world.getPlayers({
-		name: name
-	})][0]
-	return player;
-}
+	if(!item) return;
+	if(item.typeId !== "safeguard:admin_panel") return;
 
+	let mainForm = new ActionFormData()
+	.title("SafeGuard Admin Panel")
+	.body(`Please select an option from below:`)
+	.button("Settings","textures/ui/settings_glyph_color_2x.png")
+	.button("Quick Ban","textures/ui/hammer_l.png")
+	.button("Player Actions","textures/ui/icon_multiplayer.png")
+	player.playSound("random.pop");
 
-
-world.afterEvents.entityHurt.subscribe((data) => {
-	const player = data.hurtEntity;
-	
-		if(player.typeId !== "minecraft:player") return;
-	
-			const hp = player.getComponent("health").current;
-			
-				if(hp <= 0) {
-					player.runCommandAsync("function assets/death_effect");
-					
-					//death coords
-					let deathCoordStatus = (world.scoreboard.getObjective('death_coord_on') === undefined) ? false : true;
-					const { x, y, z } = player.location;
-					if(deathCoordStatus){
-						player.sendMessage(`§6[§eSafeGuard§6]§r §eYou died at ${Math.round(x)}, ${Math.round(y)}, ${Math.round(z)} (in ${player.dimension.id.replace("minecraft:","")})`);
-					}
-				}
-	});
-
-
-	Minecraft.system.events.beforeWatchdogTerminate.subscribe((beforeWatchdogTerminate) => {
-		beforeWatchdogTerminate.cancel = true;
-	
-		world.sendMessage(`§6[§eSafeGuard§6] §f${new Date()} |§4 A Watchdog Exception has been detected and has been cancelled successfully. Reason: §c${beforeWatchdogTerminate.terminateReason}`);
-	});
+	mainForm.show(player).then((formData) => {
+		if (formData.canceled) return;
+		if(formData.selection === 0) return ui.settingsForm(player);
+		if(formData.selection === 1) return ui.playerSelectionForm(player,"ban");
+		if(formData.selection === 2) return ui.playerSelectionForm(player,"action");
+	})
+});
