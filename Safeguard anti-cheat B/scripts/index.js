@@ -53,7 +53,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
   
 	switch (args[0]) {
 		case "help":
-			player.sendMessage(`§l§aPREFIX:§2 §r${config.prefix}\n§l§aCOMMANDS:\n§r§eban <player name> §r|| to ban a person\n§einvsee <player name> §r|| see inventory of a player\n§emute <player name> §r|| mute a player\n§eunmute <player name>§r || unmute a player\n§eworldborder [border] §r|| get or set the world border\n§evanish §r|| toggle vanish mode\n§eclearchat §r|| clear the chat\n§efakeleave §r|| simulate leaving the realm\n§efakeleave_server §r|| simulate leaving the server\n§esummon_npc §r|| summon an NPC\n§enotify §r|| toggle anticheat notifications`);
+			player.sendMessage(`§l§aPREFIX:§2 §r${config.prefix}\n§l§aCOMMANDS:\n§r§eban <player name> §r|| to ban a person\n§einvsee <player name> §r|| see inventory of a player\n§emute <player name> §r|| mute a player\n§eunmute <player name>§r || unmute a player\n§eworldborder [border] §r|| get or set the world border\n§evanish §r|| toggle vanish mode\n§eclearchat §r|| clear the chat\n§efakeleave §r|| simulate leaving the realm\n§efakeleave_server §r|| simulate leaving the server\n§esummon_npc §r|| summon an NPC\n§enotify §r|| toggle anticheat notifications\n§elagclear §r|| run lag clear function`);
 			data.cancel = true;
 		break;
 
@@ -172,6 +172,11 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		player.runCommandAsync("function admin_cmds/summon_npc");
 		data.cancel = true;
 		break;
+
+	  case "lagclear":
+		player.runCommandAsync("function anti/anti_lag");
+		data.cancel = true;
+		break;
   
 	  case "notify":
 		player.runCommandAsync("function admin_cmds/notify");
@@ -285,13 +290,20 @@ world.afterEvents.itemUse.subscribe((data) => {
 	if (data.source.typeId !== "minecraft:player") return;
 	const player = data.source;
 	const item = data.itemStack;
+	if(!item) return;
+	if(item.typeId !== "safeguard:admin_panel") return;
 	if(!player.hasTag("admin")){
 		player.playSound("random.anvil_land");
 		player.sendMessage("§6[§eSafeGuard§6]§r §4You need admin tag to use admin panel!§r");
 		return;
 	}
-	if(!item) return;
-	if(item.typeId !== "safeguard:admin_panel") return;
+	//check if anticheat was setup for convinience
+	if(world.scoreboard.getObjective("setup_success") == undefined){
+		player.sendMessage(`§6[§eSafeGuard§6] §r§4AntiCheat not setup!§r`);
+		player.playSound("random.anvil_land");
+		return;
+	}
+
 
 	let mainForm = new ActionFormData()
 	.title("SafeGuard Admin Panel")
