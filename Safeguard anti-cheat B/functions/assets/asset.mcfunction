@@ -104,6 +104,7 @@ execute as @a[scores={anti_lag=200}] run kill @e[type=item]
 execute as @a[scores={anti_lag=200}] run tp @e[family=monster] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run tp @e[type=xp_orb] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Lag cleared!§r"}]}
+execute as @a[scores={anti_lag=200}] run gamerule domobloot true
 execute as @a[scores={anti_lag=200..}] run scoreboard players reset @a anti_lag
 #Warning Check
 scoreboard objectives add warn_check dummy
