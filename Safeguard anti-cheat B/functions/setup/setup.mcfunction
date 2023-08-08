@@ -14,10 +14,13 @@ scoreboard objectives add welcome dummy
 scoreboard objectives add setup_success dummy
 scoreboard objectives add banned dummy
 scoreboard objectives add ac_banned dummy
-scoreboard objectives add 32k_toggle dummy
-scoreboard objectives add kod_toggle dummy
-scoreboard objectives add nocrash_toggle dummy
-scoreboard objectives add nmspf_toggle dummy
+scoreboard objectives add nethr_toggle dummy
+scoreboard objectives add diamond_toggle dummy
+scoreboard objectives add cpscheck_toggle dummy
+scoreboard objectives add killaura_toggle dummy
+scoreboard objectives add spammer_toggle dummy
+scoreboard objectives add antifly_toggle dummy
+scoreboard objectives add antinuker_toggle dummy
 scoreboard players add @a setup_success 0
 #warning scoreboard setup
 scoreboard objectives add ill_warning dummy

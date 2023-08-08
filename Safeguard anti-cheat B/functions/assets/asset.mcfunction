@@ -5,7 +5,6 @@ scoreboard players set @a[scores={setup_success=0}] setup_success 1
 scoreboard players set @a[scores={setup_success=0..}] safeguard:gametest_on 0
 scoreboard players set @a[scores={setup_success=1,safeguard:gametest_on=0}] setup_success 2
 #Scoreboards
-scoreboard players add @a lore_ban 0
 scoreboard players add @a end_lock 0
 scoreboard players add @a barrel_lock 0
 scoreboard players add @a shulk_lock 0
@@ -16,8 +15,6 @@ scoreboard players add @a end_yes 0
 scoreboard players add @a shulkbarrel_yes 0
 scoreboard players add @a auto_mod_off 0
 scoreboard players add @a death_effect_off 0
-scoreboard players add @a anti_cbe_off 0
-scoreboard players add @a anti_cbe_on 0
 scoreboard players add @a death_coord_off 0
 scoreboard players add @a death_coord_on 0
 scoreboard players add @a gmc_on 0
@@ -33,19 +30,12 @@ scoreboard players add @a ill_warning 0
 scoreboard players add @a cbe_warning 0
 scoreboard players add @a gmc_warning 0
 scoreboard players add @a grief_warning 0
-scoreboard players add @a kod_on 0
-scoreboard players add @a kod_off 0
-scoreboard players add @a nocrash_on 0
-scoreboard players add @a nocrash_off 0
 #Welcomer toggle
 execute as @a[scores={welcome_off=0}, tag=admin] run scoreboard players set @a[tag=admin] welcome 0
 execute as @a[scores={welcome_on=0}, tag=admin] run scoreboard players set @a[tag=admin] welcome 1
 #admin things(end lock)
 execute as @a[scores={end_lock=0}, tag=admin] run scoreboard players set @a[tag=admin] endnether_toggle 1
 execute as @a[scores={end_yes=0}, tag=admin] run scoreboard players set @a[tag=admin] endnether_toggle 0
-#anti cbe(admin stuff)
-execute as @a[scores={anti_cbe_off=0}, tag=admin] run scoreboard players set @a[tag=admin] anti_cbe_toggle 0
-execute as @a[scores={anti_cbe_on=0}, tag=admin] run scoreboard players set @a[tag=admin] anti_cbe_toggle 1
 #Shulker and barrel(still admin)
 execute as @a[scores={shulkbarrel_yes=0}, tag=admin] run scoreboard players set @a[tag=admin] shulkBarrel_lock 0
 execute as @a[scores={barrel_lock=0}, tag=admin] run scoreboard players set @a[tag=admin] shulkBarrel_lock 1
@@ -60,7 +50,7 @@ execute as @a[scores={gmc_on=0}, tag=admin] run scoreboard players set @a[tag=ad
 #Anti Grief admin thing
 execute as @a[scores={grief_off=0}, tag=admin] run scoreboard players set @a[tag=admin] grief_toggle 0
 execute as @a[scores={grief_on=0}, tag=admin] run scoreboard players set @a[tag=admin] grief_toggle 1
-#Anti Grief admin thing
+#Anti item admin thing
 execute as @a[scores={item_off=0}, tag=admin] run scoreboard players set @a[tag=admin] item_toggle 0
 execute as @a[scores={item_on=0}, tag=admin] run scoreboard players set @a[tag=admin] item_toggle 1
 #Death coords admin thing
@@ -104,7 +94,7 @@ execute as @a[scores={anti_lag=200}] run kill @e[type=item]
 execute as @a[scores={anti_lag=200}] run tp @e[family=monster] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run tp @e[type=xp_orb] ~ -1000 ~
 execute as @a[scores={anti_lag=200}] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§a Lag cleared!§r"}]}
-execute as @a[scores={anti_lag=200}] run gamerule domobloot true
+execute as @a[scores={anti_lag=200..}] run gamerule domobloot true
 execute as @a[scores={anti_lag=200..}] run scoreboard players reset @a anti_lag
 #Warning Check
 scoreboard objectives add warn_check dummy
@@ -120,6 +110,11 @@ execute as @a[tag=warn_fast] run tag @s add softban_five
 execute as @a[tag=warn_fast] run tag @s add warning
 execute as @a[tag=warn_fast] run scoreboard players reset @s warn_check
 execute as @a[tag=warn_fast] run tag @s remove warn_fast
+#set gamemode tags
+tag @a[m=creative] add gamemode:creative
+tag @a[m=!creative] remove gamemode:creative
+
+
 #████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 #█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░███
 #█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀░░░░█

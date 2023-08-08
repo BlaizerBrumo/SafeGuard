@@ -24,8 +24,6 @@ function punishment/softban/softunban
 function punishment/softban/twenty
 function punishment/softban/hour
 #These are module toggles
-function anti/anti_cbe
 function anti/anti_gmc
 function anti/anti_grief
-function anti/anti_items
-function anti/anti_crash
+function assets/autoclicker

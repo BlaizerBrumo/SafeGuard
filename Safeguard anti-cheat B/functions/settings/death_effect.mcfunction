@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#6
 #Toggle the auto mod
 scoreboard players add @s[tag=admin] death_toggle 1
 scoreboard players set @s[tag=admin,scores={death_toggle=2..}] death_toggle 0
