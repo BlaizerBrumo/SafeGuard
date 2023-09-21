@@ -79,14 +79,11 @@ export function isRiding(player){
  export function copyInv(player,target){
 	Minecraft.system.run(()=>{ 
 		const targetContainer = getPlayerByName(target).getComponent("minecraft:inventory").container;
+		const container = player.getComponent("minecraft:inventory").container;
 		for (let i = 0; i < targetContainer.size; i++) {
 			const item = targetContainer.getItem(i)
 			if (!item) continue;
-			const itemName = item.nameTag ?? ''
-			const { amount } = item;
-			if (item.typeId == "undefined") continue;
-			const newItem = player.getComponent("inventory").container.setItem(i, new Minecraft.ItemStack(item.typeId,item.amount));
-			if(itemName) newItem.nameTag = itemName;
+			container.setItem(i,item);
 		}
 	})
  }
