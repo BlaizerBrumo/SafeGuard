@@ -8,4 +8,4 @@ tellraw @s {"rawtext":[{"text":"\n"}]}
 tellraw @s {"rawtext":[{"text":"§l§e                          Help"}]}
 tellraw @s {"rawtext":[{"text":"§l§6----------------------------------------------------------§r"}]}
 tellraw @s {"rawtext":[{"text":"Blazer#9677 - Join the disord for any help nGu5gehXs3"}]}
-tellraw @s {"rawtext":[{"text":"Version 1.8"}]}
+tellraw @s {"rawtext":[{"text":"Version 1.8.3"}]}
