@@ -41,6 +41,11 @@ export default {
             "maxBlocks": 3,
             //checks if admin players are using nuker (good for anti op abuse)
             "checkAdmins": true
+        },
+        "worldborder":{
+            //the minimum border size required, this is used so if a possible admin abuse or force op occurs hackers don't create a border of a size 1 block or less which
+            //will teleport all the players up in the air constantly
+            "minBorderDistance": 500
         }
     },
     "chat":{

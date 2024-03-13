@@ -4,13 +4,14 @@ import { ActionFormData } from '@minecraft/server-ui';
 
 import * as config from "./config.js";
 import * as ui from "./assets/ui.js";
-import {invsee, getPlayerByName, canFindPlayer, scoreboardAction, unban, copyInv, formatMilliseconds } from "./assets/util.js";
+import { scoreboardAction, formatMilliseconds } from "./assets/util.js";
 import { globalBanList } from './assets/globalBanList.js';
+import { commandHandler } from './command/handle.js';
+import "./command/importer.js";
 
 
 console.warn("Script Loaded");
 const world = Minecraft.world;
-
 
 
 
@@ -72,7 +73,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
   
 	if (!message.startsWith(prefix)) return;
   
-	const args = message.substring(prefix.length).split(" ");
+	
   
 	if (!player.hasTag("admin")) {
 	  player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!');
@@ -80,161 +81,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
 	  return;
 	}
   
-	switch (args[0]) {
-		case "help":
-			player.sendMessage(`§l§aPREFIX:§2 §r${prefix}\n§l§aCOMMANDS:\n§r§eban <player name> §r|| to ban a person\n§einvsee <player name> §r|| see inventory of a player\n§ecopyinv <player name> §r|| copy inventory of a player to yours\n§emute <player name> §r|| mute a player\n§eunmute <player name>§r || unmute a player\n§eworldborder [border] §r|| get or set the world border\n§evanish §r|| toggle vanish mode\n§eclearchat §r|| clear the chat\n§efakeleave §r|| simulate leaving the realm\n§efakeleave_server §r|| simulate leaving the server\n§esummon_npc §r|| summon an NPC\n§enotify §r|| toggle anticheat notifications\n§elagclear §r|| clear lag\n§eunban <player name> §r|| unban a player`);
-			data.cancel = true;
-			break;
-		  
-
-  
-	  case "invsee":
-		data.cancel = true;
-		const setNameInvsee = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-		if (getPlayerByName(setNameInvsee).hasTag("admin")) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't view the inventory of §e${setNameInvsee}§f, they're an admin.`);
-		  return;
-		}
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bviewed the inventory of§l§5 ${setNameInvsee.replace("@", "")}! §r"}]}`);
-		invsee(sender, setNameInvsee);
-		break;
-  
-	  case "ban":
-		data.cancel = true;
-		const setNameBan = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-		if (!canFindPlayer(setNameBan)) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameBan}§f was not found`);
-		  return;
-		}
-		if (getPlayerByName(setNameBan).hasTag("admin")) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't ban §e${setNameBan}§f, they're an admin.`);
-		  return;
-		}
-		player.runCommandAsync('tag "' + setNameBan +'" add Ban');
-		player.sendMessage(`§6[§eSafeGuard§6]§f Banned §e${setNameBan}`);
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bbanned§l§5 ${setNameBan}! §r"}]}`);
-		break;
-
-	  case "mute":
-		data.cancel = true;
-		const setNameMute = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-		if (!canFindPlayer(setNameMute)) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameMute}§f was not found`);
-		  return;
-		}
-		if (getPlayerByName(setNameMute).hasTag("admin")) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Can't mute §e${setNameMute}§f, they're an admin.`);
-		  return;
-		}
-		player.runCommandAsync('tag "' + setNameMute +'" add muted');
-		player.sendMessage(`§6[§eSafeGuard§6]§f Muted §e${setNameMute}`);
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bmuted§l§5 ${setNameMute}! §r"}]}`);
-		break;
-  
-	  case "unmute":
-		data.cancel = true;
-		const setNameUnmute = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-		if (!canFindPlayer(setNameUnmute)) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameUnmute}§f was not found`);
-		  return;
-		}
-		if (!getPlayerByName(setNameUnmute).hasTag("muted")) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameUnmute}§f is not muted.`);
-		  return;
-		}
-		player.runCommandAsync('tag "' + setNameUnmute +'" remove muted');
-		player.sendMessage(`§6[§eSafeGuard§6]§f Unmuted §e${setNameUnmute}`);
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bunmuted§l§5 ${setNameUnmute}! §r"}]}`);
-		break;
-  
-	  case "worldborder":
-		data.cancel = true;
-		let oldBorder = null;
-		world.scoreboard.getObjectives().forEach((objective) => {
-		  const objectiveId = objective.id;
-		  if (objectiveId.startsWith("safeguard:worldBorder:")) oldBorder = objectiveId.split("safeguard:worldBorder:")[1];
-		});
-		const border = args[1];
-		if (!border) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f The current border is §e${oldBorder ?? "not set"}§f.`);
-		  return;
-		}
-		if(border === "remove"){
-			if(!oldBorder) return player.sendMessage(`§6[§eSafeGuard§6]§f The world border is §enot set§f.`);
-			scoreboardAction(`safeguard:worldBorder:${oldBorder}`,"remove");
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bremoved the world border! §r"}]}`);
-			player.sendMessage(`§6[§eSafeGuard§6]§r Removed the world border.`);
-			return;
-		}
-		if (isNaN(border) || border === "" || border < 500) {
-		  player.sendMessage(`§6[§eSafeGuard§6]§f You need to enter a valid number for the border (must be more than 500).`);
-		  return;
-		}
-		world.scoreboard.getObjectives().forEach((objective) => {
-		  if (objective.id.startsWith("safeguard:worldBorder:")) scoreboardAction(objective.id, "remove");
-		});
-		scoreboardAction(`safeguard:worldBorder:${border}`, "add");
-		player.sendMessage(`§6[§eSafeGuard§6]§f Set world border to §e${border}§f blocks.`);
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${sender} §bset the world border to§5 ${border}§b blocks! §r"}]}`);
-		break;
-  
-	  case "vanish":
-		player.runCommandAsync("function admin_cmds/vanish");
-		data.cancel = true;
-		break;
-  
-	  case "clearchat":
-		player.runCommandAsync("function admin_cmds/clearchat");
-		data.cancel = true;
-		break;
-  
-	  case "fakeleave":
-		player.runCommandAsync("function admin_cmds/fake_leave");
-		data.cancel = true;
-		break;
-  
-	  case "fakeleave_server":
-		player.runCommandAsync("function admin_cmds/fake_leave_server");
-		data.cancel = true;
-		break;
-  
-	  case "summon_npc":
-		player.runCommandAsync("function admin_cmds/summon_npc");
-		data.cancel = true;
-		break;
-
-	  case "lagclear":
-		player.runCommandAsync("function anti/anti_lag");
-		data.cancel = true;
-		break;
-  
-	  case "notify":
-		player.runCommandAsync("function admin_cmds/notify");
-		data.cancel = true;
-		break;
-
-	  case "copyinv":
-		data.cancel = true;
-		const setNameInvcopy = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-		if (!canFindPlayer(setNameInvcopy)) {
-			player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${setNameInvcopy}§f was not found`);
-			return;
-		  }
-		copyInv(player,setNameInvcopy)
-		break;
-
-		case "unban":
-			data.cancel = true;
-			const setNameUnban = args.slice(1).join(" ").replaceAll('"', "").replaceAll('@', "");
-			unban(player,setNameUnban);
-			break;
-	
-  
-	  default:
-		player.sendMessage(`§cUnknown command: §f${args}`);
-		data.cancel = true;
-		break;
-	}
+	commandHandler(data);
 })
   
 
@@ -273,8 +120,12 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 				block.setPermutation(data.brokenBlockPermutation);
 				if(autoModOn) {
 					player.runCommand("gamemode adventure @s");
+					//I decided to put the player in adventure mode so they can't break more blocks 
 					player.teleport({x: player.location.x, y: 325, z: player.location.z},{dimension: player.dimension, rotation: {x: 0, y: 0}, keepVelocity: false});
-					player.runCommand(`kick "${player.name}" §r§6[§eSafeGuard§6]§r§4 You were detected using nuker by breaking §c${player.blocksBroken}§4 in one tick. `)
+					player.runCommand(`kick "${player.name}" §r§6[§eSafeGuard§6]§r§4 You were detected using nuker by breaking §c${player.blocksBroken}§4 in one tick. `);
+					//we only send an alert if auto mod is enabled because otherwise player would be breaking blocks indefinitely 
+					//and constantly making the alert pop up, causing spam
+					//here, we kick the player so the message should be sent once or twice without causing spam
 					world.sendMessage(`§6[§eSafeGuard§6]§r§c§l ${player.name} §r§4Was detected using nuker by breaking §l§c${player.blocksBroken}§r§4 blocks in one tick!§r`);
 				}
 				return;
@@ -312,14 +163,14 @@ Minecraft.system.runInterval(()  => {
 		} 
 		if(velocity.x == 0 && velocity.z == 0 && !player.isFalling) player.removeTag("safeguard:moving")
 
-		const item = player.getComponent("minecraft:inventory").container.getItem(player.selectedSlot);
+		const item = inv.getItem(player.selectedSlot);
 		if(!item) player.removeTag("safeguard:hasRiptide");
 			if(item){
 				const itemName = item.nameTag ?? '';
 
 				//check if player has a trident
 				if(item.typeId == "minecraft:trident") {
-					const hasRiptide = item.getComponent("enchantments").enchantments.hasEnchantment("riptide");
+					const hasRiptide = item.getComponent("enchantable").hasEnchantment("riptide");
 					if(hasRiptide !== 0) player.addTag("safeguard:hasRiptide");
 				}
 				else if(item.typeId !== "minecraft:trident") player.removeTag("safeguard:hasRiptide");
@@ -330,20 +181,20 @@ Minecraft.system.runInterval(()  => {
 					if (itemName.length > config.default.item.anti_items.maxItemNameLength && antiItemsOn) {
 						world.sendMessage('§6[§eSafeGuard§6]§r§c§l ' + plrName + ' §r§4Has illegal item: §l§c' +item.typeId.replace('minecraft:','') +'§l§4(chr limit exceeded§c ' + itemName.length + '§4/30)§4!§r')
 						player.runCommandAsync('function punishment/warning/ill_warning');
-						inv.setItem(player.selectedSlot,  new Minecraft.ItemStack('air', 1));
+						inv.setItem(player.selectedSlot,  undefined);
 						return;
 					}
 					else if (item.getLore().length > 0 && antiItemsOn && config.default.item.anti_items.antiLore) { //items in surivial usually don't have lore in them so it is banned(note to make this a setting)
 						world.sendMessage('§6[§eSafeGuard§6]§r§c§l ' + plrName + '§r §4Has illegal item: §c§l' +item.typeId.replace('minecraft:','') +'§4§l(lore chr limit exceeded§c ' + String(item.getLore()).length + '§4/0)§4!§r')
 						player.runCommandAsync('function punishment/warning/ill_warning');
-						inv.setItem(player.selectedSlot,  new Minecraft.ItemStack('air', 1));
+						inv.setItem(player.selectedSlot,  undefined);
 						return;
 					}
 					//keyword ban check
 					for(var u = 0; u < config.default.item.anti_items.bannedKeyWords.length; u++){
 						if (String(itemName.toLowerCase()).includes(config.default.item.anti_items.bannedKeyWords[u]) && antiItemsOn) {
 							world.sendMessage('§6[§eSafeGuard§6]§r§c§l ' + plrName + '§r §4Has illegal item: §c§l' +item.typeId.replace('minecraft:','') +' §r§4with banned keyword, item name:§r ' + String(itemName) + '§4!§r');
-							inv.setItem(player.selectedSlot,  new Minecraft.ItemStack('air', 1));
+							inv.setItem(player.selectedSlot,  undefined);
 							return;
 						}}
 
@@ -388,10 +239,9 @@ Minecraft.system.runInterval(()  => {
 		}
 
 		world.scoreboard.getObjectives().forEach((objective) => {
-			const objectiveId = objective.id;
-			if(objectiveId.startsWith("safeguard:worldBorder:")){
+			if(objective.id.startsWith("safeguard:worldBorder:")){
 				let {x,y,z} = player.location;
-				const border = objectiveId.split("safeguard:worldBorder:")[1];
+				const border = objective.id.split("safeguard:worldBorder:")[1];
 				if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
 					player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
 					player.teleport({x: 0, y: 325, z: 0},{dimension: player.dimension, rotation: {x: 0, y: 0}, keepVelocity: false});
@@ -402,21 +252,10 @@ Minecraft.system.runInterval(()  => {
 
 		//anti fly idk
 		let debugMenu = {
-			isFalling: player.isFalling,
-			isFlying: player.isFlying,
-			isOnGround: player.isOnGround,
-			isGliding: player.isGliding,
-			isClimbing: player.isClimbing,
-			fallDistance: player.fallDistance,
-			isSwimming: player.isSwimming,
-			isJumping: player.isJumping,
-			isSprinting: player.isSprinting,
-			isInWater: player.isInWater,
-			isSneaking: player.isSneaking,
-			velocity: velocity
+			rotation: player.getViewDirection()
 		}
 		//world.sendMessage(`-------------\n§e${JSON.stringify(velocity, null, 2)}§r\n-------------`);
-		if(config.debug) world.sendMessage(`§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
+		if(config.default.debug) world.sendMessage(`§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
 
 		//check if fall distance is in negatives (fly detection)
 		if(player.fallDistance < config.default.movement.fly.minFallDistance && antiFly && !player.hasTag("gamemode:creative") && !player.hasTag("admin") && !player.hasTag("safeguard:hasRiptide") && !player.isGliding && !player.isClimbing){
