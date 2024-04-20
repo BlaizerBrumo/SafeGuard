@@ -1,18 +1,38 @@
 //Edit items in this file if you want customization:
 export default {
 
-    //dev only don't touch
-    "debug": false,
+    "other":{
+        //dev only don't touch
+        "debug": false,
+        //how long a person is banned for when reaching warnings too fast in minutes
+        "warningsTooFastPunishmentTime": 5,
 
-
+    },
     "combat": {
         "autoclicker":{
             //if player cps go over this number, player gets flagged for autoclicker
-            "maxCps": 12
+            "maxCps": 20
         },
         "killaura":{
             //if player attacks this or many more number of entities in a single tick, gets flagged for killaura
             "maxHitEntities": 2
+        },
+        "combatLogging":{
+            //how many milliseconds player will stay in combat after last damage they received from a player
+            //this is set to 15 seconds by default
+            "timeToStayInCombat": 15000,
+            //punishment for when player is detected combat logging
+            //0 - send alert to everyone, do nothing
+            //1 - kill player
+            //2 - clear inventory
+            //3 - ban player (duration specified in "punishmentTime")
+            "punishmentType": 3,
+            //enabling this will send an alert when player combat logs to everyone in game
+            "alwaysSendAlert": false,
+            //valid input: <number> <day|hour|minute>
+            "punishmentTime": "15 minute",
+            //if admins don't get affected by anti combatlogging
+            "adminsBypass": true
         }
     },
     "item":{
@@ -31,8 +51,9 @@ export default {
     },
     "movement":{
         "fly":{
-            //if the fall distance goes over this number player gets flagged for flying, increase to -11 or above if you are getting a lot of false positives
-            "minFallDistance": -10
+            //the anticheat checks for sudden changes in player velocity
+            //for example if it suddenly jumps from -4 to 6, the threshold determines how high that difference can be
+            "maxYVelocityThreshold": 8
         }
     },
     "world":{
@@ -40,12 +61,16 @@ export default {
             //if player breaks this many or more blocks in a single tick, gets flagged for nuker 
             "maxBlocks": 3,
             //checks if admin players are using nuker (good for anti op abuse)
-            "checkAdmins": true
+            "checkAdmins": true,
+            //blocks that are excluded from nuker check because they are instant broken
+            "blockExceptions": ["minecraft:sea_pickle","minecraft:sugar_cane","minecraft:deadbush","minecraft:horn_coral","minecraft:coral_fan","minecraft:coral_fan_dead","minecraft:brain_coral","minecraft:bubble_coral","minecraft:dead_brain_coral","minecraft:dead_bubble_coral","minecraft:dead_fire_coral","minecraft:dead_horn_coral","minecraft:dead_tube_coral","minecraft:fire_coral","minecraft:tube_coral","minecraft:red_flower","minecraft:yellow_flower","minecraft:grass","minecraft:seagrass","minecraft:netherrack","minecraft:torchflower","minecraft:sapling","minecraft:cherry_sapling","minecraft:tallgrass","minecraft:double_plant","minecraft:nether_sprouts"]
         },
         "worldborder":{
             //the minimum border size required, this is used so if a possible admin abuse or force op occurs hackers don't create a border of a size 1 block or less which
             //will teleport all the players up in the air constantly
-            "minBorderDistance": 500
+            "minBorderDistance": 500,
+            //if admins can go beyond world border
+            "adminsBypassBorder": true,
         }
     },
     "chat":{

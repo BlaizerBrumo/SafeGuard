@@ -1,4 +1,3 @@
-#bridge-file-version: #7
 execute as @s[tag=admin] run summon npc ~ ~ ~
 tag @e[type=npc,r=5] add friend
 tellraw @s[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r §aSuccessfully summoned the NPC!§r"}]}

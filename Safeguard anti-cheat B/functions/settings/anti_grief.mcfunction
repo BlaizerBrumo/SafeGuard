@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#2
 #Toggle the Anti grief
 scoreboard players add @s[tag=admin] grief_toggle 1
 scoreboard players set @s[tag=admin,scores={grief_toggle=2..}] grief_toggle 0

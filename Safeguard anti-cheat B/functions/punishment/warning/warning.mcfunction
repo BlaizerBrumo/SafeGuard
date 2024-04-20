@@ -1,4 +1,3 @@
-#bridge-file-version: #22
 execute as @a[scores={warning=3..},tag=!admin] run tag @s add ac_ban
 #Warning
 execute as @a[tag=warning,tag=!admin] run scoreboard players add @s warning 1

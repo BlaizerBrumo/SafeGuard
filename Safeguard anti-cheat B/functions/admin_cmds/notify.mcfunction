@@ -1,4 +1,3 @@
-#bridge-file-version: #6
 scoreboard players add @s notify 1
 scoreboard players set @s[tag=admin,scores={notify=2..}] notify 0
 tellraw @s[tag=admin,scores={notify=0}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§b You will §5no longer§b recieve anticheat notifications!§r"}]}

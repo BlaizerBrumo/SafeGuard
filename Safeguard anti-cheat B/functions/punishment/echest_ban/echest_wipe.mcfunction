@@ -1,4 +1,3 @@
-#bridge-file-version: #14
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 0 air
 replaceitem entity @a[tag=!admin,tag=echest_wipe] slot.enderchest 1 air

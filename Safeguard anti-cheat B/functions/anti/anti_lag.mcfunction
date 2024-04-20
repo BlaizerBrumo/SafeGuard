@@ -1,4 +1,3 @@
-#bridge-file-version: #37
 #PUT THIS IN A REPEATING COMMAND BLOCK ONLY WITH A TICK PER SECOND DELAY
 #Killing the entities and stuff idk
 gamerule domobloot false

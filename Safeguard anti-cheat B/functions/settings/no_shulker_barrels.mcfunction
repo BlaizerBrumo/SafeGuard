@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#14
 #Toggle the shulker and barrel ban
 scoreboard players add @s[tag=admin] shulkBarrel_lock 1
 scoreboard players set @s[tag=admin,scores={shulkBarrel_lock=4..}] shulkBarrel_lock 0

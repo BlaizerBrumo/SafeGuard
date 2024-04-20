@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#2
 #Toggle the Death Coords
 scoreboard players add @s[tag=admin] death_coord 1
 scoreboard players set @s[tag=admin,scores={death_coord=2..}] death_coord 0

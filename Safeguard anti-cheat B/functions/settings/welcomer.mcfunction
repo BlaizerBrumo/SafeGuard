@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#0
 #Toggle the Welcomer
 scoreboard players add @s[tag=admin] welcome 1
 scoreboard players set @s[tag=admin,scores={welcome=2..}] welcome 0

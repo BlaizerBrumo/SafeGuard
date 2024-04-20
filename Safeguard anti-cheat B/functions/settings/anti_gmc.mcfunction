@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#0
 #Toggle the Anti GMC
 scoreboard players add @s[tag=admin] gmc_toggle 1
 scoreboard players set @s[tag=admin,scores={gmc_toggle=2..}] gmc_toggle 0

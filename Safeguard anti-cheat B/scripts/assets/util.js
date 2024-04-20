@@ -1,5 +1,5 @@
 import * as Minecraft from "@minecraft/server";
-
+import * as config from "../config";
 const world = Minecraft.world;
 
 
@@ -24,9 +24,30 @@ export function formatMilliseconds(milliseconds) {
 	const formattedMinutes = String(minutes).padStart(2, '0');
   
 	return `${formattedDays} Days ${formattedHours} Hours ${formattedMinutes} Mins`;
-  }
+}
+export function parsePunishmentTime(punishment) {
+	if (punishment.length !== 2) {
+	  return null;
+	}
   
-
+	const amount = parseInt(punishment[0]);
+	if (isNaN(amount) || amount <= 0) {
+	  return null;
+	}
+  
+	const unit = punishment[1].toLowerCase();
+	const multiplier = {
+	  minute: millisecondTime.minute,
+	  hour: millisecondTime.hour,
+	  day: millisecondTime.day,
+	}[unit];
+  
+	if (!multiplier) {
+	  return null;
+	}
+  
+	return amount * multiplier;
+}
 export function invsee(sender, target) {
 	const senderPlayer = getPlayerByName(sender);
 	const targetPlayer = getPlayerByName(target);
@@ -74,7 +95,45 @@ export function unban(player,playerName){
 export function isRiding(player){
 	if(player.getComponent("minecraft:riding")) return true
 	else return false
- }
+}
+
+export function sendMessageToAllAdmins(message = "No message provided",isANotification = false){
+	if(config.default.debug) return world.sendMessage(message);
+	let entityQueryOptions = {
+		tags:["admin"]
+	};
+	if(isANotification){
+		entityQueryOptions.scoreOptions = [{
+			objective: "notify",
+			maxScore: 1,
+			minScore: 1,
+			exclude: false
+		}]
+	}
+	
+	const adminPlayers = world.getPlayers(entityQueryOptions);
+	adminPlayers.forEach((admin) => {
+		admin.sendMessage(message);
+	})
+}
+
+export function teleportToGround(player) {
+	const playerPosition = player.location;
+	const eyeY = playerPosition.y + 1.6; // Adjust for eye position
+  
+	const raycastStart = { x: playerPosition.x, y: eyeY, z: playerPosition.z };
+	const raycastDirection = { x: 0, y: -1, z: 0 };	
+	const dimension = player.dimension;
+
+	const tempBlock = dimension.getBlockFromRay(raycastStart,raycastDirection).block;
+	if(!tempBlock){
+		console.warn("Couldn't teleport player to the ground.");
+		return
+	}
+	Minecraft.system.run(() => {
+		player.tryTeleport({ x: tempBlock.x, y: tempBlock.y + 1, z: tempBlock.z });
+	})
+}
 
  export function copyInv(player,target){
 	Minecraft.system.run(()=>{ 

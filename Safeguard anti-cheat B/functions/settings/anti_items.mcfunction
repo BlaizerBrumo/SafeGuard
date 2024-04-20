@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#0
 #Toggle the Anti item
 scoreboard players add @s[tag=admin] item_toggle 1
 scoreboard players set @s[tag=admin,scores={item_toggle=2..}] item_toggle 0

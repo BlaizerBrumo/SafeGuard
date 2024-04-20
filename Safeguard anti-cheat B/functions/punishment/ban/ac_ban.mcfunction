@@ -1,4 +1,3 @@
-#bridge-file-version: #28
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 tag @a[tag=ban,tag=!admin] add Ban
 scoreboard players add @a[tag=ac_ban,tag=!admin] ac_banned 1

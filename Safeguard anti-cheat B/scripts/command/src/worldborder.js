@@ -1,4 +1,4 @@
-import { scoreboardAction } from '../../assets/util';
+import { scoreboardAction, sendMessageToAllAdmins } from '../../assets/util';
 import config from '../../config';
 import { newCommand } from '../handle';
 import * as Minecraft from "@minecraft/server";
@@ -7,6 +7,7 @@ const world = Minecraft.world;
 
 newCommand({
     name:"worldborder",
+	description: "<border | remove> Get or set the worldborder",
     run: (data) => {
         let player = data.player;
         let oldBorder = null;
@@ -22,7 +23,10 @@ newCommand({
 		if(border === "remove"){
 			if(!oldBorder) return player.sendMessage(`§6[§eSafeGuard§6]§f The world border is §enot set§f.`);
 			scoreboardAction(`safeguard:worldBorder:${oldBorder}`,"remove");
-			player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${player.name} §bremoved the world border! §r"}]}`);
+			world.worldBorder = null;
+
+			sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§5§l ${player.name} §bremoved the world border! §r`,true);
+			//player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${player.name} §bremoved the world border! §r"}]}`);
 			player.sendMessage(`§6[§eSafeGuard§6]§r Removed the world border.`);
 			return;
 		}
@@ -34,8 +38,10 @@ newCommand({
 		  if (objective.id.startsWith("safeguard:worldBorder:")) scoreboardAction(objective.id, "remove");
 		});
 		scoreboardAction(`safeguard:worldBorder:${border}`, "add");
+		world.worldBorder = border;
 		player.sendMessage(`§6[§eSafeGuard§6]§f Set world border to §e${border}§f blocks.`);
-		player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${player.name} §bset the world border to§5 ${border}§b blocks! §r"}]}`);
+		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§5§l ${player.name} §bset the world border to§5 ${border}§b blocks! §r`,true);
+		//player.runCommandAsync(`tellraw @a[tag=admin,scores={notify=1}] {"rawtext":[{"text":"§6[§eSafeGuard Notify§6]§5§l "},{"text":"${player.name} §bset the world border to§5 ${border}§b blocks! §r"}]}`);
 		
     }
 })

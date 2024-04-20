@@ -16,6 +16,7 @@ For any questions or help please join the official SafeGuard discord server: [di
   > _If player matches any of these checks, player is warned and is given weakness for 2s to prevent giving attacks_
   > - **High CPS Check:** Checks if a player has a cps higher than the set amount inside of [config]
   > - **Multi Killaura Check:** Checks if a player attacks more entities then the set amount inside [config]
+  > - **Combat Log Detection:** Checks if a player rejoins the server after leaving during combat and gives them the punishment selected in [config]
 > 
 > 
 > ### 🏷️ Item Cheat Detections
@@ -29,11 +30,13 @@ For any questions or help please join the official SafeGuard discord server: [di
 > ### 🏃 Movement Cheat Detections
   > _If player matches any of these checks, player is warned and the anticheat tries to fix their position by teleporting_
   > - **Fly Check:** Checks if player is flying
+  > - **Invalid Velocity Check:** Checks if player is reaching an invalid Y velocity
 >
 >
 > ### 🌎 World Cheat Detections
   > _If player matches any of these checks, player is warned and anticheat replaces any broken blocks_
   > - **Nuker Check:** Checks if player breaks more blocks than the set amount inside [config]
+  > - **Scaffold Check:** Checks if player is using scaffold or tower modules for horion
   > - **Illegal Item Place Check:** Checks if player places a block or uses an item that is inside the banned item list in [config] 
 >
 > 
@@ -78,7 +81,7 @@ For any questions or help please join the official SafeGuard discord server: [di
   > - **invsee [player name]:** See the inventory of a player
   > - **mute [player name]:** Mute a player
   > - **unmute [player name]:** Unmute a player
-  > - **worldborder [border]:** Get or set the world border
+  > - **worldborder [border | remove]:** Get or set the world border
   > - **vanish:** Toggle vanish mode
   > - **clearchat:** Clear the chat
   > - **fakeleave:** Simulate leaving the realm
@@ -86,12 +89,14 @@ For any questions or help please join the official SafeGuard discord server: [di
   > - **summon_npc:** Summon an NPC
   > - **notify:** Toggle anticheat notifications
   > - **lagclear:** Run lag clear function
+  > - **copyinv [player name]:** Copy the inventory of a player
   > - **unban [player name]:** Unban a player
+  > - **report [player name]:** Players can report other player anonymously to all online admins
 >
 > 
 > ### 📃 Admin Panel Item
   > _The admin panel is an item which can be obtained with command `/give @s safeguard:admin_panel`_
-  > - **Settings:** Turn SafeGuard module/feature settings
+  > - **Settings:** Toggle SafeGuard modules/features
   > - **Quick Ban:** Quickly ban a player using SafeGuard ban system 
   > - **Player Actions:** Select an online player to ban, clear echest, warn, etc
   > - **Unban Player:** Enter a player's name to unban, they will be unban when they rejoin

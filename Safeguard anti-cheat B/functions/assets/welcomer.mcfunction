@@ -1,4 +1,3 @@
-#bridge-file-version: #27
 #Tag 
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 execute as @a[scores={welcome_on=0}] run scoreboard players set @a[scores={welcomer=3..}] welcomer 2

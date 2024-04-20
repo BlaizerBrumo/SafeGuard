@@ -1,4 +1,3 @@
-#bridge-file-version: #3
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 title @a[tag=echest_ban] times 1 1 1
 title @a[tag=echest_ban] actionbar §l§4You are echest banned.

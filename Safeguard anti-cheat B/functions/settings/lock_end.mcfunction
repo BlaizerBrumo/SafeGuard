@@ -1,5 +1,3 @@
-#bridge-file-version: #0
-#27
 #Toggle the end lock
 scoreboard players add @s[tag=admin] endnether_toggle 1
 scoreboard players set @s[tag=admin,scores={endnether_toggle=2..}] endnether_toggle 0

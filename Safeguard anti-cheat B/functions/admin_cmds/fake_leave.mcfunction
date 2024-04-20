@@ -1,4 +1,3 @@
-#bridge-file-version: #11
 execute as @s[tag=admin] run tellraw @a {"rawtext":[{"text":"§e"},{"selector":"@s"},{"text":" left the realm"}]}
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§a Fake left success!"}]}
 playsound random.levelup @s[tag=admin]

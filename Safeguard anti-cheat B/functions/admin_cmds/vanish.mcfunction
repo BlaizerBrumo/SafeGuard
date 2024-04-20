@@ -1,4 +1,3 @@
-#bridge-file-version: #25
 scoreboard players add @s[tag=admin] vanish 1
 scoreboard players set @s[tag=admin,scores={vanish=2..}] vanish 0
 effect @s[tag=admin,scores={vanish=0}] invisibility 0 0

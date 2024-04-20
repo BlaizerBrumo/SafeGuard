@@ -4,16 +4,32 @@ import { ActionFormData } from '@minecraft/server-ui';
 
 import * as config from "./config.js";
 import * as ui from "./assets/ui.js";
-import { scoreboardAction, formatMilliseconds } from "./assets/util.js";
+import { scoreboardAction, formatMilliseconds, teleportToGround, sendMessageToAllAdmins, millisecondTime, parsePunishmentTime } from "./assets/util.js";
 import { globalBanList } from './assets/globalBanList.js';
 import { commandHandler } from './command/handle.js';
 import "./command/importer.js";
 
 
-console.warn("Script Loaded");
+console.warn("[SafeGuard] Script Loaded");
 const world = Minecraft.world;
 
 
+
+world.afterEvents.playerPlaceBlock.subscribe((data) => {
+	const {player,block} = data;
+	const playerRotation = player.getRotation();
+
+	if(playerRotation.x == 60 || playerRotation.x == 90){
+		if(!player.scaffoldChecks) player.scaffoldChecks = 0;
+		
+		const antiScaffoldOn = (world.scoreboard.getObjective('safeguard:scaffold_check') === undefined) ? false : true;
+		if(!antiScaffoldOn || player.hasTag("admin")) return;
+		block.setType("minecraft:air");
+		if(player.scaffoldChecks === 1 || player.scaffoldChecks % 15 === 0) sendMessageToAllAdmins(`§6[§eSafeGuard Beta§6]§c ${player.name}§4 was detected using scaffold!`);
+		player.scaffoldChecks++
+		player.runCommandAsync(`scoreboard players add @s "safeguard:scaffold_check" 1`);
+	} 
+})
 
 world.beforeEvents.itemUseOn.subscribe((data) => {
 	const player = data.source;
@@ -75,12 +91,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
   
 	
   
-	if (!player.hasTag("admin")) {
-	  player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!');
-	  data.cancel = true;
-	  return;
-	}
-  
 	commandHandler(data);
 })
   
@@ -101,12 +111,14 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 		block.setPermutation(data.brokenBlockPermutation);
 		world.sendMessage(`§6[§eSafeGuard§6]§r§c§l §r§c${player.name}§4 Attempted to break §c${blockId}`)
 	}
-
-
-	player.blocksBroken++
-	if(player.blocksBroken > config.default.world.nuker.maxBlocks && antiNuker){
-		if(player.hasTag("admin") && !config.default.world.nuker.checkAdmins) return;
-		player.runCommandAsync(`scoreboard players add @s "safeguard:nuker_check" 1`)
+	//check if the block id is in nuker block excpetions to prevent false positives
+	if(!config.default.world.nuker.blockExceptions.includes(blockId) && player.getEffect("haste") == undefined){
+		player.blocksBroken++
+	}
+	
+		if(player.blocksBroken > config.default.world.nuker.maxBlocks && antiNuker){
+			if(player.hasTag("admin") && !config.default.world.nuker.checkAdmins) return;
+			player.runCommand(`scoreboard players add @s "safeguard:nuker_check" 1`);
 				// kill the items dropped items
 				const items = dimension.getEntities({
 					location:{x: block.location.x, y: block.location.y, z: block.location.z},
@@ -129,13 +141,15 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 					world.sendMessage(`§6[§eSafeGuard§6]§r§c§l ${player.name} §r§4Was detected using nuker by breaking §l§c${player.blocksBroken}§r§4 blocks in one tick!§r`);
 				}
 				return;
-	}
+		}
 	if(blockId == "minecraft:diamond_ore" || blockId =="minecraft:deepslate_diamond_ore"){
 		if(!diamondAlertOn) return
-		player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §ediamond ore§r"}]}`);
+		//player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §ediamond ore§r"}]}`);
+		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§5§l §r§e${player.name}§f mined x1 §ediamond ore§r`);
 	}
 	if(blockId == "minecraft:ancient_debris" && netheriteAlertOn){
-		player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §enetherite ore§r"}]}`);
+		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§5§l §r§e${player.name}§f mined x1 §enetherite ore§r`);
+		//player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §enetherite ore§r"}]}`);
 	}
 })
 
@@ -144,6 +158,10 @@ Minecraft.system.runInterval(()  => {
 	if(world.scoreboard.getObjective("safeguard:gametest_on") == undefined){
 		world.scoreboard.addObjective("safeguard:gametest_on","Gamtetest Is On");
 	}
+	//check settings status
+	const antiItemsOn = (world.scoreboard.getObjective('item_on') === undefined) ? false : true;
+	const autoModOn = (world.scoreboard.getObjective('auto_mod_on') === undefined) ? false : true;
+	const antiAutoClicker =  (world.scoreboard.getObjective('safeguard:cps_check') === undefined) ? false : true;
 	[...world.getPlayers()].forEach(player => {
 		const plrName = player.name;
 		const inv = player.getComponent("inventory").container;
@@ -152,12 +170,27 @@ Minecraft.system.runInterval(()  => {
 		player.blocksBroken = 0;
 		player.hitEntities = [];
 		
-		//check settings status
-		const antiItemsOn = (world.scoreboard.getObjective('item_on') === undefined) ? false : true;
-		const autoModOn = (world.scoreboard.getObjective('auto_mod_on') === undefined) ? false : true;
-		const antiAutoClicker =  (world.scoreboard.getObjective('safeguard:cps_check') === undefined) ? false : true;
-		const antiFly = (world.scoreboard.getObjective('safeguard:fly_check') === undefined) ? false : true;
+		betaFeatures(player);
 
+		//check if player received too many warnings
+		if(player.hasTag("safeguard:reachingWarningsTooFast")){
+			player.removeTag("safeguard:reachingWarningsTooFast");
+			player.addTag("safeguard:Ban");
+			const now = Date.now();
+			const punishmentTime = millisecondTime.minute * config.default.other.warningsTooFastPunishmentTime;
+			const unbanTime = now + punishmentTime
+			player.addTag(`safeguardBanInfo**false**${unbanTime}**SafeGuard AutoMod**Reaching warnings too fast`);
+			player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r You are temporarily banned for reaching warnings too fast.`);
+		}
+		//check if player's combat log time ran out
+		if(player.combatLogTimer){
+			const now = Date.now();
+			if(now - player.combatLogTimer > config.default.combat.combatLogging.timeToStayInCombat){
+				player.combatLogTimer = null;
+				player.removeTag("safeguard:isInCombat");
+				player.sendMessage(`§r§6[§eSafeGuard§6]§r You are no longer in combat.`);
+			}
+		}
 		if(velocity.x > 0 || velocity.z > 0){
 			if(!player.isFalling) player.addTag("safeguard:moving");
 		} 
@@ -237,36 +270,103 @@ Minecraft.system.runInterval(()  => {
 		if(player.dimension.id == "minecraft:the_end" && world.scoreboard.getObjective('end_lock')){
 			player.kill();
 		}
+		
 
-		world.scoreboard.getObjectives().forEach((objective) => {
-			if(objective.id.startsWith("safeguard:worldBorder:")){
-				let {x,y,z} = player.location;
-				const border = objective.id.split("safeguard:worldBorder:")[1];
-				if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
-					player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
-					player.teleport({x: 0, y: 325, z: 0},{dimension: player.dimension, rotation: {x: 0, y: 0}, keepVelocity: false});
-					player.addEffect("slow_falling", 1200, { amplifier: 1, showParticles: false })
-				}
+		if(world.worldBorder){
+			let { x, y, z } = player.location;
+			const border = world.worldBorder;
+			if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
+				if(player.hasTag("admin") && config.default.world.worldborder.adminsBypassBorder) return;
+
+				player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
+				const currentLocation = player.location;
+				const offsetX = currentLocation.x >= 0 ? -1 : 1;
+				const offsetZ = currentLocation.z >= 0 ? -1 : 1; 
+				//const offsetY = currentLocation.y >= 0 ? -1 : 1;
+
+				player.tryTeleport({
+				  x: currentLocation.x + offsetX,
+				  y: currentLocation.y,
+				  z: currentLocation.z + offsetZ,
+				}, {
+				  checkForBlocks: false,
+				});
 			}
-		});
-
-		//anti fly idk
-		let debugMenu = {
-			rotation: player.getViewDirection()
 		}
-		//world.sendMessage(`-------------\n§e${JSON.stringify(velocity, null, 2)}§r\n-------------`);
-		if(config.default.debug) world.sendMessage(`§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
 
+		
+
+
+		//removed because its bad
 		//check if fall distance is in negatives (fly detection)
-		if(player.fallDistance < config.default.movement.fly.minFallDistance && antiFly && !player.hasTag("gamemode:creative") && !player.hasTag("admin") && !player.hasTag("safeguard:hasRiptide") && !player.isGliding && !player.isClimbing){
+		/*if(player.fallDistance < config.default.movement.fly.minFallDistance && antiFly && !player.hasTag("gamemode:creative") && !player.hasTag("admin") && !player.hasTag("safeguard:hasRiptide") && !player.isGliding && !player.isClimbing){
 			world.sendMessage(`§6[§eSafeGuard§6] §r§l§c${player.name}§4 was detected flying!`);
 			player.runCommandAsync(`scoreboard players add @s "safeguard:fly_check" 1`)
-			player.tryTeleport({x: player.location.x, y: player.location.y + player.fallDistance, z: player.location.z},{checkForBlocks: true,dimension: player.dimension, rotation: {x:0,y:0}, keepVelocity: false});
-		}
+		}*/
 
 	
 	})
 });
+
+
+function betaFeatures(player){
+
+	if(player.hasTag("admin")) return;
+	const playerVelocity =  player.getVelocity();
+	const playerHealth = player.getComponent("minecraft:health");
+	const playerMode = player.getGameMode();
+	//anti fly idk
+	let debugMenu = {
+		velocity: playerVelocity,
+	}
+	//world.sendMessage(`-------------\n§e${JSON.stringify(velocity, null, 2)}§r\n-------------`);
+	//if(config.default.debug) console.warn(`§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
+
+
+	
+	const invalidVelocityCheckOn = (world.scoreboard.getObjective('safeguard:velocity_check') === undefined) ? false : true;
+	
+
+	if(playerVelocity.y < -3.919921875 && invalidVelocityCheckOn){
+		//while testing for a fly detection, I noticed that the terminal velocity for falling on y coordinate is -3.919921875
+		//this seems to be a a better detection fly because when flying the velocity sometimes tends to set the velocity below that number which I assume is impossible
+		//this also sometimes detects other movement cheats
+		sendMessageToAllAdmins(`§6[§eSafeGuard Beta§6] §c${player.name}§4 reached invalid y velocity: §c${playerVelocity.y.toFixed(3)}§4`);
+		teleportToGround(player);
+		player.runCommandAsync(`scoreboard players add @s "safeguard:velocity_check" 1`);
+		//player.tryTeleport({x:player.location.x + playerVelocity.x, y:player.location.y + playerVelocity.y,z:player.location.z + playerVelocity.z},{keepVelocity:false})
+	}
+	if(playerVelocity.y === 0 && !player.isOnGround && playerHealth.currentValue > 0 && !player.isFlying && !player.isSwimming && playerMode !== Minecraft.GameMode.creative && !player.isJumping){
+		//even though this seems like a great check to detect NoFall it tends to false positive on low tps servers
+		//until I figure out how to improve this, this is gonna stay here with no handling
+		//world.sendMessage(`§6[§eSafeGuard Beta§6] §4Invalid properties: §c${player.name}§4 is not grounded and has no y velocity`);
+	}
+}
+
+
+Minecraft.system.runInterval(() => {
+	[...world.getPlayers()].forEach(player => {
+		if(player.hasTag("admin")) return;
+		const antiFly = (world.scoreboard.getObjective('safeguard:fly_check') === undefined) ? false : true;
+		const maxYVelocityThreshold = config.default.movement.fly.maxYVelocityThreshold;
+		const playerVelocity = player.getVelocity();
+		const currentYVelocity = playerVelocity.y;
+
+		if(!player.previousYVelocity) player.previousYVelocity = 0;
+
+		const velocityDifference = Math.round(currentYVelocity - player.previousYVelocity);
+
+
+		if (velocityDifference > maxYVelocityThreshold && !player.isGliding && antiFly && player.previousYVelocity !== 0 && currentYVelocity !== 0) {
+			teleportToGround(player);
+			sendMessageToAllAdmins(`§6[§eSafeGuard Beta§6] §c${player.name}§4 reached a high velocity difference (§c${velocityDifference}§4), potentially indicating fly behavior.`);
+			player.runCommandAsync(`scoreboard players add @s "safeguard:fly_check" 1`);
+			//world.sendMessage(`DIFF[§e${velocityDifference}§r] PREV[§e${previousYVelocity}§r] CURR[§e${currentYVelocity}§r]`);
+		}
+
+		player.previousYVelocity = currentYVelocity;
+	})
+}, 10);
 
 
 //combat cheats detection and shi
@@ -298,7 +398,61 @@ world.afterEvents.entityHitEntity.subscribe(async (data) => {
 world.afterEvents.playerSpawn.subscribe((data) => {
 	const player = data.player;
 
+	if(data.initialSpawn){
+		if(!world.recievedInitialBorder){
+			//get intial world border
+			world.scoreboard.getObjectives().forEach((objective) => {
+				const objectiveId = objective.id;
+				if (objectiveId.startsWith("safeguard:worldBorder:")){
+					console.warn(`[SafeGuard] Recieved intial world border: ${objectiveId}`)
+					world.worldBorder = parseInt(objectiveId.split("safeguard:worldBorder:")[1]);
+				}
+			});
+			if(!world.worldBorder){
+				console.warn("[SafeGuard] No world border detected")
+				world.worldBorder = null;
+			}
+			world.recievedInitialBorder = true;
+		}
+		if(player.hasTag("safeguard:isInCombat")){
+			player.removeTag("safeguard:isInCombat");
+			if(config.default.combat.combatLogging.alwaysSendAlert) world.sendMessage(`§r§6[§eSafeGuard§6]§e ${player.name}§r Was detected combat logging!`);
+			switch(config.default.combat.combatLogging.punishmentType){
+				case 0:
+					//check for alwaysSendAlert option to prevent spam
+					if(!config.default.combat.combatLogging.alwaysSendAlert) world.sendMessage(`§r§6[§eSafeGuard§6]§e ${player.name}§r Was detected combat logging!`);
+				break;
+				case 1:
+					player.sendMessage(`§r§6[§eSafeGuard§6]§r You were killed for combat logging`);
+					player.kill();
+				break;
+				case 2:
+					player.sendMessage(`§r§6[§eSafeGuard§6]§r Your inventory was cleared for combat logging`);
+					const inv = player.getComponent("inventory").container;
+					inv.clearAll();
+				break;
+				case 3:
+					const punishment = config.default.combat.combatLogging.punishmentTime.split(" ");
+					const punishmentTime = parsePunishmentTime(punishment);
+				  
+					if (!punishmentTime) {
+					  console.error(`§4[SafeGuard] Invalid punishment time format in config.`);
+					  break;
+					}
+				  
+					const now = Date.now();
+					const unbanTime = now + punishmentTime;
 
+					player.addTag("safeguard:Ban");
+					player.addTag(`safeguardBanInfo**false**${unbanTime}**SafeGuard AntiCheat**Combat Logging`);
+					player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r You were temporarily banned for combat logging.`);
+					break;
+				default:
+					console.error(`§4[SafeGuard] Unknown punishment type(${config.default.combat.combatLogging.punishmentType}) was entered, no punishment will be given`);
+				break;
+			}
+		}
+	}
 	//if(!player.hasTag("Ban") || !player.hasTag("safeguard:Ban")) return;
 
 	if(globalBanList.includes(player.name)) return player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
@@ -311,7 +465,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		player.removeTag("safeguard:Ban");
 		player.removeTag("ac_ban");
 		player.removeTag("ban");
-		player.runCommandAsync("scoreboard players reset @s ac_banned");
+		player.runCommand("scoreboard players reset @s ac_banned");
 		player.removeTag("Ban");
 		player.sendMessage(`§6[§eSafeGuard§6]§r §aYou were unbanned!`);
 		player.teleport({x: player.location.x, y: 325, z: player.location.z},{dimension: player.dimension, rotation: {x: 0, y: 0}, keepVelocity: false});
@@ -401,8 +555,9 @@ world.afterEvents.entityHurt.subscribe((data) => {
 	const hp = player.getComponent("health").currentValue;
 		
 	if(hp <= 0) {
-
-		const inv = player.getComponent("inventory").container;
+		player.combatLogTimer = null;
+		if(player.hasTag("safeguard:isInCombat")) player.removeTag("safeguard:isInCombat");
+		
 		player.runCommandAsync("function assets/death_effect");
 		
 		//death coords
@@ -412,4 +567,48 @@ world.afterEvents.entityHurt.subscribe((data) => {
 			player.sendMessage(`§6[§eSafeGuard§6]§r §eYou died at ${Math.round(x)}, ${Math.round(y)}, ${Math.round(z)} (in ${player.dimension.id.replace("minecraft:","")})`);
 		}
 	}
+	if (data.damageSource.damagingEntity) {
+		const damager = data.damageSource.damagingEntity;
+		if (damager.typeId !== "minecraft:player") return;
+	  
+		const adminsBypassCombatLogging = config.default.combat.combatLogging.adminsBypass;
+		const now = Date.now();
+		const antiCombatLogEnabled = (world.scoreboard.getObjective('safeguard:anti_combatlog') === undefined) ? false : true;
+	  
+		if (!player.hasTag("safeguard:isInCombat") && antiCombatLogEnabled) {
+		  if (player.hasTag("admin") && adminsBypassCombatLogging) {
+			player.combatLogTimer = 0;
+		  } else {
+			player.addTag("safeguard:isInCombat");
+			
+			if (!player.combatLogWarningDisplayed) {
+			  player.sendMessage(`§r§6[§eSafeGuard§6]§r You are now in combat, leaving during combat will result in a punishment.`);
+			  player.combatLogWarningDisplayed = true;
+			} else {
+			  player.sendMessage(`§r§6[§eSafeGuard§6]§r You are now in combat`);
+			}
+		  }
+		}
+	  
+		if (!damager.hasTag("safeguard:isInCombat") && antiCombatLogEnabled) {
+		  if (damager.hasTag("admin") && adminsBypassCombatLogging) {
+			damager.combatLogTimer = 0;
+		  } else {
+			damager.addTag("safeguard:isInCombat");
+			
+			if (!damager.combatLogWarningDisplayed) {
+			  damager.sendMessage(`§r§6[§eSafeGuard§6]§r You are now in combat, leaving during combat will result in a punishment.`);
+			  damager.combatLogWarningDisplayed = true;
+			} else {
+			  damager.sendMessage(`§r§6[§eSafeGuard§6]§r You are now in combat.`);
+			}
+		  }
+		}
+		
+		if(antiCombatLogEnabled){
+			damager.combatLogTimer = now;
+			player.combatLogTimer = now;
+		}
+	  }
+	  
 })

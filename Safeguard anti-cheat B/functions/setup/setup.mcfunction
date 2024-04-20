@@ -21,6 +21,9 @@ scoreboard objectives add killaura_toggle dummy
 scoreboard objectives add spammer_toggle dummy
 scoreboard objectives add antifly_toggle dummy
 scoreboard objectives add antinuker_toggle dummy
+scoreboard objectives add safeguard:scaffold_toggle dummy
+scoreboard objectives add safeguard:velocity_check_toggle dummy
+scoreboard objectives add safeguard:combatlog_toggle dummy
 scoreboard players add @a setup_success 0
 #warning scoreboard setup
 scoreboard objectives add ill_warning dummy

@@ -1,4 +1,3 @@
-#bridge-file-version: #7
 tellraw @s {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§c§l "},{"text":"ERROR: §r§4This function shouldn't be ran manually§r"}]}
 #This will clear victim's inventory and not let them use it.
 clear @a[tag=inv_lock]

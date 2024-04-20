@@ -106,7 +106,7 @@ scoreboard players reset @a[scores={warn_check=6001..}] warn_check
 tag @a[tag=warn_check] remove warn_check
 #warning check2
 execute as @a[tag=warn_fast] run tellraw @a {"rawtext":[{"text":"§6[§eSafeGuard§6]§r§l§c "},{"selector": "@s"},{"text":" §4is reaching warnings too fast and was softbanned!§r"}]}
-execute as @a[tag=warn_fast] run tag @s add softban_five
+execute as @a[tag=warn_fast] run tag @s add safeguard:reachingWarningsTooFast
 execute as @a[tag=warn_fast] run tag @s add warning
 execute as @a[tag=warn_fast] run scoreboard players reset @s warn_check
 execute as @a[tag=warn_fast] run tag @s remove warn_fast
