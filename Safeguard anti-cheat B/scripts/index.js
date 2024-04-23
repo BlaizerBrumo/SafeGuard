@@ -57,25 +57,39 @@ world.beforeEvents.chatSend.subscribe((data) => {
 	const prefix = config.default.chat.prefix;
 	const whitelistedPrefixes = config.default.chat.spammer.whitelistedPrefixes;
 	let checkSpam = false;
+	const isAdmin = player.hasTag("admin");
 
 	const antiSpam = (world.scoreboard.getObjective('safeguard:spammer_protection') === undefined) ? false : true;
 
 	//message spam protection
-	if(message == player.lastMessage && !player.hasTag("admin") && antiSpam){
+	if(message == player.lastMessage && !isAdmin && antiSpam){
 		data.cancel = true;
 		player.sendMessage(`§6[§eSafeGuard§6]§r§c Please don't send repeating messages!`);
 		return;
 	}
-	else if(Date.now() - player.lastMessageDate <= config.default.chat.spammer.minTime && !player.hasTag("admin") && antiSpam){
+	else if(Date.now() - player.lastMessageDate <= config.default.chat.spammer.minTime && !isAdmin && antiSpam){
 		data.cancel = true;
 		player.sendMessage(`§6[§eSafeGuard§6]§r§c You're sending messages too quickly!`);
 		return;
 	}
+
+	else if(message.length > config.default.chat.spammer.maxMessageCharLimit && !isAdmin && antiSpam){
+		data.cancel = true;
+		player.sendMessage(`§6[§eSafeGuard§6]§r§c Sorry! Your message has too many characters!`);
+		return;
+	}
+	else if(message.split(" ").length > config.default.chat.spammer.maxMessageWordLimit && !isAdmin && antiSpam){
+		data.cancel = true;
+		player.sendMessage(`§6[§eSafeGuard§6]§r§c Please keep your message below ${config.default.chat.spammer.maxMessageWordLimit} words!`);
+		return;
+	}
+
 	whitelistedPrefixes.forEach(wPrefix => {
 		if(message.startsWith(wPrefix)){
 			checkSpam = true;
 		}
 	})
+	
 	if(!checkSpam){
 		player.lastMessage = message;
 		player.lastMessageDate = Date.now();
@@ -166,11 +180,12 @@ Minecraft.system.runInterval(()  => {
 		const plrName = player.name;
 		const inv = player.getComponent("inventory").container;
 		const velocity = player.getVelocity();
+		const isAdmin = player.hasTag("admin");
 
 		player.blocksBroken = 0;
 		player.hitEntities = [];
 		
-		betaFeatures(player);
+		betaFeatures(player,velocity);
 
 		//check if player received too many warnings
 		if(player.hasTag("safeguard:reachingWarningsTooFast")){
@@ -208,7 +223,7 @@ Minecraft.system.runInterval(()  => {
 				}
 				else if(item.typeId !== "minecraft:trident") player.removeTag("safeguard:hasRiptide");
 
-				if (player.hasTag('admin')) return;
+				if (isAdmin) return;
 				else{
 					//illegal name check
 					if (itemName.length > config.default.item.anti_items.maxItemNameLength && antiItemsOn) {
@@ -248,7 +263,7 @@ Minecraft.system.runInterval(()  => {
 
 		const finalcps = world.scoreboard.getObjective("safeguard:finalcps").getScore(player.scoreboardIdentity);
 
-		if(finalcps > config.default.combat.autoclicker.maxCps && !player.hasTag("admin") && antiAutoClicker){
+		if(finalcps > config.default.combat.autoclicker.maxCps && isAdmin && antiAutoClicker){
 			world.sendMessage(`§6[§eSafeGuard§6]§r §c§l${player.name}§r§4 was detected using autoclicker with a cps of §l§c${finalcps}`);
 			player.runCommandAsync(`scoreboard players add @s "safeguard:cps_check" 1`)
 			player.addEffect("weakness", 40, { amplifier: 255, showParticles: false })
@@ -276,7 +291,7 @@ Minecraft.system.runInterval(()  => {
 			let { x, y, z } = player.location;
 			const border = world.worldBorder;
 			if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
-				if(player.hasTag("admin") && config.default.world.worldborder.adminsBypassBorder) return;
+				if(isAdmin && config.default.world.worldborder.adminsBypassBorder) return;
 
 				player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
 				const currentLocation = player.location;
@@ -309,10 +324,10 @@ Minecraft.system.runInterval(()  => {
 });
 
 
-function betaFeatures(player){
+function betaFeatures(player,velocity){
 
 	if(player.hasTag("admin")) return;
-	const playerVelocity =  player.getVelocity();
+	const playerVelocity =  velocity;
 	const playerHealth = player.getComponent("minecraft:health");
 	const playerMode = player.getGameMode();
 	//anti fly idk

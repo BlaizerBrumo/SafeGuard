@@ -77,6 +77,10 @@ export default {
         //chat command prefix
         "prefix": "!",
         "spammer":{
+            //maximum amount characters the message can have before it's considered spam
+            "maxMessageCharLimit": 512,
+            //maximum amount of words the message can have before it's considered spam
+            "maxMessageWordLimit": 512,
             //minimum time between messages in milliseconds
             "minTime": 1500,
             //if a message starts with this word/symbol/letter or whatever you enter it won't be flagged for spam

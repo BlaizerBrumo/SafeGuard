@@ -1,5 +1,7 @@
 import { canFindPlayer, getPlayerByName, sendMessageToAllAdmins } from '../../assets/util';
 import {newCommand} from '../handle';
+import * as config from "../../config";
+import { world } from '@minecraft/server';
 
 newCommand({
     name: "report",
@@ -41,12 +43,27 @@ newCommand({
         }
 
         function reportPlayer(reportedPlayer,reason){
-            if(!reportedPlayer.reports) reportedPlayer.reports = [];
+            let reportedPlayerReportsProperty = reportedPlayer.getDynamicProperty("safeguard:reports");
+            if(reportedPlayerReportsProperty === undefined){
+                reportedPlayer.setDynamicProperty("safeguard:reports","");
+                reportedPlayerReportsProperty = reportedPlayer.getDynamicProperty("safeguard:reports");
+            }  
 
-            if(reportedPlayer.reports.includes(player.id)) return player.sendMessage(`§6[§eSafeGuard§6]§f You have already reported this player!`);
-            if(reportedPlayer.name == player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f You cannot report yourself!`);
+            const tempProperty = reportedPlayerReportsProperty.split(",");
+            
+
+
+            if(player.hasTag("admin")){
+                console.warn(tempProperty)
+                player.sendMessage(`§6[§eSafeGuard§6]§f This player has been reported §e${tempProperty.length - 1}§r times.`);
+                return;
+            }
+
+            if(tempProperty.includes(player.id)) return player.sendMessage(`§6[§eSafeGuard§6]§f You have already reported this player!`);
+            if(reportedPlayer.name === player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f You cannot report yourself!`);
             if(reportedPlayer.hasTag("admin")) return player.sendMessage(`§6[§eSafeGuard§6]§f You cannot report admins.`);
-            reportedPlayer.reports.push(player.id);
+            tempProperty.push(player.id);
+            reportedPlayer.setDynamicProperty("safeguard:reports",tempProperty.toString());
             
             player.sendMessage(`§6[§eSafeGuard§6]§f Sent your report to all online admins!`);
 
