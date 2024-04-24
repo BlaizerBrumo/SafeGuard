@@ -43,8 +43,10 @@ For any questions or help please join the official SafeGuard discord server: [di
 > ### 💬 Chat Cheat Detections
   > _If player matches any of these checks, player is warned and message is cancelled_
   > - **Same Message Check:** Checks if player send the same message 2 or more times in a row
-  > - **Short Timed Messages Check:** Checks if player sends a message within a 1.5 second gap to prevent spam
+  > - **Short Timed Messages Check:** Checks if player sends a message within a 1.5 second gap to prevent spam, edit in [config]
   > - **Sending Message While Moving Check:** Checks if player send a message while moving
+  > - **Message Large Character Amount Check:** Checks if player sends a message with more than 512 characters, edit in [config]
+  > - **Message Too Many Words Check:** Checks if player has a message with too many words, edit in [config]
 >
 >
 >
@@ -91,7 +93,7 @@ For any questions or help please join the official SafeGuard discord server: [di
   > - **lagclear:** Run lag clear function
   > - **copyinv [player name]:** Copy the inventory of a player
   > - **unban [player name]:** Unban a player
-  > - **report [player name]:** Players can report other player anonymously to all online admins
+  > - **report [player name]:** Report players anonymously to all online admins, admins can check a player's report count 
 >
 > 
 > ### 📃 Admin Panel Item
