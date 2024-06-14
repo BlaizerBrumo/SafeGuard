@@ -211,7 +211,7 @@ Minecraft.system.runInterval(()  => {
 		} 
 		if(velocity.x == 0 && velocity.z == 0 && !player.isFalling) player.removeTag("safeguard:moving")
 
-		const item = inv.getItem(player.selectedSlot);
+		const item = inv.getItem(player.selectedSlotIndex);
 		if(!item) player.removeTag("safeguard:hasRiptide");
 			if(item){
 				const itemName = item.nameTag ?? '';

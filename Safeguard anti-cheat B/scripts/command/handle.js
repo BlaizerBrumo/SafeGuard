@@ -3,6 +3,7 @@ import * as config from "../config";
 let commands = {};
 
 export function newCommand(obj){
+    if(command.disabled) return;
     if(commands[obj.name]) return console.error(`§4[SafeGuard] A command named "${obj.name}" already exists!`)
     if(!obj.description) {
         obj.description = "No description provided";

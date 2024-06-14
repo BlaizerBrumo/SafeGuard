@@ -14,5 +14,6 @@ import "../command/src/lagclear";
 import "../command/src/notify";
 import "../command/src/worldborder";
 import "../command/src/help";
+import "../command/src/admin-kit"
 
 import "../command/src/report";
