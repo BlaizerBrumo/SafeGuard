@@ -176,7 +176,7 @@ Minecraft.system.runInterval(()  => {
 	const antiItemsOn = (world.scoreboard.getObjective('item_on') === undefined) ? false : true;
 	const autoModOn = (world.scoreboard.getObjective('auto_mod_on') === undefined) ? false : true;
 	const antiAutoClicker =  (world.scoreboard.getObjective('safeguard:cps_check') === undefined) ? false : true;
-	[...world.getPlayers()].forEach(player => {
+	world.getPlayers().forEach(player => {
 		const plrName = player.name;
 		const inv = player.getComponent("inventory").container;
 		const velocity = player.getVelocity();
@@ -290,7 +290,7 @@ Minecraft.system.runInterval(()  => {
 		if(world.worldBorder){
 			let { x, y, z } = player.location;
 			const border = world.worldBorder;
-			if(x > border || y > border || z > border || x < -border || y < -border || z < -border ) {
+			if(Math.abs(x) > border || Math.abs(y) > border || Math.abs(z) > border) {
 				if(isAdmin && config.default.world.worldborder.adminsBypassBorder) return;
 
 				player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
