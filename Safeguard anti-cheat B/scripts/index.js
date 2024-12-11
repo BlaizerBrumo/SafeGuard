@@ -107,7 +107,19 @@ world.beforeEvents.chatSend.subscribe((data) => {
   
 	commandHandler(data);
 })
-  
+
+let dbl = world.getDynamicProperty("dbl").toString()
+let b1 = (dbl.indexOf("[") + 1);
+let b2 = (dbl.indexOf("]"));
+let devicebanlist = dbl.slice(b1, b2).split(", ");
+Minecraft.system.runInterval(() => {
+	for (const player of world.getPlayers()) {
+		if (devicebanlist.includes(player.clientSystemInfo.platformType) && !player.hasTag("admin") || !player.isOp() || !player.hasTag("dtbypass")) {
+			player.sendMessage("you are on a banned device")
+			player.dimension.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4You are banned from joining on this device type find another device type.\n§4Reason: §cPlaying on ${player.clientSystemInfo.platformType} \n§4Banned by: §cThe Device Ban Hammer`)
+		}
+	}
+})
 
 //anti nuker
 world.afterEvents.playerBreakBlock.subscribe((data) => {
