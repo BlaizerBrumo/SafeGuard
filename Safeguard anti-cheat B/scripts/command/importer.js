@@ -15,5 +15,6 @@ import "../command/src/notify";
 import "../command/src/worldborder";
 import "../command/src/help";
 import "../command/src/admin-kit"
-
+import "../command/src/dtban"
+import "../command/src/devinfo"
 import "../command/src/report";
