@@ -1,7 +1,9 @@
 import { world } from "@minecraft/server";
 import { newCommand } from '../handle';
-
-let devicebanlist = [];
+let dbl = world.getDynamicProperty("dbl").toString()
+let b1 = (dbl.lastIndexOf("[") + 1);
+let b2 = (dbl.indexOf("]"));
+let devicebanlist = dbl.slice(b1, b2).split(", ");
 newCommand({
     name: "dtban",
     description: "<ban/unban/list> <device type> Manages device bans",
