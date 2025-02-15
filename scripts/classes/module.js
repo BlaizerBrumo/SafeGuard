@@ -7,7 +7,6 @@ class SafeGuardModule {
     Modules = {
         antiGmc: "Anti GMC",
         antiGrief: "Anti Grief",
-        antiItem: "Anti Item",
         autoMod: "Auto Mod",
         deathCoords: "Death Coords",
         deathEffect: "Death Effect",

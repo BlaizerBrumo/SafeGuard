@@ -13,3 +13,4 @@ tellraw @s {"rawtext":[{"text":"§l§6-----------------------§e Contributors §
 tellraw @s {"rawtext":[{"text":"§l§a jasonlaubb §7- Adding support for Minecraft 1.20.40 in V1.8.2"}]}
 tellraw @s {"rawtext":[{"text":"§l§a SeaLeopard35302 §7- Making base for admin kits"}]}
 tellraw @s {"rawtext":[{"text":"§l§6=============================================================="}]}
+tellraw @s {"rawtext":[{"text":"§r§6[§eSafeGuard§6]§4 WARNING!§c This is a beta version, report bugs to the discord."}]}
