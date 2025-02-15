@@ -559,7 +559,7 @@ world.afterEvents.itemUse.subscribe((data) => {
 		if (formData.canceled) return;
 		switch (formData.selection) {
 			case 0:
-				return ui.moduleSettingsForm(player);
+				return ui.settingSelector(player);
 			case 1:
 				return ui.playerSelectionForm(player, "ban");
 			case 2:
