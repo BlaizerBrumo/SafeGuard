@@ -125,6 +125,7 @@ function ownerLoginForm(player){
 }
 
 function configEditorForm(player){
+	return player.sendMessage(`§6[§eSafeGuard§6]§r Config editor is disabled as it's not finished.`)
 	if (!player.isOwner()) return ownerLoginForm(player);
 
 	const mainConfigForm = new ActionFormData().title("SafeGuard Config Editor");
