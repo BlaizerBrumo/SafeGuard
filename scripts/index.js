@@ -274,7 +274,7 @@ Minecraft.system.runInterval(() => {
 		player.velocity = player.getVelocity();
 		player.speed = Vector3utils.magnitude(player.velocity);
 		player.hitEntities = [];
-		player.onScreenDisplay.setActionBar(`CPS: ${player.finalCps ?? 0} / ${player.currentCps ?? 0}`)
+		//player.onScreenDisplay.setActionBar(`CPS: ${player.finalCps ?? 0} / ${player.currentCps ?? 0}`)
 		//anti fly idk
 		/*let debugMenu = {
 			
