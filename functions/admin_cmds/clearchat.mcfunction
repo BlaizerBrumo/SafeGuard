@@ -1,0 +1,3 @@
+execute as@s[tag=admin] run tellraw @a{"rawtext":[{"text":"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n§6[§eSafeGuard§6]§r Chat has been cleared by§e "},{"selector":"@s"}]}
+execute as@s[tag=!admin]run tellraw @s{"rawtext":[{"text":"§6[§eSafeGuard§6]§4Youneedadmintagtorunthis!§r"}]}
+playsound random.anvil_land @s[tag=!admin]
