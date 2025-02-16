@@ -389,6 +389,8 @@ world.afterEvents.entityHitEntity.subscribe(async (data) => {
 	const player = data.damagingEntity;
 	const hurtEntity = data.hitEntity;
 
+	const rot = player.getRotation();
+
 	const antiKillaura = (world.scoreboard.getObjective('safeguard:killaura_check') === undefined) ? false : true;
 	
 	const hasWeakness = player.getEffect("weakness");
@@ -405,6 +407,14 @@ world.afterEvents.entityHitEntity.subscribe(async (data) => {
 		player.runCommandAsync(`scoreboard players add @s "safeguard:killaura_check" 1`)
 		player.hitEntities = 0;
 	}
+
+        if(
+		!Number.isInteger(rot.x) && 
+		(
+			Number.isInteger(rot.x) || Number.isInteger(rot.y)
+		)) {
+            world.sendMessage(`§6[§eSafeGuard§6]§r §c§l${player.name}§r§4 was detected using killaura by attacking with rotations: §l§c${rot.x} | ${rot.y} !`);
+        }
 
 	if(!hasWeakness) player.runCommandAsync(`scoreboard players add @s safeguard:cps 1`);
 })
