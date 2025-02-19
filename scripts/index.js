@@ -48,7 +48,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		if (message.length > 512) {
 			data.cancel = true;
 			player.ban("Sending invalid packet", Date.now(), true, "SafeGuard AntiCheat");
-			player.runCommandAsync(`kick "${player.name}" §6[§eSafeGuard§6]§r You have been permanently banned for sending invalid packet.`);
+			player.runCommandAsync(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for sending invalid packet.`);
 			sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§c ${player.name}§4 was automatically banned for sending an invalid text packet (length=${message.length})`, true);
 			return;
 		}
@@ -125,11 +125,22 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 
 	if (!data.initialSpawn) return;
-	if (!world.safeguardInitialized) Initialize();
+	//if (!world.safeguardInitialized) Initialize();
 	
 	player.currentGamemode = player.getGameMode();
 	player.isMuted = player.getMuteInfo().isActive;
 	player.combatLogTimer = null;
+
+	const antiNamespoof = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiNamespoof);
+
+	if (antiNamespoof && (player.name.length > 16 || gamertagRegex.test(player.name))) {
+		player.ban("Namespoof", Date.now(), true, "SafeGuard AntiCheat");
+		player.runCommandAsync(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for namespoof.`);
+		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r ${player.name}§r§4 was automatically banned for namespoof`, true);
+		return;
+	}
+	//for setup function
+	world.scoreboard.getObjective("safeguard:gametest_on").setScore(player.scoreboardIdentity,0);
 
 	if (!world.safeguardIsSetup && player.hasAdmin()) {
 		player.sendMessage(`§r§6[§eSafeGuard§6]§r§4 WARNING! §cThe AntiCheat is not setup, some features may not work. Please run §7/function setup/setup§c to setup!`);
@@ -149,11 +160,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		world.setDynamicProperty("safeguard:legacyNotificationPlayerList",[...newArray].join(","));
 		
 	}
-	//TODO: check for namespoof here
-	if ((player.name.length > 16 || gamertagRegex.test(player.name) && !player.hasAdmin())){
-		world.sendMessage(`${player.name} flagged for namespoof`);
-	}
-	if (globalBanList.includes(player.name)) return player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
+	if (globalBanList.includes(player.name)) return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
 
 
 	if (world.safeguardUnbanQueue.includes(player.name)){
@@ -169,8 +176,8 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		const { unbanTime, isPermanent, bannedBy, reason } = banInfo;
 		const timeRemaining = formatMilliseconds(unbanTime - Date.now());
 		logDebug(`${player.name} is banned: `, JSON.stringify(banInfo));
-		if (isPermanent) return player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
-		else return player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${timeRemaining}\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
+		if (isPermanent) return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
+		else return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${timeRemaining}\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
 	}
 
 	//migrate legacy mute to V2
@@ -181,7 +188,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 	if (world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)){
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§4 The player §c${player.name}§4 was kicked for joining on banned device: §c${player.clientSystemInfo.platformType}`);
-		player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
+		player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
 		return;
 	}
 	
@@ -199,7 +206,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	const antiCLog = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiCombatlog);
 	const endLockOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock);
 	const netherLock = SafeguardModule.getModuleStatus(SafeguardModule.Modules.netherLock);
-	const antiGmc = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiGmc);
 
 	
 
@@ -251,7 +257,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 					const unbanTime = now + punishmentTime;
 
 					player.ban("Combat logging", unbanTime, false, "SafeGuard AntiCheat");
-					player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r You were temporarily banned for combat logging.`);
+					player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r You were temporarily banned for combat logging.`);
 					break;
 				default:
 					console.warn(`§4[SafeGuard] Unknown punishment type(${config.default.combat.combatLogging.punishmentType}) was entered, no punishment will be given`);
@@ -269,12 +275,15 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 Minecraft.system.runInterval(() => {
 	const invalidVelocityCheckOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
-	world.getPlayers().forEach((player) => {
+	const players = world.getPlayers();
+	for (let ii = 0; ii < players.length; ii++) {
+		const player = players[ii];
 		const isAdmin = player.hasAdmin();
 		player.velocity = player.getVelocity();
 		player.speed = Vector3utils.magnitude(player.velocity);
 		player.hitEntities = [];
-		//player.onScreenDisplay.setActionBar(`CPS: ${player.finalCps ?? 0} / ${player.currentCps ?? 0}`)
+		player.blocksBroken = 0;
+		//player.onScreenDisplay.setActionBar(`Velocity: ${player.velocity.y} | ${((player.velocity.y / -3.919921875) * 100).toFixed(1)}%`)
 		//anti fly idk
 		/*let debugMenu = {
 			
@@ -337,7 +346,7 @@ Minecraft.system.runInterval(() => {
 				});
 			}
 		}
-	})
+	}
 });
 
 world.afterEvents.entityHitEntity.subscribe(async (data) => {
@@ -450,14 +459,14 @@ function betaFeatures(player) {
 	const invalidVelocityCheckOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
 
 
-	if (playerVelocity.y < -3.919921875 && invalidVelocityCheckOn) {
+	if (invalidVelocityCheckOn && (playerVelocity.y < -3.919921875 && (Date.now() - player.tridentLastUse) > 5000) && player.isFalling) {
+		//check for last trident use time to prevent false positive with riptide
+		
 		//while testing for a fly detection, I noticed that the terminal velocity for falling on y coordinate is -3.919921875
 		//this seems to be a a better detection fly because when flying the velocity sometimes tends to set the velocity below that number which I assume is impossible
 		//this also sometimes detects other movement cheats
 		sendAnticheatAlert(player, "movement cheats (invalid y velocity)", playerVelocity.y.toFixed(3), SafeguardModule.Modules.velocityCheck);
-		//LEGACY: sendMessageToAllAdmins(`§6[§eSafeGuard Beta§6] §c${player.name}§4 reached invalid y velocity: §c${playerVelocity.y.toFixed(3)}§4`);
 		teleportToGround(player);
-		//player.tryTeleport({x:player.location.x + playerVelocity.x, y:player.location.y + playerVelocity.y,z:player.location.z + playerVelocity.z},{keepVelocity:false})
 	}
 }
 
@@ -483,7 +492,7 @@ Minecraft.system.runInterval(() => {
 			sendAnticheatAlert(player, "high velocity difference", velocityDifference, SafeguardModule.Modules.flyCheck);
 			//world.sendMessage(`DIFF[§e${velocityDifference}§r] PREV[§e${previousYVelocity}§r] CURR[§e${currentYVelocity}§r]`);
 		}
-		if (speedDifference > 5 && !player.isGliding && player.previousSpeed !== 0 && speed !== 0 && velocityCheck && player.currentGamemode !== Minecraft.GameMode.creative) {
+		if (velocityCheck && speedDifference > 5 && !player.isGliding && player.previousSpeed !== 0 && speed !== 0 && player.currentGamemode !== Minecraft.GameMode.creative) {
 			sendAnticheatAlert(player, "high speeds", speedDifference.toFixed(4), SafeguardModule.Modules.velocityCheck);
 			player.registerValidCoords = false;
 			player.teleport(player.lastValidCoords, { keepVelocity: false, rotation: { x: 0, y: 0 } });
@@ -497,15 +506,15 @@ Minecraft.system.runInterval(() => {
 }, 10);
 
 
-world.beforeEvents.playerGameModeChange.subscribe((data) => {
-	const {toGameMode,fromGameMode,player} = data;
+world.afterEvents.playerGameModeChange.subscribe((data) => {
+	const {toGameMode,player} = data;
 	player.currentGamemode = toGameMode;
 	//NOTE: This only gets triggered when a person switches gamemode, it DOES NOT constantly check for gamemode creative
 	if(player.hasAdmin()) return;
 
 	const antiGmcOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiGmc);
 	if(antiGmcOn && toGameMode == Minecraft.GameMode.creative){
-		Minecraft.system.run(()=>{player.setGameMode(fromGameMode)});
+		player.setGameMode(Minecraft.GameMode.survival);
 		sendAnticheatAlert(player,"gamemode creative","true",SafeguardModule.Modules.antiGmc);
 	}
 })
@@ -531,6 +540,10 @@ world.afterEvents.itemUse.subscribe((data) => {
 	const player = data.source;
 	const item = data.itemStack;
 	if (!item) return;
+	if (item.typeId === "minecraft:trident" && item.getComponent("enchantable").hasEnchantment("riptide")){
+		player.tridentLastUse = Date.now();
+		//logDebug(`[SafeGuard] ${player.name} used riptide`)
+	}
 	if (item.typeId !== "safeguard:admin_panel") return;
 	if (!player.hasAdmin()) {
 		player.playSound("random.anvil_land");
@@ -553,6 +566,7 @@ world.afterEvents.itemUse.subscribe((data) => {
 		.button("Quick Ban", "textures/ui/hammer_l.png")
 		.button("Player Actions", "textures/ui/icon_multiplayer.png")
 		.button("Unban Player", "textures/items/iron_sword.png")
+		.button("Ban Logs", "textures/items/banner_pattern.png")
 	player.playSound("random.pop");
 
 	mainForm.show(player).then((formData) => {
@@ -566,6 +580,8 @@ world.afterEvents.itemUse.subscribe((data) => {
 				return ui.playerSelectionForm(player, "action");
 			case 3:
 				return ui.unbanForm(player);
+			case 4:
+				return ui.banLogForm(player);
 		}
 	})
 });
@@ -587,12 +603,11 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 	}
 	//check if the block id is in nuker block excpetions to prevent false positives
 	if (!config.default.world.nuker.blockExceptions.includes(blockId) && !player.getEffect("haste")) {
-		if (!player.blocksBroken) player.blocksBroken = 0;
 		player.blocksBroken++
 	}
 
 	if (player.blocksBroken > config.default.world.nuker.maxBlocks && antiNuker) {
-		if (player.hasTag("admin") && !config.default.world.nuker.checkAdmins) return;
+		if (player.hasAdmin() && !config.default.world.nuker.checkAdmins) return;
 		// kill the items dropped items
 		const items = dimension.getEntities({
 			location: { x: block.location.x, y: block.location.y, z: block.location.z },
@@ -627,3 +642,9 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 		//player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §enetherite ore§r"}]}`);
 	}
 })
+
+//in case of /reload being ran
+Initialize();
+for (const player of world.getPlayers()) {
+	player.currentGamemode = player.getGameMode();
+}

@@ -20,5 +20,8 @@ import "../command/src/version";
 import "../command/src/warn";
 import "../command/src/warnings";
 import "../command/src/clearwarn";
+import "../command/src/systeminfo";
+import "../command/src/removeowner";
+import "../command/src/clearbanlogs";
 
 import "../command/src/report";

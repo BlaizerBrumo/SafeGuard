@@ -1,6 +1,3 @@
-#Testing if the function responds
-scoreboard players add @a safeguard:setup_success 0
-scoreboard players set @a[scores={safeguard:setup_success=0}] safeguard:setup_success 1
 #TODO: Change this to be inside script api to run only once instead of every tick.
 #Function execute
 execute as @a[scores={death_effect=0}] run execute as @e[type=lightning_bolt] run fill ~-2~-2~-2 ~2~2~2 air 0 replace fire

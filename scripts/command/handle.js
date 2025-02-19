@@ -10,6 +10,7 @@ let commands = {};
  * @param {string} obj.name - The name of the command.
  * @param {string} obj.description - A description of the command.
  * @param {boolean} [obj.adminOnly=true] - Whether the command is admin-only.
+ * @param {boolean} [obj.ownerOnly=false] - Whether the command is only for the owner.
  * @param {function} obj.run - The function to execute when the command is triggered.
  */
 export function newCommand(obj){
@@ -28,7 +29,7 @@ export function getHelpData() {
     const helpData = [];
     for (const commandName in commands) {
       const command = commands[commandName];
-      helpData.push({ name: command.name, description: command.description, adminOnly: command.adminOnly });
+      helpData.push({ name: command.name, description: command.description, adminOnly: command.adminOnly, ownerOnly: command.ownerOnly });
     }
     return helpData;
 }
@@ -53,7 +54,8 @@ export function commandHandler(data){
     if(cmdName == "help") runData.commandsData = getHelpData();
 
     if(command.adminOnly && !player.hasAdmin()) return player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!');
-    
+    if (command.ownerOnly && !player.isOwner()) return player.sendMessage('§6[§eSafeGuard§6]§r§c You need owner status to run this!')
+
     try{
         command.run(runData);
     }

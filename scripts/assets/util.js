@@ -36,6 +36,32 @@ export function formatMilliseconds(milliseconds) {
 	return `${formattedDays} Days ${formattedHours} Hours ${formattedMinutes} Mins`;
 }
 
+/**
+ * Creates a new safeguard ban log
+ *
+ * @param {Object} obj - The ban log data
+ * @param {string} obj.a - The banned person's name
+ * @param {string} obj.b - The name of the admin who banned the person
+ * @param {number} obj.c - Ban timestamp
+ * @param {string} obj.d - Ban reason
+ */
+export function generateBanLog(obj) {
+	const logs = world.getDynamicProperty("safeguard:banLogs") ?? "[]";
+	
+	const newLogs = JSON.parse(logs);
+
+	newLogs.push(obj);
+
+	let logsString = JSON.stringify(newLogs);
+	
+	while (logsString.length >= 32767 && newLogs.length > 1) {
+		newLogs.shift();
+		logsString = JSON.stringify(newLogs); 
+	}
+
+	world.setDynamicProperty("safeguard:banLogs", logsString);
+}
+
 
 /**
  * 
@@ -125,6 +151,7 @@ export function scoreboardAction(id,type){
 }
 
 export function logDebug(...msg){
+	if(!msg.join(' ').startsWith("[")) msg.unshift("[SafeGuard]")
 	if(config.default.other.consoleDebugMode) console.warn(...msg);
 }
 

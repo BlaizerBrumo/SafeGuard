@@ -35,6 +35,15 @@ export function Initialize(){
     }
     //TODO: see if setting up logs works. Make sure to add a limit to how much logs can be displayed
 
+    let editedConfig = world.getDynamicProperty("safeguard:config");
+    if(editedConfig){
+        editedConfig = JSON.parse(editedConfig);
+        for (const i of Object.keys(editedConfig)) {
+            config.default[i] = editedConfig[i];
+        }
+        logDebug(`Loaded config from dynamic properties.`)
+    }
+
     logDebug("[SafeGuard] Initialized");
     world.safeguardInitialized = true;
 }

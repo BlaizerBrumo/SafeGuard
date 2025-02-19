@@ -14,7 +14,7 @@ newCommand({
             data.player.sendMessage(`§6[§eSafeGuard§6]§f Can't copy the inventory of §e${targetPlayer.name}§f, they're an admin.`);
 		    return;
         }
-        sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§5§l ${player.name} §bcopied the inventory of§l§5 ${targetPlayer.name}! §r`,true);
+        sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§e ${player.name} §fcopied the inventory of§e ${targetPlayer.name}§f! §r`,true);
 		copyInv(player,targetPlayer);
     }
 })

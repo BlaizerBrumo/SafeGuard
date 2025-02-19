@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import { logDebug, sendMessageToAllAdmins } from "../assets/util";
+import { generateBanLog, logDebug, sendMessageToAllAdmins } from "../assets/util";
 import { SafeguardModule } from "./module";
 
 Player.prototype.initialClick = 0;
@@ -10,11 +10,11 @@ Player.prototype.previousYVelocity = 0;
 Player.prototype.previousSpeed = 0;
 Player.prototype.registerValidCoords = true; 
 Player.prototype.isMuted = false;
+Player.prototype.tridentLastUse = 0;
 
 //get warns
 Player.prototype.getWarnings = function(){
 	const warnings_string = this.getDynamicProperty("safeguard:warnings");
-	logDebug(warnings_string);
 	if(!warnings_string) return {};
 	const warnings = JSON.parse(warnings_string);
 
@@ -97,6 +97,22 @@ Player.prototype.ban = function(reason="No reason provided", unbanTime, permanen
 	if (banProperty?.isBanned) throw SyntaxError(`Player "${this.name}" is already banned`);
 
 	const bannedByAdminName = (admin?.name ?? admin) || "SafeGuard AntiCheat";
+
+	//a - banned persons name
+	//b - admin name
+	//c - time of ban
+	//d - ban reason
+	try{
+		generateBanLog({
+			a:this.name,
+			b:bannedByAdminName,
+			c:Date.now(),
+			d:reason
+		})
+	}
+	catch(error){
+		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§c There was an error creating a ban log for §4${this.name}§c Error: \n§4${error}`)
+	}
 
 	const banObject = {
 		isBanned: true,
@@ -193,7 +209,7 @@ Player.prototype.unmute = function(){
 }
 
 Player.prototype.isOwner = function(){
-	return undefined;
+	return this.getDynamicProperty("safeguard:ownerStatus") ?? false;
 	//TODO: save the owner password in dynamic property
 	//NOTE: owner should have more powers than admins, for example editing config and denying admins ppermissions
 	//CHALLENGE: determining which player to give owner to on initiliaze
@@ -207,7 +223,7 @@ Player.prototype.isOwner = function(){
 //check admin status
 Player.prototype.hasAdmin = function() {
 	// this is in case I ever change the admin tag or if the user wants to change it
-	return this.hasTag("admin");
+	return this.hasTag("admin") || this.isOwner();
 };
 
 logDebug(`[SafeGuard] Updated Player class`);
