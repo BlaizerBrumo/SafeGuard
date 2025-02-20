@@ -125,8 +125,12 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 
 	if (!data.initialSpawn) return;
-	//if (!world.safeguardInitialized) Initialize();
-	
+	//needed for first initialize
+	try{
+		if (!world.safeguardInitialized) Initialize();
+	}catch(err){
+		logDebug(`Initialization had expected errors.`);
+	}
 	player.currentGamemode = player.getGameMode();
 	player.isMuted = player.getMuteInfo().isActive;
 	player.combatLogTimer = null;
@@ -139,8 +143,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r ${player.name}§r§4 was automatically banned for namespoof`, true);
 		return;
 	}
-	//for setup function
-	world.scoreboard.getObjective("safeguard:gametest_on").setScore(player.scoreboardIdentity,0);
+	
 
 	if (!world.safeguardIsSetup && player.hasAdmin()) {
 		player.sendMessage(`§r§6[§eSafeGuard§6]§r§4 WARNING! §cThe AntiCheat is not setup, some features may not work. Please run §7/function setup/setup§c to setup!`);
@@ -268,7 +271,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	const playerFreezeStatus = player.getDynamicProperty("safeguard:freezeStatus");
 	if (typeof playerFreezeStatus === "boolean") player.setFreezeTo(playerFreezeStatus);
 
-
+	
 
 
 })
@@ -283,6 +286,7 @@ Minecraft.system.runInterval(() => {
 		player.speed = Vector3utils.magnitude(player.velocity);
 		player.hitEntities = [];
 		player.blocksBroken = 0;
+
 		//player.onScreenDisplay.setActionBar(`Velocity: ${player.velocity.y} | ${((player.velocity.y / -3.919921875) * 100).toFixed(1)}%`)
 		//anti fly idk
 		/*let debugMenu = {
@@ -644,7 +648,7 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 })
 
 //in case of /reload being ran
-Initialize();
+if(!world.safeguardInitialized) Initialize();
 for (const player of world.getPlayers()) {
 	player.currentGamemode = player.getGameMode();
 }
