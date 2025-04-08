@@ -4,6 +4,6 @@ newCommand({
     name:"notify",
     description:"Toggle anticheat notifications",
     run: (data) => {
-        data.player.runCommandAsync("function admin_cmds/notify");
+        data.player.runCommand("function admin_cmds/notify");
     }
 })

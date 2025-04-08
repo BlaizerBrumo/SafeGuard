@@ -48,7 +48,9 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		if (message.length > 512) {
 			data.cancel = true;
 			player.ban("Sending invalid packet", Date.now(), true, "SafeGuard AntiCheat");
-			player.runCommandAsync(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for sending invalid packet.`);
+			system.run(() => {
+				player.runCommand(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for sending invalid packet.`);
+			})
 			sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§c ${player.name}§4 was automatically banned for sending an invalid text packet (length=${message.length})`, true);
 			return;
 		}
@@ -90,9 +92,10 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
 	if (!message.startsWith(prefix)) return;
 
-
-
-	commandHandler(data);
+	//mojang made .runCommand() not be able to run in read-only mode (before events)
+	//this bypasses this restriction
+	data.cancel = true;
+	Minecraft.system.run(() => commandHandler(data));
 })
 
 
@@ -139,7 +142,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 	if (antiNamespoof && (player.name.length > 16 || gamertagRegex.test(player.name))) {
 		player.ban("Namespoof", Date.now(), true, "SafeGuard AntiCheat");
-		player.runCommandAsync(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for namespoof.`);
+		player.runCommand(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for namespoof.`);
 		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r ${player.name}§r§4 was automatically banned for namespoof`, true);
 		return;
 	}
@@ -163,7 +166,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		world.setDynamicProperty("safeguard:legacyNotificationPlayerList",[...newArray].join(","));
 		
 	}
-	if (globalBanList.includes(player.name)) return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
+	if (globalBanList.includes(player.name)) return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
 
 
 	if (world.safeguardUnbanQueue.includes(player.name)){
@@ -179,8 +182,8 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		const { unbanTime, isPermanent, bannedBy, reason } = banInfo;
 		const timeRemaining = formatMilliseconds(unbanTime - Date.now());
 		logDebug(`${player.name} is banned: `, JSON.stringify(banInfo));
-		if (isPermanent) return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
-		else return player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${timeRemaining}\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
+		if (isPermanent) return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
+		else return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${timeRemaining}\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
 	}
 
 	//migrate legacy mute to V2
@@ -191,7 +194,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 	if (world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)){
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§4 The player §c${player.name}§4 was kicked for joining on banned device: §c${player.clientSystemInfo.platformType}`);
-		player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
+		player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
 		return;
 	}
 	
@@ -260,7 +263,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 					const unbanTime = now + punishmentTime;
 
 					player.ban("Combat logging", unbanTime, false, "SafeGuard AntiCheat");
-					player.runCommandAsync(`kick @s §r§6[§eSafeGuard§6]§r You were temporarily banned for combat logging.`);
+					player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r You were temporarily banned for combat logging.`);
 					break;
 				default:
 					console.warn(`§4[SafeGuard] Unknown punishment type(${config.default.combat.combatLogging.punishmentType}) was entered, no punishment will be given`);
@@ -393,7 +396,7 @@ world.afterEvents.entityHurt.subscribe((data) => {
 		player.combatLogTimer = null;
 		if(player.hasTag("safeguard:isInCombat")) player.removeTag("safeguard:isInCombat");
 		
-		if(SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect)) player.runCommandAsync("function assets/death_effect");
+		if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect)) player.runCommand("function assets/death_effect");
 		
 
 		//death coords
@@ -647,8 +650,11 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 	}
 })
 
-//in case of /reload being ran
-if(!world.safeguardInitialized) Initialize();
-for (const player of world.getPlayers()) {
-	player.currentGamemode = player.getGameMode();
-}
+
+Minecraft.system.run(() => {
+	//in case of /reload being ran
+	if(!world.safeguardInitialized) Initialize();
+	for (const player of world.getPlayers()) {
+		player.currentGamemode = player.getGameMode();
+	}
+})

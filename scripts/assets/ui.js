@@ -21,7 +21,7 @@ function banForm(player,targetPlayer,type,banReason){
 			if(confirmData.selection === 1){
 				targetPlayer.ban("No reason provided.", Date.now(), true, player);
 
-				targetPlayer.runCommandAsync(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §cNo reason provided\n§4Banned by: §c${player.name}`)
+				targetPlayer.runCommand(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §cNo reason provided\n§4Banned by: §c${player.name}`)
         
 				player.sendMessage(`§6[§eSafeGuard§6]§f Successfully banned §e${targetPlayer.name}`);
 				sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§f §e${player.name}§f banned §e${targetPlayer.name}§f!`,true);
@@ -55,8 +55,8 @@ function banForm(player,targetPlayer,type,banReason){
 			player.sendMessage(`§6[§eSafeGuard§6]§f Successfully banned §e${targetPlayer.name}`);
 			sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§f §e${player.name}§f banned §e${targetPlayer.name}§f!`, true);
 			
-			if(!isPermanent) player.runCommandAsync(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${values[0]} Days ${values[1]} Hours ${values[2]} Mins\n§4Reason: §c${banReason == "" ? "No reason provided." : banReason}\n§4Banned by: §c${player.name}`)
-			if(isPermanent) player.runCommandAsync(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${banReason == "" ? "No reason provided." : banReason}\n§4Banned by: §c${player.name}`)
+			if (!isPermanent) player.runCommand(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${values[0]} Days ${values[1]} Hours ${values[2]} Mins\n§4Reason: §c${banReason == "" ? "No reason provided." : banReason}\n§4Banned by: §c${player.name}`)
+			if (isPermanent) player.runCommand(`kick "${targetPlayer.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${banReason == "" ? "No reason provided." : banReason}\n§4Banned by: §c${player.name}`)
 			
 
 		})
@@ -369,7 +369,7 @@ function playerActionForm(player,targetPlayer){
 			case 0:
 				return banForm(player,targetPlayer,"slow",reason);
 			case 1:
-				player.runCommandAsync(`kick "${targetPlayer.name}" ${reason}`);
+				player.runCommand(`kick "${targetPlayer.name}" ${reason}`);
 				break
 			case 2:
 				targetPlayer.setWarning("manual");
@@ -396,10 +396,10 @@ function playerActionForm(player,targetPlayer){
 					player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${targetPlayer.name}§f is not muted.`);
 					return;
 				}
-				player.unmute();
+				targetPlayer.unmute();
 				
 				player.sendMessage(`§6[§eSafeGuard§6]§r Successfully unmuted §e${targetPlayer.name}`);
-				player.sendMessage(`§6[§eSafeGuard§6]§r You were unmuted!`)
+				targetPlayer.sendMessage(`§6[§eSafeGuard§6]§r You were unmuted!`)
 				break;
 			case 8:
 				if (!targetPlayer.getDynamicProperty("safeguard:freezeStatus")) return player.sendMessage(`§6[§eSafeGuard§6]§f §e${targetPlayer.name}§f is not frozen.`);

@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import { generateBanLog, logDebug, sendMessageToAllAdmins } from "../assets/util";
+import { formatMilliseconds, generateBanLog, logDebug, sendMessageToAllAdmins } from "../assets/util";
 import { SafeguardModule } from "./module";
 
 Player.prototype.initialClick = 0;
@@ -42,7 +42,7 @@ Player.prototype.setWarning = function(module){
 		if (manualWarningCount === 2) this.sendMessage(`§r§6[§eSafeGuard§6]§4 Warning!§c Next warning from an admin will result in a permanent ban.`);
 		else if(manualWarningCount === 3){
 			this.ban("Reaching 3 manual warnings", -1, true, "SafeGuard AntiCheat");
-			this.runCommandAsync(`kick "${this.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §cReaching 3 manual warnings.\n§4Banned by: §cSafeGuard AntiCheat`);
+			this.runCommand(`kick "${this.name}" §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §cReaching 3 manual warnings.\n§4Banned by: §cSafeGuard AntiCheat`);
 			sendMessageToAllAdmins(`§r§6[§eSafeGuard Notify§6]§4 The player §c${this.name}§4 was permanently banned for reaching 3 manual warnings.`,true);
 		}
 	}
@@ -159,8 +159,8 @@ Player.prototype.setFreezeTo = function(freeze){
 
 	this.setDynamicProperty("safeguard:freezeStatus",freeze);
 
-	this.inputPermissions.cameraEnabled = !freeze;
-	this.inputPermissions.movementEnabled = !freeze;
+	this.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, !freeze);
+	this.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, !freeze);
 };
 
 //mute

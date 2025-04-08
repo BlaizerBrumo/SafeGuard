@@ -273,7 +273,7 @@ export function sendAnticheatAlert(detectedPlayer, detectionType, detectionValue
 
 	if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.autoMod)) {
 		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r§c ${detectedPlayer.name}§r was automatically kicked by SafeGuard AutoMod module. Detection[${module} = ${detectionValue}]`, true);
-		detectedPlayer.runCommandAsync(`kick "${detectedPlayer.name}" §6[§eSafeGuard AutoMod§6]§r You have been detected cheating. Module[${module} = ${detectionValue}]`);
+		detectedPlayer.runCommand(`kick "${detectedPlayer.name}" §6[§eSafeGuard AutoMod§6]§r You have been detected cheating. Module[${module} = ${detectionValue}]`);
 	}
 
 	const message = `§6[§eSafeGuard§6]§r §c§l${detectedPlayer.name}§r§4 was detected using §l§c${detectionType}§r§4 with a value of §l§c${detectionValue}§r§4!`;

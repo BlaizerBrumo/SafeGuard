@@ -41,7 +41,6 @@ export function commandHandler(data){
     const args = message.substring(prefix.length).split(" ");
     const cmdName = args[0];
     const command = commands[cmdName];
-    data.cancel = true;
 
 
     if (!command) return player.sendMessage(`§r§6[§eSafeGuard§6]§c Unknown command: §f${args[0]}`);
@@ -60,6 +59,6 @@ export function commandHandler(data){
         command.run(runData);
     }
     catch(error){
-        player.sendMessage(`§6[§eSafeGuard§6]§r§c Caught error while running command "${cmdName}":\n\n${error}`);
+        player.sendMessage(`§6[§eSafeGuard§6]§r§c Caught error while running command "${cmdName}":\n\n${error}\n${error.stack}`);
     }
 }

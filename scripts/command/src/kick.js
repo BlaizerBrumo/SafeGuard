@@ -15,6 +15,6 @@ newCommand({
             return;
         }
         sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§e ${player.name} §fkicked the player§e ${targetPlayer.name}§f! §r`, true);
-        targetPlayer.runCommandAsync(`kick @s you were kicked by ${player.name}`);
+        targetPlayer.runCommand(`kick @s you were kicked by ${player.name}`);
     }
 })

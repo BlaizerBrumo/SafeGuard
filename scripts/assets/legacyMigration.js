@@ -56,7 +56,7 @@ export function legacy_BanToV2(player){
     player.ban(reason,parseInt(timeStamp),isPermanent === "true",adminName);
 
     //kick the player assuming when they join back the system will display their ban info
-    player.runCommandAsync(`kick "${player.name}" §r§6[§eSafeGuard§6]§r You were banned, rejoin to find out more info.`);
+    player.runCommand(`kick "${player.name}" §r§6[§eSafeGuard§6]§r You were banned, rejoin to find out more info.`);
 
     logDebug(`[SafeGuard] Successfully migrated "${player.name}" 's ban from legacy to v2`);
 }
