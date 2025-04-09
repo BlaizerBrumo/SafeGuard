@@ -45,7 +45,7 @@ newCommand({
 		if (muteTarget.name === player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f Cannot execute this command on yourself!`);
 
 		// Parse and convert the time duration
-		if (duration == "permanent" || duration.length < 1) return mutePlayer(muteTarget, reason, -1);
+		if (duration == "permanent" || duration.length < 1) return muteTarget.mute(muteTarget, reason, -1);
 
 		const timeRegex = /^(\d+)([SMHD])$/i;
 		if(!timeRegex.test(duration)){

@@ -3,7 +3,7 @@ tellraw @s {"rawtext":[{"text":"§l§7Advanced Anticheat for Minecraft Bedrock E
 tellraw @s {"rawtext":[{"text":"\n"}]}
 tellraw @s {"rawtext":[{"text":"§l§7Developed by: §aBlazer#9677 (Discord)"}]}
 tellraw @s {"rawtext":[{"text":"§l§7Github: §ahttps://github.com/BlaizerBrumo/SafeGuard"}]}
-tellraw @s {"rawtext":[{"text":"§l§7Version: §a2§7.§a0§7.§a0"}]}
+tellraw @s {"rawtext":[{"text":"§l§7Version: §a2§7.§a0§7.§a1"}]}
 tellraw @s {"rawtext":[{"text":"\n"}]}
 tellraw @s {"rawtext":[{"text":"§l§6-----------------------§e Help Section §6-------------------------"}]}
 tellraw @s {"rawtext":[{"text":"§l§7For assistance, join the Discord, or open an issue on the github page."}]}
