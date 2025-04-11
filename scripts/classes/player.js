@@ -1,4 +1,4 @@
-import { Player, world,InputPermissionCategory } from "@minecraft/server";
+import { Player, world, InputPermissionCategory } from "@minecraft/server";
 import { formatMilliseconds, generateBanLog, logDebug, sendMessageToAllAdmins } from "../assets/util";
 import { SafeguardModule } from "./module";
 

@@ -24,6 +24,4 @@ import "../command/src/systeminfo";
 import "../command/src/removeowner";
 import "../command/src/clearbanlogs";
 
-import "../command/src/test"
-
 import "../command/src/report";
