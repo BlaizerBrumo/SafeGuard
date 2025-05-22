@@ -36,7 +36,7 @@ function banForm(player,targetPlayer,type,banReason){
 		.slider("Ban Time:\n\nDays",0,360,1,0)
 		.slider("Hours",0,23,1,0)
 		.slider("Minutes",0,59,1,0)
-		.toggle("Permanent",false)
+		.toggle("Permanent", { defaultValue: false})
 		banForm.show(player).then((banFormData) => {
 			if(banFormData.canceled) return player.sendMessage(`§6[§eSafeGuard§6]§f Cancelled`);
 			const now = Date.now();
@@ -233,7 +233,7 @@ function configEditorForm(player) {
 
 					switch (typeof subValue) {
 						case "boolean":
-							configModuleForm.toggle(`${key} -> ${subKey}\n`, subValue);
+							configModuleForm.toggle(`${key} -> ${subKey}\n`, { defaultValue: subValue});
 							break;
 						case "number":
 						case "string":
@@ -246,7 +246,7 @@ function configEditorForm(player) {
 
 				switch (typeof value) {
 					case "boolean":
-						configModuleForm.toggle(`${key}\n`, value);
+						configModuleForm.toggle(`${key}\n`, { defaultValue: value});
 						break;
 					case "number":
 					case "string":
@@ -307,7 +307,7 @@ function moduleSettingsForm(player){
 		const setting = validModules[i];
 		const isSettingEnabled = SafeguardModule.getModuleStatus(setting);
 
-		settingsform.toggle(setting, isSettingEnabled);
+		settingsform.toggle(setting, {defaultValue:isSettingEnabled});
 	}
 
 	settingsform.show(player).then((formData) => {

@@ -42,7 +42,7 @@ newCommand({
 		if (!muteTarget) {
 			return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${playerName}§f was not found.`);
 		}
-		if (muteTarget.name === player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f Cannot execute this command on yourself!`);
+		// if (muteTarget.name === player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f Cannot execute this command on yourself!`);
 
 		// Parse and convert the time duration
 		if (duration == "permanent" || duration.length < 1) return muteTarget.mute(muteTarget, reason, -1);

@@ -202,8 +202,8 @@ Player.prototype.unmute = function(){
 		isPermanent: false,
 		reason: ""
 	});;
-	targetPlayer.setDynamicProperty("safeguard:muteInfo", muteInfo_string);
-	targetPlayer.isMuted = false;
+	this.setDynamicProperty("safeguard:muteInfo", muteInfo_string);
+	this.isMuted = false;
 
 	logDebug(muteInfo_string);
 }

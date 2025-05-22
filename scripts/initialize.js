@@ -18,6 +18,8 @@ export function Initialize(){
             //NOTE: SafeGuard notify migration queue is handled in index.js at initialSpawn
             legacy_ScoreboardsToV2();
         }
+        if (!world.safeguardUnbanQueue) world.safeguardUnbanQueue = [];
+        
         world.safeguardIsSetup = world.scoreboard.getObjective("safeguard:setup_success") !== undefined; 
         
         world.safeguardNotifyMigrationQueue = (world.getDynamicProperty("safeguard:legacyNotifyPlayerList") ?? "").split(",");
