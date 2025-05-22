@@ -3,6 +3,49 @@ export default {
     "version": "2.0.2",
     //the owner password to edit config in game
     "OWNER_PASSWORD": "password",
+    "ranks": {
+        "owner": {
+            "name": "Owner",
+            "displayText": "§c[Owner]",
+            "nameColor": "§c",
+            "messageColor": "§f",
+            "permissionsLevel": 4,
+            "id": "owner"
+        },
+        "admin": {
+            "name": "Admin",
+            "displayText": "§6[Admin]",
+            "nameColor": "§6",
+            "messageColor": "§f",
+            "permissionsLevel": 3,
+            "id": "admin"
+        },
+        "staff": {
+            "name": "Staff",
+            "displayText": "§e[Staff]",
+            "nameColor": "§e",
+            "messageColor": "§f",
+            "permissionsLevel": 2,
+            "id": "staff"
+        },
+        "donator": {
+            "name": "Donator",
+            "displayText": "§b[Donator]",
+            "nameColor": "§b",
+            "messageColor": "§f",
+            "permissionsLevel": 1,
+            "id": "donator"
+        },
+        "member": {
+            "name": "Member",
+            "displayText": "§a[Member]",
+            "nameColor": "§a",
+            "messageColor": "§f",
+            "permissionsLevel": 0,
+            "id": "member"
+        }
+    },
+    "defaultRank": "member",
     "other":{
         //dev stuff
         "consoleDebugMode": true,

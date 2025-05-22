@@ -88,8 +88,24 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		player.lastMessageDate = now;
 	}
 
+	// NEW RANK FORMATTING LOGIC STARTS HERE
+	if (!message.startsWith(prefix)) { // Only format if it's NOT a command
+		const playerRankId = player.getDynamicProperty("safeguard:rankId") || config.default.defaultRank;
+		// Ensure playerRankId is a string, as dynamic properties can return other types.
+		const rankIdStr = typeof playerRankId === 'string' ? playerRankId : config.default.defaultRank;
+		const rankInfo = config.default.ranks[rankIdStr];
 
-	if (!message.startsWith(prefix)) return;
+		if (rankInfo) { // Check if rankInfo is valid
+			const formattedMessage = `${rankInfo.displayText} ${rankInfo.nameColor}${player.name}§r: ${rankInfo.messageColor}${message}`;
+			data.cancel = true; // Cancel original message
+			world.sendMessage(formattedMessage); // Send formatted message
+			return; // Return after sending formatted message to prevent command processing
+		}
+		// If rankInfo is not found, the original message will proceed unless cancelled by other logic.
+	}
+	// NEW RANK FORMATTING LOGIC ENDS HERE
+
+	if (!message.startsWith(prefix)) return; // This check is now somewhat redundant if rank formatting happened, but kept for safety / if rank formatting doesn't occur.
 
 	data.cancel = true;
 	Minecraft.system.run(() => commandHandler(data));
