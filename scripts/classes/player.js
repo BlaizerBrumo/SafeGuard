@@ -76,6 +76,7 @@ Player.prototype.getMuteInfo = function(){
 	muteInfo.isActive = isActive;
 	if(!isActive) muteInfo.duration = -1;
 	logDebug("[Mute Info]",isActive, muteInfo.duration - Date.now());
+	this.isMuted = isActive;
 	return muteInfo;
 }
 
@@ -138,18 +139,17 @@ Player.prototype.unban = function() {
 	}
 	const banProperty = this.getDynamicProperty("safeguard:banInfo");
 	if (!banProperty) {
-		removeFromUnbanQueue(this)
 		logDebug(`Player "${this.name}" is not banned (property missing)`);
-		return false;
+		return false; // Player was not banned, so nothing to do with unban queue.
 	}
 	const banInfo = JSON.parse(banProperty);
 	if (!banInfo?.isBanned) {
-		removeFromUnbanQueue(this)
-		logDebug(`Player "${this.name}" is not banned (.isBanned=${banInfo.isBanned.toString() ?? "null"})`);
-		return false;
+		logDebug(`Player "${this.name}" is not banned (.isBanned=${banInfo.isBanned?.toString() ?? "null"})`);
+		return false; // Player was not actively banned, so nothing to do with unban queue.
 	}
 	
-	removeFromUnbanQueue(this)
+	// Only call removeFromUnbanQueue if the player was actually banned and is now being successfully unbanned.
+	removeFromUnbanQueue(this);
 	
 	return true;
 };
@@ -176,7 +176,7 @@ Player.prototype.mute = function(adminPlayer,reason, durationMs) {
 
 	const isPermanent = durationMs == -1;
 	const endTime = isPermanent ? "permanent" : Date.now() + durationMs;
-	const muteTime = isPermanent ? "permanent time" : `${timeValue}${timeUnit}`;
+	const muteTimeDisplay = isPermanent ? "permanent" : formatMilliseconds(durationMs);
 	const muteInfo = {
 		admin: adminName,
 		duration: endTime,
@@ -187,9 +187,15 @@ Player.prototype.mute = function(adminPlayer,reason, durationMs) {
 	this.isMuted = true;
 
 	// Notify player and admins
-	adminPlayer.sendMessage(`§6[§eSafeGuard§6]§f You have muted §e${this.name}§f for §e${muteTime}.`);
-	sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§e ${this.name}§f has been muted for §e${muteTime}§f by §e${adminPlayer.name}§f. Reason: §e${reason}§f`, true);
-	logDebug(`MUTED NAME="${this.name}"; REASON="${reason}"; DURATION=${formatMilliseconds(durationMs)}`);
+    if (adminPlayer instanceof Player) { // Check if adminPlayer is a Player object
+	    adminPlayer.sendMessage(`§6[§eSafeGuard§6]§f You have muted §e${this.name}§f for §e${muteTimeDisplay}.`);
+    } else if (typeof adminPlayer === 'string') {
+        // If adminPlayer is a string (name), try to find the player and send message
+        const actualAdminPlayer = Array.from(world.getPlayers()).find(p => p.name === adminPlayer);
+        actualAdminPlayer?.sendMessage(`§6[§eSafeGuard§6]§f You have muted §e${this.name}§f for §e${muteTimeDisplay}.`);
+    }
+	sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§e ${this.name}§f has been muted for §e${muteTimeDisplay}§f by §e${adminName}§f. Reason: §e${reason}§f`, true);
+	logDebug(`MUTED NAME="${this.name}"; REASON="${reason}"; DURATION=${muteTimeDisplay}`);
 }
 
 //unmute
