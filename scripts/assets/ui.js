@@ -237,7 +237,7 @@ function configEditorForm(player) {
 							break;
 						case "number":
 						case "string":
-							configModuleForm.textField(`${key} -> ${subKey}\n`, subValue.toString(), subValue.toString());
+							configModuleForm.textField(`${key} -> ${subKey}\n`, subValue.toString(), {defaultValue:subValue.toString()});
 							break;
 					}
 				}
@@ -250,7 +250,7 @@ function configEditorForm(player) {
 						break;
 					case "number":
 					case "string":
-						configModuleForm.textField(`${key}\n`, value.toString(), value.toString());
+						configModuleForm.textField(`${key}\n`, value.toString(), {defaultValue:value.toString()});
 						break;
 				}
 			}
