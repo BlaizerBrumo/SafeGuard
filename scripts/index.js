@@ -521,22 +521,6 @@ world.afterEvents.playerGameModeChange.subscribe((data) => {
 	}
 })
 
-world.afterEvents.playerPlaceBlock.subscribe((data) => {
-	const antiScaffoldOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.scaffoldCheck);
-
-	if (!antiScaffoldOn) return;
-	const { player, block } = data;
-	const playerRotation = player.getRotation();
-
-	if (playerRotation.x == 60 || playerRotation.x == 90) {
-		if (!player.scaffoldChecks) player.scaffoldChecks = 0;
-
-		block.setType("minecraft:air");
-		if (player.scaffoldChecks === 1 || player.scaffoldChecks % 15 === 0) sendAnticheatAlert(player, "scaffold", `timesDetected=${player.scaffoldChecks}`, SafeguardModule.Modules.scaffoldCheck);
-		player.scaffoldChecks++
-	}
-})
-
 world.afterEvents.itemUse.subscribe((data) => {
 	if (data.source.typeId !== "minecraft:player") return;
 	const player = data.source;
