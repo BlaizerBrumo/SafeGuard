@@ -31,7 +31,10 @@ newCommand({
             }
         }
 
-        const playerIndex = gbanList.indexOf(targetName);
+        const playerIndex = gbanList.findIndex(entry => 
+            (typeof entry === 'string' && entry === targetName) || 
+            (typeof entry === 'object' && entry.name === targetName)
+        );
 
         if (playerIndex === -1) {
             player.sendMessage(`§cPlayer ${targetName} is not on the offline ban list.`);

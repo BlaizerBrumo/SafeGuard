@@ -14,143 +14,12 @@ import { Vector3utils } from './classes/vector3.js';
 
 import "./classes/player.js"; // This is the import to verify later
 import { Initialize } from './initialize.js';
+import { initializeReachCheck } from './modules/reach_check.js';
+import { initializeNoSwingCheck } from './modules/noswing_check.js'; // New import
 
 logDebug("[SafeGuard] Script Loaded");
 
 const world = Minecraft.world;
-
-// Register /sg:version slash command
-if (Minecraft.world.commands) { // Check if the CustomCommandRegistry is available
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:version",
-            description: "Displays the current version of the SafeGuard pack.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Any, // As !version was adminOnly: false
-            mandatoryParameters: [],
-            optionalParameters: []
-        }, (origin, args) => { // origin is CommandOrigin
-            // Construct the message using config.default.version
-            const versionMessage = `§r§6[§eSafeGuard§6]§f Version: §ev${config.default.version}`;
-            if (origin instanceof Minecraft.Player) {
-                origin.sendMessage(versionMessage);
-            } else {
-                // If run from server console or command block, log it
-                console.warn(versionMessage.replace(/§[0-9a-fk-or]/g, '')); // Strip color codes for console
-            }
-        });
-        logDebug("[SafeGuard] Registered /sg:version command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:version command:", e);
-    }
-} else {
-    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:version registration.");
-}
-
-// Register /sg:offlineban slash command
-if (Minecraft.world.commands) {
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:offlineban",
-            description: "Adds a player to the global ban list (offline). They will be banned on next join.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin, // Or Operator, consistent with !offlineban
-            mandatoryParameters: [{
-                name: "playerName",
-                type: Minecraft.CustomCommandParamType.String, // Player is offline, so use String
-                description: "The exact name of the player to offline ban."
-            }],
-            optionalParameters: [] // No optional reason for now, to keep it simple like globalBanList
-        }, (origin, args) => {
-            const targetName = args.playerName; // Argument name matches parameter name
-
-            const gbanListString = world.getDynamicProperty("safeguard:gbanList");
-            let gbanList = [];
-            if (typeof gbanListString === 'string') {
-                try {
-                    gbanList = JSON.parse(gbanListString);
-                    if (!Array.isArray(gbanList)) gbanList = [];
-                } catch (e) {
-                    logDebug("Failed to parse dynamic global ban list for /sg:offlineban:", e);
-                    gbanList = [];
-                }
-            }
-
-            if (gbanList.includes(targetName)) {
-                const message = `§cPlayer ${targetName} is already on the offline ban list.`;
-                if (origin instanceof Minecraft.Player) origin.sendMessage(message); else console.warn(message.replace(/§[0-9a-fk-or]/g, ''));
-                return;
-            }
-
-            gbanList.push(targetName);
-            world.setDynamicProperty("safeguard:gbanList", JSON.stringify(gbanList));
-
-            const successMessage = `§aPlayer ${targetName} has been added to the offline ban list.`;
-            if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
-            
-            let adminName = "Server";
-            if (origin instanceof Minecraft.Player) adminName = origin.name;
-            logDebug(`[OfflineBan] ${adminName} added ${targetName} to the offline ban list via slash command.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:offlineban command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:offlineban command:", e);
-    }
-} else {
-    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:offlineban registration.");
-}
-
-// Register /sg:offlineunban slash command
-if (Minecraft.world.commands) {
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:offlineunban",
-            description: "Removes a player from the global ban list (offline).",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin, // Consistent with !offlineunban
-            mandatoryParameters: [{
-                name: "playerName",
-                type: Minecraft.CustomCommandParamType.String,
-                description: "The exact name of the player to remove from the offline ban list."
-            }],
-            optionalParameters: []
-        }, (origin, args) => {
-            const targetName = args.playerName;
-
-            const gbanListString = world.getDynamicProperty("safeguard:gbanList");
-            let gbanList = [];
-            if (typeof gbanListString === 'string') {
-                try {
-                    gbanList = JSON.parse(gbanListString);
-                    if (!Array.isArray(gbanList)) gbanList = [];
-                } catch (e) {
-                    logDebug("Failed to parse dynamic global ban list for /sg:offlineunban:", e);
-                    gbanList = [];
-                }
-            }
-
-            const playerIndex = gbanList.indexOf(targetName);
-
-            if (playerIndex === -1) {
-                const message = `§cPlayer ${targetName} is not on the offline ban list.`;
-                if (origin instanceof Minecraft.Player) origin.sendMessage(message); else console.warn(message.replace(/§[0-9a-fk-or]/g, ''));
-                return;
-            }
-
-            gbanList.splice(playerIndex, 1);
-            world.setDynamicProperty("safeguard:gbanList", JSON.stringify(gbanList));
-
-            const successMessage = `§aPlayer ${targetName} has been removed from the offline ban list.`;
-            if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
-            
-            let adminName = "Server";
-            if (origin instanceof Minecraft.Player) adminName = origin.name;
-            logDebug(`[OfflineUnban] ${adminName} removed ${targetName} from the offline ban list via slash command.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:offlineunban command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:offlineunban command:", e);
-    }
-} else {
-    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:offlineunban registration.");
-}
 
 const gamertagRegex = /[^A-Za-z 0-9-]/gm;
 
@@ -319,9 +188,29 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	}
 
 	// Check against both seed and dynamic global ban lists
-	if (seedGlobalBanList.includes(player.name) || dynamicGbanList.includes(player.name)) {
-		player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the global ban list.`);
-		return; 
+	const isBannedInSeed = seedGlobalBanList.some(entry => 
+		(typeof entry === 'string' && entry === player.name) || 
+		(typeof entry === 'object' && entry.name === player.name)
+	);
+	const isBannedInDynamic = dynamicGbanList.some(entry => 
+		(typeof entry === 'string' && entry === player.name) || 
+		(typeof entry === 'object' && entry.name === player.name)
+	);
+
+	if (isBannedInSeed || isBannedInDynamic) {
+		let kickMessage = `§r§6[§eSafeGuard§6]§r §4Your name was found in the global ban list.`; // Default
+
+		const dynamicBanEntry = dynamicGbanList.find(entry => typeof entry === 'object' && entry.name === player.name);
+		const seedBanEntry = seedGlobalBanList.find(entry => typeof entry === 'object' && entry.name === player.name);
+		
+		if (dynamicBanEntry && dynamicBanEntry.reason) {
+			kickMessage = `§r§6[§eSafeGuard§6]§r §4You are on the global ban list.\n§4Reason: §c${dynamicBanEntry.reason}\n§4Banned by: §c${dynamicBanEntry.bannedBy || 'Unknown'}`;
+		} else if (seedBanEntry && seedBanEntry.reason) { // Fallback to seed list reason
+			 kickMessage = `§r§6[§eSafeGuard§6]§r §4You are on the global ban list.\n§4Reason: §c${seedBanEntry.reason}\n§4Banned by: §c${seedBanEntry.bannedBy || 'System'}`;
+		}
+
+		player.runCommand(`kick @s ${kickMessage}`);
+		return;
 	}
 
 	if (world.safeguardUnbanQueue.includes(player.name)){
@@ -750,4 +639,6 @@ Minecraft.system.run(() => {
 	for (const player of world.getPlayers()) {
 		player.currentGamemode = player.getGameMode();
 	}
+	initializeReachCheck(); 
+	initializeNoSwingCheck(); // Call the new module initializer
 })
