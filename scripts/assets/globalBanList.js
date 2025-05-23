@@ -43,4 +43,4 @@ export const globalBanList = [
 	"budgingermine38",
 	"esotericaliy",
 	"vision3914"
-]
+];

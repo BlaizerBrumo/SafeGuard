@@ -91,17 +91,18 @@ export function settingSelector(player){
 		.button("Module Settings")
 		.button("Config Editor")
 		.button("Config Debug")
+		// No "Back" button here as this is the main settings menu.
 	player.playSound("random.pop");
 
 	form.show(player).then((formData) => {
-		if (formData.canceled) return;
+		if (formData.canceled) return; // Or handle as needed, maybe go to main UI if there was one.
 		switch (formData.selection) {
 			case 0:
-				return moduleSettingsForm(player);
+				return moduleSettingsForm(player, settingSelector);
 			case 1:
-				return configEditorForm(player);
+				return configEditorForm(player, settingSelector);
 			case 2:
-				return configDebugForm(player);
+				return configDebugForm(player, settingSelector);
 		}
 	})
 }
@@ -182,30 +183,33 @@ function ownerLoginForm(player){
 	})
 }
 
-function configDebugForm(player){
+function configDebugForm(player, previousForm){
 	const form = new ActionFormData()
 		.title("SafeGuard Config Debugger")
 		.body(`Please select an option from below:`)
 		.button("Export Config to Console")
-		.button("Reset Config");
+		.button("Reset Config")
+		.button("Back"); // Added Back button
 
 	form.show(player).then((formData) => {
-		if (formData.canceled) return;
+		if (formData.canceled) return previousForm(player);
 		switch (formData.selection) {
 			case 0:
 				console.warn(JSON.stringify(config.default));
 				player.sendMessage(`§6[§eSafeGuard§6]§f The config was exported to the console`);
-				break;
+                return configDebugForm(player, previousForm); // Re-show form after action
 			case 1:
 				world.setDynamicProperty("safeguard:config",undefined);
 				player.sendMessage(`§6[§eSafeGuard§6]§f The config was reset. Run §e/reload§f`);
-				break;
+                return configDebugForm(player, previousForm); // Re-show form after action
+			case 2: // Back button
+				return previousForm(player);
 		}
 	})
 }
 
-function configEditorForm(player) {
-	if (!player.isOwner()) return ownerLoginForm(player);
+function configEditorForm(player, previousForm) {
+	if (!player.isOwner()) return ownerLoginForm(player); // Consider passing previousForm here too if login can go back
 
 	const mainConfigForm = new ActionFormData().title("SafeGuard Config Editor");
 	const configOptions = Object.keys(config.default).filter(key => typeof config.default[key] === "object");
@@ -213,9 +217,13 @@ function configEditorForm(player) {
 	for (let i = 0; i < configOptions.length; i++) {
 		mainConfigForm.button(configOptions[i]);
 	}
+    mainConfigForm.button("Back"); // Add back button to module selection
 
 	mainConfigForm.show(player).then((configSelection) => {
-		if (configSelection.canceled) return;
+		if (configSelection.canceled) return previousForm(player);
+        if (configSelection.selection === configOptions.length) { // Check if "Back" was pressed
+            return previousForm(player);
+        }
 
 		const selectedModule = configOptions[configSelection.selection];
 		const configModuleForm = new ModalFormData();
@@ -259,8 +267,8 @@ function configEditorForm(player) {
 		// Show modal form and process user input
 		configModuleForm.show(player).then((formData) => {
 			if (formData.canceled) {
-				configEditorForm(player);
-				return;
+				// If the value editing form is cancelled, go back to the module selection form
+				return configEditorForm(player, previousForm); 
 			}
 
 			// Update config.default with new values
@@ -297,10 +305,11 @@ function configEditorForm(player) {
 }
 
 //settings form
-function moduleSettingsForm(player){	
+function moduleSettingsForm(player, previousForm){	
 
 	let settingsform = new ModalFormData()
 	.title("SafeGuard Module Settings");
+    // No direct "Back" button for ModalFormData, cancellation will handle it.
 
 	const validModules = SafeguardModule.getValidModules();
 	for (let i = 0; i < validModules.length; i++) {
@@ -312,8 +321,8 @@ function moduleSettingsForm(player){
 
 	settingsform.show(player).then((formData) => {
 		if (formData.canceled) {
-			player.sendMessage(`§6[§eSafeGuard§6]§r You closed the form without saving!`);
-			return;
+			// player.sendMessage(`§6[§eSafeGuard§6]§r You closed the form without saving!`); // Optional message
+			return previousForm(player); // Go back if cancelled
 		}
 
 		for (let i = 0; i < validModules.length; i++) {
@@ -326,6 +335,7 @@ function moduleSettingsForm(player){
 				sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§f ${player.name}§f turned ${shouldEnableSetting ? "on" : "off"} §e${setting}§f!`,true);
 			}
 		}
+        return previousForm(player); // Go back after processing
 	});
 }
 

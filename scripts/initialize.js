@@ -1,29 +1,59 @@
 import * as Minecraft from '@minecraft/server';
-import { legacy_ScoreboardsToV2, legacy_WorldBordertoV2 } from './assets/legacyMigration';
 import { logDebug, scoreboardAction } from './assets/util';
 import * as config from './config';
+import { globalBanList } from './assets/globalBanList.js'; // Added import
 const world = Minecraft.world;
 
 export function Initialize(){
     Minecraft.system.run(() => {
-        if (world.scoreboard.getObjective("safeguard:gametest_on") == undefined) {
-            scoreboardAction("safeguard:gametest_on", "add");
+        // Ensure scoreboard objectives exist
+        const objectives = [
+            "safeguard:gametest_on",
+            "safeguard:vanish",
+            "safeguard:notify",
+            "safeguard:setup_success"
+        ];
+        objectives.forEach(obj => {
+            if (world.scoreboard.getObjective(obj) == undefined) {
+                try {
+                    world.scoreboard.addObjective(obj, obj); // Use obj as display name too, or customize
+                    logDebug(`[SafeGuard] Created scoreboard objective: ${obj}`);
+                } catch (e) {
+                    logDebug(`[SafeGuard] Failed to create scoreboard objective ${obj}:`, e);
+                }
+            }
+        });
+
+        // Initialize Gamerules
+        if (world.getDynamicProperty("safeguard:gamerulesSet") === undefined) {
+            try {
+                world.setGameRule(Minecraft.GameRule.sendCommandFeedback, false);
+                world.setGameRule(Minecraft.GameRule.commandBlockOutput, false);
+                world.setDynamicProperty("safeguard:gamerulesSet", true);
+                logDebug("[SafeGuard] Initialized gamerules (sendCommandFeedback, commandBlockOutput).");
+            } catch (e) {
+                logDebug("[SafeGuard] Failed to initialize gamerules:", e);
+            }
         }
-        if (!world.worldBorder) {
-            const worldBorder = world.getDynamicProperty("safeguard:worldBorder");
-            if (!worldBorder) legacy_WorldBordertoV2();
-            else world.worldBorder = worldBorder ?? 0;
+
+        // world.worldBorder can be set directly if needed, or managed by other game logic/commands.
+        // Example: world.worldBorder = world.getDynamicProperty("safeguard:worldBorder") ?? 0;
+        // For this task, we are removing the specific legacy_WorldBordertoV2() call and related conditional.
+        // If worldBorder needs to be initialized from a dynamic property, that logic should be explicit.
+        // For now, just ensuring the property is read if it exists.
+        const existingWorldBorder = world.getDynamicProperty("safeguard:worldBorder");
+        if (typeof existingWorldBorder === 'number') {
+            world.worldBorder = existingWorldBorder;
         }
-        if (world.scoreboard.getObjective("notify")){
-            //NOTE: SafeGuard notify migration queue is handled in index.js at initialSpawn
-            legacy_ScoreboardsToV2();
-        }
-        if (!world.safeguardUnbanQueue) world.safeguardUnbanQueue = [];
+
+
+        if (!world.safeguardUnbanQueue) world.safeguardUnbanQueue = []; // This seems like a runtime variable, not directly from dynamic property string parsing here.
         
-        world.safeguardIsSetup = world.scoreboard.getObjective("safeguard:setup_success") !== undefined; 
+        // Check for script setup first, then scoreboard as a fallback.
+        world.safeguardIsSetup = world.getDynamicProperty("safeguard:scriptSetupComplete") === true || 
+                                 world.scoreboard.getObjective("safeguard:setup_success") !== undefined;
         
-        world.safeguardNotifyMigrationQueue = (world.getDynamicProperty("safeguard:legacyNotifyPlayerList") ?? "").split(",");
-        world.safeguardUnbanQueue = (world.getDynamicProperty("safeguard:unbanQueue") ?? "").split(",");
+        world.safeguardUnbanQueue = (world.getDynamicProperty("safeguard:unbanQueue") ?? "").split(",").filter(name => name.trim() !== "");
 
         
         logDebug(`[SafeGuard] Unban Queue: `,world.safeguardUnbanQueue.join(","));
@@ -47,7 +77,14 @@ export function Initialize(){
             logDebug(`Loaded config from dynamic properties.`)
         }
 
-        logDebug("[SafeGuard] Initialized");
-        world.safeguardInitialized = true;
+        // Load Global Ban List from globalBanList.js if dynamic property doesn't exist
+        if (world.getDynamicProperty("safeguard:gbanList") === undefined) {
+            world.setDynamicProperty("safeguard:gbanList", JSON.stringify(globalBanList)); // Use the imported globalBanList
+            logDebug("[SafeGuard] Initialized global ban list dynamic property from globalBanList.js seed.");
+        }
+
+        world.setDynamicProperty("safeguard:scriptSetupComplete", true); // Set script setup flag
+        logDebug("[SafeGuard] Initialized and script setup marked as complete.");
+        world.safeguardInitialized = true; // General initialization flag
     })
 }
