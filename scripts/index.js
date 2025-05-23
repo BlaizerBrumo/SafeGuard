@@ -5,19 +5,152 @@ import { ActionFormData } from '@minecraft/server-ui';
 import * as config from "./config.js";
 import * as ui from "./assets/ui.js";
 import { formatMilliseconds, teleportToGround, sendMessageToAllAdmins, parsePunishmentTime, sendAnticheatAlert, logDebug } from "./assets/util.js";
-import { globalBanList } from './assets/globalBanList.js';
+import { globalBanList as seedGlobalBanList } from './assets/globalBanList.js'; // Renamed import
 import { commandHandler } from './command/handle.js';
 import "./command/importer.js";
+import "./slash_commands.js";
 import { SafeguardModule } from './classes/module.js';
 import { Vector3utils } from './classes/vector3.js';
 
-import "./classes/player.js";
-import { legacy_BanToV2 } from './assets/legacyMigration.js';
+import "./classes/player.js"; // This is the import to verify later
 import { Initialize } from './initialize.js';
 
 logDebug("[SafeGuard] Script Loaded");
 
 const world = Minecraft.world;
+
+// Register /sg:version slash command
+if (Minecraft.world.commands) { // Check if the CustomCommandRegistry is available
+    try {
+        Minecraft.world.commands.registerCommand({
+            name: "sg:version",
+            description: "Displays the current version of the SafeGuard pack.",
+            permissionLevel: Minecraft.CommandPermissionLevel.Any, // As !version was adminOnly: false
+            mandatoryParameters: [],
+            optionalParameters: []
+        }, (origin, args) => { // origin is CommandOrigin
+            // Construct the message using config.default.version
+            const versionMessage = `§r§6[§eSafeGuard§6]§f Version: §ev${config.default.version}`;
+            if (origin instanceof Minecraft.Player) {
+                origin.sendMessage(versionMessage);
+            } else {
+                // If run from server console or command block, log it
+                console.warn(versionMessage.replace(/§[0-9a-fk-or]/g, '')); // Strip color codes for console
+            }
+        });
+        logDebug("[SafeGuard] Registered /sg:version command");
+    } catch (e) {
+        logDebug("[SafeGuard] Failed to register /sg:version command:", e);
+    }
+} else {
+    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:version registration.");
+}
+
+// Register /sg:offlineban slash command
+if (Minecraft.world.commands) {
+    try {
+        Minecraft.world.commands.registerCommand({
+            name: "sg:offlineban",
+            description: "Adds a player to the global ban list (offline). They will be banned on next join.",
+            permissionLevel: Minecraft.CommandPermissionLevel.Admin, // Or Operator, consistent with !offlineban
+            mandatoryParameters: [{
+                name: "playerName",
+                type: Minecraft.CustomCommandParamType.String, // Player is offline, so use String
+                description: "The exact name of the player to offline ban."
+            }],
+            optionalParameters: [] // No optional reason for now, to keep it simple like globalBanList
+        }, (origin, args) => {
+            const targetName = args.playerName; // Argument name matches parameter name
+
+            const gbanListString = world.getDynamicProperty("safeguard:gbanList");
+            let gbanList = [];
+            if (typeof gbanListString === 'string') {
+                try {
+                    gbanList = JSON.parse(gbanListString);
+                    if (!Array.isArray(gbanList)) gbanList = [];
+                } catch (e) {
+                    logDebug("Failed to parse dynamic global ban list for /sg:offlineban:", e);
+                    gbanList = [];
+                }
+            }
+
+            if (gbanList.includes(targetName)) {
+                const message = `§cPlayer ${targetName} is already on the offline ban list.`;
+                if (origin instanceof Minecraft.Player) origin.sendMessage(message); else console.warn(message.replace(/§[0-9a-fk-or]/g, ''));
+                return;
+            }
+
+            gbanList.push(targetName);
+            world.setDynamicProperty("safeguard:gbanList", JSON.stringify(gbanList));
+
+            const successMessage = `§aPlayer ${targetName} has been added to the offline ban list.`;
+            if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
+            
+            let adminName = "Server";
+            if (origin instanceof Minecraft.Player) adminName = origin.name;
+            logDebug(`[OfflineBan] ${adminName} added ${targetName} to the offline ban list via slash command.`);
+        });
+        logDebug("[SafeGuard] Registered /sg:offlineban command");
+    } catch (e) {
+        logDebug("[SafeGuard] Failed to register /sg:offlineban command:", e);
+    }
+} else {
+    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:offlineban registration.");
+}
+
+// Register /sg:offlineunban slash command
+if (Minecraft.world.commands) {
+    try {
+        Minecraft.world.commands.registerCommand({
+            name: "sg:offlineunban",
+            description: "Removes a player from the global ban list (offline).",
+            permissionLevel: Minecraft.CommandPermissionLevel.Admin, // Consistent with !offlineunban
+            mandatoryParameters: [{
+                name: "playerName",
+                type: Minecraft.CustomCommandParamType.String,
+                description: "The exact name of the player to remove from the offline ban list."
+            }],
+            optionalParameters: []
+        }, (origin, args) => {
+            const targetName = args.playerName;
+
+            const gbanListString = world.getDynamicProperty("safeguard:gbanList");
+            let gbanList = [];
+            if (typeof gbanListString === 'string') {
+                try {
+                    gbanList = JSON.parse(gbanListString);
+                    if (!Array.isArray(gbanList)) gbanList = [];
+                } catch (e) {
+                    logDebug("Failed to parse dynamic global ban list for /sg:offlineunban:", e);
+                    gbanList = [];
+                }
+            }
+
+            const playerIndex = gbanList.indexOf(targetName);
+
+            if (playerIndex === -1) {
+                const message = `§cPlayer ${targetName} is not on the offline ban list.`;
+                if (origin instanceof Minecraft.Player) origin.sendMessage(message); else console.warn(message.replace(/§[0-9a-fk-or]/g, ''));
+                return;
+            }
+
+            gbanList.splice(playerIndex, 1);
+            world.setDynamicProperty("safeguard:gbanList", JSON.stringify(gbanList));
+
+            const successMessage = `§aPlayer ${targetName} has been removed from the offline ban list.`;
+            if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
+            
+            let adminName = "Server";
+            if (origin instanceof Minecraft.Player) adminName = origin.name;
+            logDebug(`[OfflineUnban] ${adminName} removed ${targetName} from the offline ban list via slash command.`);
+        });
+        logDebug("[SafeGuard] Registered /sg:offlineunban command");
+    } catch (e) {
+        logDebug("[SafeGuard] Failed to register /sg:offlineunban command:", e);
+    }
+} else {
+    logDebug("[SafeGuard] CustomCommandRegistry not available, skipping /sg:offlineunban registration.");
+}
 
 const gamertagRegex = /[^A-Za-z 0-9-]/gm;
 
@@ -48,7 +181,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		if (message.length > 512) {
 			data.cancel = true;
 			player.ban("Sending invalid packet", Date.now(), true, "SafeGuard AntiCheat");
-			system.run(() => {
+			Minecraft.system.run(() => { // Changed from system.run to Minecraft.system.run
 				player.runCommand(`kick @s §6[§eSafeGuard§6]§r You have been permanently banned for sending invalid packet.`);
 			})
 			sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§c ${player.name}§4 was automatically banned for sending an invalid text packet (length=${message.length})`, true);
@@ -89,19 +222,32 @@ world.beforeEvents.chatSend.subscribe((data) => {
 		player.lastMessageDate = now;
 	}
 
+	// NEW RANK FORMATTING LOGIC STARTS HERE
+	if (!message.startsWith(prefix)) { // Only format if it's NOT a command
+		const playerRankId = player.getDynamicProperty("safeguard:rankId") || config.default.defaultRank;
+		// Ensure playerRankId is a string, as dynamic properties can return other types.
+		const rankIdStr = typeof playerRankId === 'string' ? playerRankId : config.default.defaultRank;
+		const rankInfo = config.default.ranks[rankIdStr];
 
-	if (!message.startsWith(prefix)) return;
+		if (rankInfo) { // Check if rankInfo is valid
+			const formattedMessage = `${rankInfo.displayText} ${rankInfo.nameColor}${player.name}§r: ${rankInfo.messageColor}${message}`;
+			data.cancel = true; // Cancel original message
+			world.sendMessage(formattedMessage); // Send formatted message
+			return; // Return after sending formatted message to prevent command processing
+		}
+		// If rankInfo is not found, the original message will proceed unless cancelled by other logic.
+	}
+	// NEW RANK FORMATTING LOGIC ENDS HERE
 
-	//mojang made .runCommand() not be able to run in read-only mode (before events)
-	//this bypasses this restriction
+	if (!message.startsWith(prefix)) return; // This check is now somewhat redundant if rank formatting happened, but kept for safety / if rank formatting doesn't occur.
+
 	data.cancel = true;
 	Minecraft.system.run(() => commandHandler(data));
 })
 
 
 world.afterEvents.playerDimensionChange.subscribe((data) => {
-	const {fromLocation,player,toDimension} = data;
-	//logDebug(`Dimension ID: ${toDimension.id}`);
+	const {fromLocation,player,dimension: toDimension} = data; // dimension renamed to toDimension
 
 	if (toDimension.id == "minecraft:the_end") {
 		if(!SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock)) return;
@@ -124,11 +270,9 @@ world.afterEvents.playerDimensionChange.subscribe((data) => {
 })
 
 world.afterEvents.playerSpawn.subscribe((data) => {
-	const { player } = data;
+	const { player, initialSpawn } = data; // initialSpawn from data
 
-
-	if (!data.initialSpawn) return;
-	//needed for first initialize
+	if (!initialSpawn) return; // Use initialSpawn
 	try{
 		if (!world.safeguardInitialized) Initialize();
 	}catch(err){
@@ -147,7 +291,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		return;
 	}
 	
-
 	if (!world.safeguardIsSetup && player.hasAdmin()) {
 		player.sendMessage(`§r§6[§eSafeGuard§6]§r§4 WARNING! §cThe AntiCheat is not setup, some features may not work. Please run §7/function setup/setup§c to setup!`);
 	}
@@ -157,17 +300,29 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		world.setDynamicProperty("safeguard:version",config.default.version);
 	}
 
-	if (world.safeguardNotifyMigrationQueue.includes(player.name)){
-		//legacy migration
-		const notifyScoreboard = world.scoreboard.addObjective("safeguard:notify") ?? world.scoreboard.getObjective("safeguard:notify");
-		notifyScoreboard.setScore(player.scoreboardIdentity,1);
-		let newArray = new Set(world.safeguardNotifyMigrationQueue);
-		newArray.delete(player.name);
-		world.setDynamicProperty("safeguard:legacyNotificationPlayerList",[...newArray].join(","));
-		
+	// Fetch and parse the dynamic global ban list
+	const dynamicGbanListString = world.getDynamicProperty("safeguard:gbanList");
+	let dynamicGbanList = [];
+	if (typeof dynamicGbanListString === 'string') { // Ensure it's a string before parsing
+		try {
+			dynamicGbanList = JSON.parse(dynamicGbanListString);
+			if (!Array.isArray(dynamicGbanList)) { // Ensure it's an array
+				dynamicGbanList = [];
+				logDebug("Dynamic global ban list was not an array, reset to empty.");
+			}
+		} catch (e) {
+			logDebug("Failed to parse dynamic global ban list, resetting to empty:", e);
+			dynamicGbanList = []; // Reset to empty array on parse error
+			// Optionally, re-initialize from seed if parsing fails and it's considered critical
+			// world.setDynamicProperty("safeguard:gbanList", JSON.stringify(seedGlobalBanList)); 
+		}
 	}
-	if (globalBanList.includes(player.name)) return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
 
+	// Check against both seed and dynamic global ban lists
+	if (seedGlobalBanList.includes(player.name) || dynamicGbanList.includes(player.name)) {
+		player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the global ban list.`);
+		return; 
+	}
 
 	if (world.safeguardUnbanQueue.includes(player.name)){
 		if(player.unban()) {
@@ -185,12 +340,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		if (isPermanent) return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4You are permanently banned.\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
 		else return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4You are banned.\n§4Time Remaining: §c${timeRemaining}\n§4Reason: §c${reason}\n§4Banned by: §c${bannedBy}`);
 	}
-
-	//migrate legacy mute to V2
-	if (player.hasTag("muted")) legacy_MuteToV2(player);
-
-	//migrate legacy "safeguard:Ban" tag ban system into the new one.
-	if (player.hasTag("safeguard:Ban")) return legacy_BanToV2(player);
 
 	if (world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)){
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§4 The player §c${player.name}§4 was kicked for joining on banned device: §c${player.clientSystemInfo.platformType}`);
@@ -212,9 +361,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	const antiCLog = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiCombatlog);
 	const endLockOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock);
 	const netherLock = SafeguardModule.getModuleStatus(SafeguardModule.Modules.netherLock);
-
-	
-
 	
 	if ((endLockOn && player.dimension.id == "minecraft:the_end") && !(player.hasAdmin() && config.default.world.endLock.adminsBypass)) {
 		const playerSpawnPoint = player.getSpawnPoint();
@@ -238,7 +384,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 			switch (config.default.combat.combatLogging.punishmentType) {
 				case 0:
-					//check for alwaysSendAlert option to prevent spam
 					if (!config.default.combat.combatLogging.alwaysSendAlert) world.sendMessage(`§r§6[§eSafeGuard§6]§e ${player.name}§r Was detected combat logging!`);
 					break;
 				case 1:
@@ -273,32 +418,18 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	}
 	const playerFreezeStatus = player.getDynamicProperty("safeguard:freezeStatus");
 	if (typeof playerFreezeStatus === "boolean") player.setFreezeTo(playerFreezeStatus);
-
-	
-
-
 })
 
 Minecraft.system.runInterval(() => {
 	const invalidVelocityCheckOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
 	const players = world.getPlayers();
-	for (let ii = 0; ii < players.length; ii++) {
+	for (let ii = 0; ii < players.length; ii++) { // Changed to a traditional for loop
 		const player = players[ii];
 		const isAdmin = player.hasAdmin();
 		player.velocity = player.getVelocity();
 		player.speed = Vector3utils.magnitude(player.velocity);
 		player.hitEntities = [];
 		player.blocksBroken = 0;
-
-		//player.onScreenDisplay.setActionBar(`Velocity: ${player.velocity.y} | ${((player.velocity.y / -3.919921875) * 100).toFixed(1)}%`)
-		//anti fly idk
-		/*let debugMenu = {
-			
-			a:player.getRotation()
-		}
-		world.sendMessage(`-------------\n§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
-		*/
-
 
 		betaFeatures(player);
 		if (player.currentCps > 0 && Date.now() - player.initialClick >= 1000) {
@@ -312,7 +443,7 @@ Minecraft.system.runInterval(() => {
 			player.currentCps = 0;
 		}
 		if (!player.registerValidCoords) player.registerValidCoords = true;
-		//anti combat log timer
+		
 		if (player.combatLogTimer) {
 			const now = Date.now();
 			if (now - player.combatLogTimer > config.default.combat.combatLogging.timeToStayInCombat) {
@@ -342,9 +473,8 @@ Minecraft.system.runInterval(() => {
 				const currentLocation = player.location;
 				const offsetX = currentLocation.x >= 0 ? -1 : 1;
 				const offsetZ = currentLocation.z >= 0 ? -1 : 1;
-				//const offsetY = currentLocation.y >= 0 ? -1 : 1;
 
-				player.tryTeleport({
+				player.tryTeleport({ // tryTeleport instead of teleport
 					x: currentLocation.x + offsetX,
 					y: currentLocation.y,
 					z: currentLocation.z + offsetZ,
@@ -357,22 +487,20 @@ Minecraft.system.runInterval(() => {
 });
 
 world.afterEvents.entityHitEntity.subscribe(async (data) => {
-	const player = data.damagingEntity;
-	const hurtEntity = data.hitEntity;
+	const player = data.damagingEntity; // damagingEntity instead of player
+	const hurtEntity = data.hitEntity; // hitEntity instead of hurtEntity
 
 	if (!(player instanceof Minecraft.Player)) return;
 	const hasWeakness = player.getEffect("weakness");
 
 	const antiKillaura = SafeguardModule.getModuleStatus(SafeguardModule.Modules.killauraCheck);
 
-
 	if (!hasWeakness && !player.hitEntities.includes(hurtEntity.id)) player.hitEntities.push(hurtEntity.id);
-
 
 	if (player.hitEntities.length > config.default.combat.killaura.maxHitEntities && !player.hasAdmin() && antiKillaura) {
 		sendAnticheatAlert(player, "multi killaura", player.hitEntities.length, SafeguardModule.Modules.killauraCheck);
 		player.addEffect("weakness", 40, { amplifier: 255, showParticles: false });
-		player.hitEntities = 0;
+		player.hitEntities = 0; // This was player.hitEntities = [];
 	}
 	if (!hasWeakness && player.hitEntities.length <= 1) {
 		const now = Date.now();
@@ -380,13 +508,11 @@ world.afterEvents.entityHitEntity.subscribe(async (data) => {
 		if (!player.initialClick || now - player.initialClick >= 1000) player.initialClick = now;
 
 		player.currentCps++;
-
 	}
-	
-
 })
+
 world.afterEvents.entityHurt.subscribe((data) => {
-	const player = data.hurtEntity;
+	const player = data.hurtEntity; // hurtEntity instead of player
 
 	if (player.typeId !== "minecraft:player") return;
 
@@ -398,8 +524,6 @@ world.afterEvents.entityHurt.subscribe((data) => {
 		
 		if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect)) player.runCommand("function assets/death_effect");
 		
-
-		//death coords
 		const deathCoordStatus = SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathCoords);
 		if(deathCoordStatus){
 			const { x, y, z } = player.location;
@@ -407,7 +531,6 @@ world.afterEvents.entityHurt.subscribe((data) => {
 		}
 	}
 
-	//anti combat log
 	const antiCombatLogEnabled = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiCombatlog);
 	if (!antiCombatLogEnabled) return;
 
@@ -417,7 +540,6 @@ world.afterEvents.entityHurt.subscribe((data) => {
 
 		const adminsBypassCombatLogging = config.default.combat.combatLogging.adminsBypass;
 		const now = Date.now();
-
 
 		if (!player.hasTag("safeguard:isInCombat") && antiCombatLogEnabled) {
 			if (player.hasTag("admin") && adminsBypassCombatLogging) {
@@ -452,35 +574,23 @@ world.afterEvents.entityHurt.subscribe((data) => {
 		player.combatLogTimer = now;
 	}
 })
-function betaFeatures(player) {
 
+function betaFeatures(player) {
 	const { velocity } = player;
 
 	if (player.hasAdmin()) return;
 	const playerVelocity = velocity;
 
-	//if(config.default.debug) logDebug(`§e${JSON.stringify(debugMenu, null, 2)}§r\n-------------`);
-
-
-
 	const invalidVelocityCheckOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
 
-
 	if (invalidVelocityCheckOn && (playerVelocity.y < -3.919921875 && (Date.now() - player.tridentLastUse) > 5000) && player.isFalling) {
-		//check for last trident use time to prevent false positive with riptide
-		
-		//while testing for a fly detection, I noticed that the terminal velocity for falling on y coordinate is -3.919921875
-		//this seems to be a a better detection fly because when flying the velocity sometimes tends to set the velocity below that number which I assume is impossible
-		//this also sometimes detects other movement cheats
 		sendAnticheatAlert(player, "movement cheats (invalid y velocity)", playerVelocity.y.toFixed(3), SafeguardModule.Modules.velocityCheck);
 		teleportToGround(player);
 	}
 }
 
-
 Minecraft.system.runInterval(() => {
 	world.getPlayers().forEach(player => {
-		//if(player.isAdmin) return;
 		const antiFly = SafeguardModule.getModuleStatus(SafeguardModule.Modules.flyCheck);
 		const velocityCheck = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
 
@@ -497,7 +607,6 @@ Minecraft.system.runInterval(() => {
 		if (velocityDifference > maxYVelocityThreshold && !player.isGliding && antiFly && player.previousYVelocity !== 0 && currentYVelocity !== 0) {
 			teleportToGround(player);
 			sendAnticheatAlert(player, "high velocity difference", velocityDifference, SafeguardModule.Modules.flyCheck);
-			//world.sendMessage(`DIFF[§e${velocityDifference}§r] PREV[§e${previousYVelocity}§r] CURR[§e${currentYVelocity}§r]`);
 		}
 		if (velocityCheck && speedDifference > 5 && !player.isGliding && player.previousSpeed !== 0 && speed !== 0 && player.currentGamemode !== Minecraft.GameMode.creative) {
 			sendAnticheatAlert(player, "high speeds", speedDifference.toFixed(4), SafeguardModule.Modules.velocityCheck);
@@ -505,10 +614,8 @@ Minecraft.system.runInterval(() => {
 			player.teleport(player.lastValidCoords, { keepVelocity: false, rotation: { x: 0, y: 0 } });
 		}
 
-
 		player.previousYVelocity = currentYVelocity;
 		player.previousSpeed = speed;
-
 	})
 }, 10);
 
@@ -516,7 +623,6 @@ Minecraft.system.runInterval(() => {
 world.afterEvents.playerGameModeChange.subscribe((data) => {
 	const {toGameMode,player} = data;
 	player.currentGamemode = toGameMode;
-	//NOTE: This only gets triggered when a person switches gamemode, it DOES NOT constantly check for gamemode creative
 	if(player.hasAdmin()) return;
 
 	const antiGmcOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiGmc);
@@ -549,7 +655,6 @@ world.afterEvents.itemUse.subscribe((data) => {
 	if (!item) return;
 	if (item.typeId === "minecraft:trident" && item.getComponent("enchantable").hasEnchantment("riptide")){
 		player.tridentLastUse = Date.now();
-		//logDebug(`[SafeGuard] ${player.name} used riptide`)
 	}
 	if (item.typeId !== "safeguard:admin_panel") return;
 	if (!player.hasAdmin()) {
@@ -557,14 +662,12 @@ world.afterEvents.itemUse.subscribe((data) => {
 		player.sendMessage("§6[§eSafeGuard§6]§r §4You need admin tag to use admin panel!§r");
 		return;
 	}
-	//check if anticheat was setup for convinience
 	if (!world.scoreboard.getObjective("safeguard:setup_success")) {
 		player.sendMessage(`§6[§eSafeGuard§6]§c§l ERROR: §r§4AntiCheat not setup!§r`);
 		player.sendMessage(`§6[§eSafeGuard§6]§r§4 Run §c/function setup/setup§4 to setup anticheat!§r`);
 		player.playSound("random.anvil_land");
 		return;
 	}
-
 
 	let mainForm = new ActionFormData()
 		.title("SafeGuard Admin Panel")
@@ -602,20 +705,19 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 	const antiNuker = SafeguardModule.getModuleStatus(SafeguardModule.Modules.nukerCheck);
 	const autoModOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.autoMod);
 
-
 	if (blockId == "minecraft:bedrock" || blockId == "minecraft:end_portal_frame") {
 		if (player.hasAdmin() || player.currentGamemode === Minecraft.GameMode.creative) return;
 		block.setPermutation(data.brokenBlockPermutation);
 		world.sendMessage(`§6[§eSafeGuard§6]§r§c§l §r§c${player.name}§4 Attempted to break §c${blockId}`)
 	}
-	//check if the block id is in nuker block excpetions to prevent false positives
+	
 	if (!config.default.world.nuker.blockExceptions.includes(blockId) && !player.getEffect("haste")) {
 		player.blocksBroken++
 	}
 
 	if (player.blocksBroken > config.default.world.nuker.maxBlocks && antiNuker) {
 		if (player.hasAdmin() && !config.default.world.nuker.checkAdmins) return;
-		// kill the items dropped items
+		
 		const items = dimension.getEntities({
 			location: { x: block.location.x, y: block.location.y, z: block.location.z },
 			minDistance: 0,
@@ -628,31 +730,22 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 		block.setPermutation(data.brokenBlockPermutation);
 		if (autoModOn) {
 			player.runCommand("gamemode adventure @s");
-			//I decided to put the player in adventure mode so they can't break more blocks 
 			player.teleport({ x: player.location.x, y: 325, z: player.location.z }, { dimension: player.dimension, rotation: { x: 0, y: 0 }, keepVelocity: false });
-			//we only send an alert if auto mod is enabled because otherwise player would be breaking blocks indefinitely 
-			//and constantly making the alert pop up, causing spam
-			//here, we kick the player so the message should be sent once or twice without causing spam
 			sendAnticheatAlert(player, "nuker", player.blocksBroken, SafeguardModule.Modules.nukerCheck);
 		}
 		return;
 	}
 
-	//xray alerts
 	if (blockId == "minecraft:diamond_ore" || blockId == "minecraft:deepslate_diamond_ore") {
 		if (!diamondAlertOn) return
-		//player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §ediamond ore§r"}]}`);
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§5§l §r§e${player.name}§f mined x1 §ediamond ore§r`);
 	}
 	if (blockId == "minecraft:ancient_debris" && netheriteAlertOn) {
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§5§l §r§e${player.name}§f mined x1 §enetherite ore§r`);
-		//player.runCommandAsync(`tellraw @a[tag=admin] {"rawtext":[{"text":"§6[§eSafeGuard§6]§5§l "},{"text":"§r§e${player.name}§f mined x1 §enetherite ore§r"}]}`);
 	}
 })
 
-
 Minecraft.system.run(() => {
-	//in case of /reload being ran
 	if(!world.safeguardInitialized) Initialize();
 	for (const player of world.getPlayers()) {
 		player.currentGamemode = player.getGameMode();

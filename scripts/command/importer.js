@@ -23,5 +23,8 @@ import "../command/src/clearwarn";
 import "../command/src/systeminfo";
 import "../command/src/removeowner";
 import "../command/src/clearbanlogs";
+import "./src/setrank.js";
+import "./src/offlineban.js";
+import "./src/offlineunban.js";
 
 import "../command/src/report";
