@@ -8,6 +8,7 @@ import { formatMilliseconds, teleportToGround, sendMessageToAllAdmins, parsePuni
 import { globalBanList as seedGlobalBanList } from './assets/globalBanList.js'; // Renamed import
 import { commandHandler } from './command/handle.js';
 import "./command/importer.js";
+import "./slash_commands.js";
 import { SafeguardModule } from './classes/module.js';
 import { Vector3utils } from './classes/vector3.js';
 
