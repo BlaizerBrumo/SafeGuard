@@ -80,6 +80,36 @@ export default {
             "punishmentTime": "15 minute",
             //if admins don't get affected by anti combatlogging
             "adminsBypass": false
+        },
+        "reachCheck": {
+            "enabled": true,
+            "maxHitDistanceSurvival": 3.5,
+            "maxHitDistanceCreative": 6.0,
+            "checkBlockBreak": true,
+            "maxBlockBreakDistanceSurvival": 5.0,
+            "maxBlockBreakDistanceCreative": 7.0,
+            "checkBlockPlace": true,
+            "maxBlockPlaceDistanceSurvival": 5.0,
+            "maxBlockPlaceDistanceCreative": 7.0,
+            "violationThreshold": 5,
+            "action": "alert",
+            "customCommand": "say {playerName} might be using Reach ({reachType})!"
+        },
+        "noSwingCheck": {
+            "enabled": true,
+            "violationThreshold": 3,
+            "action": "alert", 
+            "customCommand": "say {playerName} might be using NoSwing!",
+            "maxTimeSinceSwingMs": 750 
+        },
+        "contextualKillauraCheck": {
+            "enabled": true,
+            "checkWhileUsingItem": true, 
+            "checkWhileSleeping": true,  
+            "checkWhileChestOpen": true, 
+            "violationThreshold": 3,
+            "action": "alert", 
+            "customCommand": "say {playerName} might be using Killaura (Invalid Context)!"
         }
     },
     "item":{
@@ -128,6 +158,65 @@ export default {
             "adminsBypassBorder": true,
         }
     },
+    "itemInteractions": { 
+        "fastUseCheck": {
+            "enabled": true,
+            "itemSpecificCooldowns": {
+                "minecraft:ender_pearl": 1000, 
+                "minecraft:snowball": 200,    
+                "minecraft:egg": 200,         
+                "minecraft:splash_potion": 800, 
+                "minecraft:lingering_potion": 800, 
+                "minecraft:experience_bottle": 200, 
+                "minecraft:fishing_rod": 500 
+            },
+            "foodCooldownMs": 1600, 
+            "defaultCooldownMs": 300, 
+            "violationThreshold": 5,
+            "action": "alert", 
+            "customCommand": "say {playerName} might be using FastUse for {itemName}!"
+        }
+    },
+    "packetChecks": { 
+        "invalidHeadRotationCheck": {
+            "enabled": true,
+            "minPitch": -90.0, 
+            "maxPitch": 90.0,  
+            "maxYawDeltaPerTick": 200.0, 
+            "violationThreshold": 10, 
+            "action": "alert", 
+            "customCommand": "say {playerName} might have invalid head rotation!"
+        }
+    },
+    "scaffoldCheck": {
+        "enabled": true, 
+        "existingRotationCheck": { 
+             "enabled": true
+        },
+        "towerCheck": {
+            "enabled": true,
+            "maxBlocksPerSecond": 8, 
+            "minSameXZCount": 3, 
+            "violationThreshold": 2, 
+            "action": "alert",
+            "customCommand": "say {playerName} might be using Tower/Scaffold!"
+        },
+        "upwardsPlacementCheck": {
+            "enabled": true,
+            "minPitchLookingUp": -75.0, 
+            "violationThreshold": 3,
+            "action": "alert",
+            "customCommand": "say {playerName} might be using Scaffold (Upwards Placement)!"
+        },
+        "downwardScaffoldCheck": {
+            "enabled": true,
+            "maxXZSpeedWhenNotSneaking": 0.2, 
+            "minDownwardBlocks": 3, 
+            "violationThreshold": 2,
+            "action": "alert",
+            "customCommand": "say {playerName} might be using Downward Scaffold!"
+        }
+    },
     "chat":{
         //chat command prefix
         "prefix": "!",
@@ -141,5 +230,30 @@ export default {
             //if a message starts with this word/symbol/letter or whatever you enter it won't be flagged for spam
             "whitelistedPrefixes": ["!"]
         }
+    },
+    "aliases": {
+        "b": "ban",
+        "k": "kick",
+        "m": "mute",
+        "um": "unmute",
+        "p": "pardon",
+        "uban": "unban",
+        "ofb": "offlineban",
+        "ofub": "offlineunban",
+        "sr": "setrank",
+        "fl": "fakeleave",
+        "cl": "lagclear",
+        "cc": "clearchat",
+        "ver": "version",
+        "info": "systeminfo",
+        "invs": "invsee",
+        "h": "help",
+        "cw": "clearwarn",
+        "wn": "warn",
+        "wns": "warnings",
+        "fr": "freeze",
+        "vn": "vanish",
+        "ci": "copyinv",
+        "wb": "worldborder"
     }
 }

@@ -12,20 +12,19 @@ function getCommandExecutorName(origin) {
     return "Server"; // Or any placeholder for console/command blocks
 }
 
-if (Minecraft.world.commands) {
-    // Existing /sg:offlineunban command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:offlineunban",
-            description: "Removes a player from the global ban list (offline).",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [{
-                name: "playerName",
-                type: Minecraft.CustomCommandParamType.String,
-                description: "The exact name of the player to remove from the offline ban list."
-            }],
-            optionalParameters: []
-        }, (origin, args) => {
+const commandDefinitions = [
+    {
+        name: "sg:offlineunban",
+        baseName: "offlineunban",
+        description: "Removes a player from the global ban list (offline).",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [{
+            name: "playerName",
+            type: Minecraft.CustomCommandParamType.String,
+            description: "The exact name of the player to remove from the offline ban list."
+        }],
+        optionalParameters: [],
+        callback: (origin, args) => {
             const targetName = args.playerName;
             const gbanListString = world.getDynamicProperty("safeguard:gbanList");
             let gbanList = [];
@@ -53,29 +52,24 @@ if (Minecraft.world.commands) {
             if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
             const adminName = getCommandExecutorName(origin);
             logDebug(`[OfflineUnban] ${adminName} removed ${targetName} from the offline ban list via slash command.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:offlineunban command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:offlineunban command:", e);
-    }
-
-    // Existing /sg:ban command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:ban",
-            description: "Permanently bans an online player, optionally specifying a reason.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [{
-                name: "targetPlayerName",
-                type: Minecraft.CustomCommandParamType.Player, 
-                description: "Name of the player to ban."
-            }],
-            optionalParameters: [{
-                name: "reason",
-                type: Minecraft.CustomCommandParamType.String,
-                description: "Reason for the ban."
-            }]
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:ban",
+        baseName: "ban",
+        description: "Permanently bans an online player, optionally specifying a reason.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [{
+            name: "targetPlayerName",
+            type: Minecraft.CustomCommandParamType.Player, 
+            description: "Name of the player to ban."
+        }],
+        optionalParameters: [{
+            name: "reason",
+            type: Minecraft.CustomCommandParamType.String,
+            description: "Reason for the ban."
+        }],
+        callback: (origin, args) => {
             const adminPlayer = (origin instanceof Minecraft.Player) ? origin : null;
             const targetPlayers = args.targetPlayerName;
             if (!targetPlayers || targetPlayers.length === 0) {
@@ -103,50 +97,40 @@ if (Minecraft.world.commands) {
             }
             targetPlayer.ban(reason, true, adminName); 
             logDebug(`[SafeGuard] ${adminName} banned ${targetPlayer.name} via /sg:ban. Reason: ${reason}`);
-        });
-        logDebug("[SafeGuard] Registered /sg:ban command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:ban command:", e);
-    }
-    
-    // Existing /sg:version command
-     try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:version",
-            description: "Displays the current version of the SafeGuard pack.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Any,
-            mandatoryParameters: [],
-            optionalParameters: []
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:version",
+        baseName: "version",
+        description: "Displays the current version of the SafeGuard pack.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Any,
+        mandatoryParameters: [],
+        optionalParameters: [],
+        callback: (origin, args) => {
             const versionMessage = `§r§6[§eSafeGuard§6]§f Version: §ev${config.default.version}`;
             if (origin instanceof Minecraft.Player) {
                 origin.sendMessage(versionMessage);
             } else {
                 console.warn(versionMessage.replace(/§[0-9a-fk-or]/g, '')); 
             }
-        });
-        logDebug("[SafeGuard] Registered /sg:version command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:version command:", e);
-    }
-
-    // Existing /sg:offlineban command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:offlineban",
-            description: "Adds a player to the global ban list (offline). They will be banned on next join.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin, 
-            mandatoryParameters: [{
-                name: "playerName",
-                type: Minecraft.CustomCommandParamType.String, 
-                description: "The exact name of the player to offline ban."
-            }],
-            optionalParameters: [{
-                name: "reason",
-                type: Minecraft.CustomCommandParamType.String,
-                description: "Reason for the offline ban (stored with the ban)."
-            }]
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:offlineban",
+        baseName: "offlineban",
+        description: "Adds a player to the global ban list (offline). They will be banned on next join.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin, 
+        mandatoryParameters: [{
+            name: "playerName",
+            type: Minecraft.CustomCommandParamType.String, 
+            description: "The exact name of the player to offline ban."
+        }],
+        optionalParameters: [{
+            name: "reason",
+            type: Minecraft.CustomCommandParamType.String,
+            description: "Reason for the offline ban (stored with the ban)."
+        }],
+        callback: (origin, args) => {
             const targetName = args.playerName;
             const reason = args.reason || "No reason provided";
             const adminName = getCommandExecutorName(origin);
@@ -175,25 +159,20 @@ if (Minecraft.world.commands) {
             const successMessage = `§aPlayer ${targetName} has been added to the offline ban list. Reason: ${reason}`;
             if (origin instanceof Minecraft.Player) origin.sendMessage(successMessage); else console.warn(successMessage.replace(/§[0-9a-fk-or]/g, ''));
             logDebug(`[OfflineBan] ${adminName} added ${targetName} to the offline ban list via slash command. Reason: ${reason}`);
-        });
-        logDebug("[SafeGuard] Registered /sg:offlineban command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:offlineban command:", e);
-    }
-
-    // Existing /sg:setrank command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:setrank",
-            description: "<playerName> <rankId> - Sets a player's rank.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [
-                { name: "targetPlayerName", type: Minecraft.CustomCommandParamType.Player, description: "Player to set rank for." },
-                { name: "rankId", type: Minecraft.CustomCommandParamType.String, description: "ID of the rank (e.g., owner, admin, member)." }
-            ],
-            optionalParameters: []
-        }, (origin, args) => {
-            const targetPlayers = args.targetPlayerName; // Array of Player objects
+        }
+    },
+    {
+        name: "sg:setrank",
+        baseName: "setrank",
+        description: "<playerName> <rankId> - Sets a player's rank.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [
+            { name: "targetPlayerName", type: Minecraft.CustomCommandParamType.Player, description: "Player to set rank for." },
+            { name: "rankId", type: Minecraft.CustomCommandParamType.String, description: "ID of the rank (e.g., owner, admin, member)." }
+        ],
+        optionalParameters: [],
+        callback: (origin, args) => {
+            const targetPlayers = args.targetPlayerName; 
             const rankIdInput = args.rankId.toLowerCase();
             const executorName = getCommandExecutorName(origin);
 
@@ -203,7 +182,7 @@ if (Minecraft.world.commands) {
                 else console.warn(msg.replace(/§[0-9a-fk-or]/g, ''));
                 return;
             }
-            const targetPlayer = targetPlayers[0]; // Use the first player found
+            const targetPlayer = targetPlayers[0]; 
 
             const validRankIds = Object.keys(config.default.ranks);
             if (!validRankIds.includes(rankIdInput)) {
@@ -222,21 +201,16 @@ if (Minecraft.world.commands) {
             
             targetPlayer.sendMessage(`§aYour rank has been set to ${rankName} by ${executorName}.`);
             logDebug(`[SetRank] ${executorName} set ${targetPlayer.name}'s rank to ${rankIdInput} (${rankName}) via /sg:setrank.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:setrank command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:setrank command:", e);
-    }
-
-    // Existing /sg:clearbanlogs command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:clearbanlogs",
-            description: "Clears all ban logs stored by SafeGuard.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [],
-            optionalParameters: []
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:clearbanlogs",
+        baseName: "clearbanlogs",
+        description: "Clears all ban logs stored by SafeGuard.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [],
+        optionalParameters: [],
+        callback: (origin, args) => {
             world.setDynamicProperty("safeguard:banLogs", undefined);
             
             const feedbackMessage = "§6[§eSafeGuard§6]§f The ban logs were successfully cleared";
@@ -247,21 +221,16 @@ if (Minecraft.world.commands) {
             }
             const executorName = getCommandExecutorName(origin);
             logDebug(`[ClearBanLogs] ${executorName} cleared all ban logs via /sg:clearbanlogs.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:clearbanlogs command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:clearbanlogs command:", e);
-    }
-
-    // Existing /sg:clearchat command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:clearchat",
-            description: "Clears the chat for all players.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [],
-            optionalParameters: []
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:clearchat",
+        baseName: "clearchat",
+        description: "Clears the chat for all players.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [],
+        optionalParameters: [],
+        callback: (origin, args) => {
             const executorName = getCommandExecutorName(origin);
             try {
                 if (origin instanceof Minecraft.Player) {
@@ -278,25 +247,20 @@ if (Minecraft.world.commands) {
                     console.warn("Error trying to clear chat via server console.");
                 }
             }
-        });
-        logDebug("[SafeGuard] Registered /sg:clearchat command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:clearchat command:", e);
-    }
-
-    // New /sg:clearwarn command
-    try {
-        Minecraft.world.commands.registerCommand({
-            name: "sg:clearwarn",
-            description: "Clears a player's warnings.",
-            permissionLevel: Minecraft.CommandPermissionLevel.Admin,
-            mandatoryParameters: [
-                { name: "targetPlayerName", type: Minecraft.CustomCommandParamType.Player, description: "Player whose warnings to clear." }
-            ],
-            optionalParameters: []
-        }, (origin, args) => {
+        }
+    },
+    {
+        name: "sg:clearwarn",
+        baseName: "clearwarn",
+        description: "Clears a player's warnings.",
+        permissionLevel: Minecraft.CommandPermissionLevel.Admin,
+        mandatoryParameters: [
+            { name: "targetPlayerName", type: Minecraft.CustomCommandParamType.Player, description: "Player whose warnings to clear." }
+        ],
+        optionalParameters: [],
+        callback: (origin, args) => {
             const adminPlayer = (origin instanceof Minecraft.Player) ? origin : null;
-            const targetPlayers = args.targetPlayerName; // Array of Player objects
+            const targetPlayers = args.targetPlayerName; 
 
             if (!targetPlayers || targetPlayers.length === 0) {
                 const msg = "§cTarget player not found or specified for /sg:clearwarn.";
@@ -304,9 +268,8 @@ if (Minecraft.world.commands) {
                 else console.warn(msg.replace(/§[0-9a-fk-or]/g, ''));
                 return;
             }
-            const targetPlayer = targetPlayers[0]; // Use the first player found
+            const targetPlayer = targetPlayers[0]; 
 
-            // Check if targetPlayer.hasAdmin() exists and if it's true
             if (typeof targetPlayer.hasAdmin === 'function' && targetPlayer.hasAdmin()) {
                  const msg = "§cCan't clear warnings of an admin.";
                  if (adminPlayer) adminPlayer.sendMessage(msg);
@@ -314,7 +277,6 @@ if (Minecraft.world.commands) {
                  return;
             }
 
-            // Assuming targetPlayer.clearWarnings() is a custom method
             if (typeof targetPlayer.clearWarnings === 'function') {
                 targetPlayer.clearWarnings();
             } else {
@@ -333,12 +295,53 @@ if (Minecraft.world.commands) {
                 console.warn(successMsgToOrigin.replace(/§[0-9a-fk-or]/g, '') + ` (executed by ${executorName})`);
             }
             logDebug(`[ClearWarn] ${executorName} cleared warnings for ${targetPlayer.name} via /sg:clearwarn.`);
-        });
-        logDebug("[SafeGuard] Registered /sg:clearwarn command");
-    } catch (e) {
-        logDebug("[SafeGuard] Failed to register /sg:clearwarn command:", e);
+        }
     }
+];
 
+if (Minecraft.world.commands) {
+    commandDefinitions.forEach(commandDef => {
+        // Register the main command
+        try {
+            Minecraft.world.commands.registerCommand({
+                name: commandDef.name,
+                description: commandDef.description,
+                permissionLevel: commandDef.permissionLevel,
+                mandatoryParameters: commandDef.mandatoryParameters,
+                optionalParameters: commandDef.optionalParameters
+            }, commandDef.callback);
+            logDebug(`[SafeGuard] Registered /${commandDef.name} command`);
+        } catch (e) {
+            logDebug(`[SafeGuard] Failed to register /${commandDef.name} command: ${e}`);
+        }
+
+        // Register Aliases for this command
+        if (config.default.aliases) {
+            for (const aliasKey in config.default.aliases) {
+                if (config.default.aliases[aliasKey] === commandDef.baseName) {
+                    const aliasFullName = "sg:" + aliasKey;
+                    // Check if the alias is already defined as a main command to prevent conflicts
+                    if (commandDefinitions.some(def => def.name === aliasFullName)) {
+                        logDebug(`[SafeGuard] Alias ${aliasFullName} for ${commandDef.name} conflicts with a defined main command. Skipping alias registration.`);
+                        continue;
+                    }
+                    const aliasDescription = `Alias for /${commandDef.name}. ${commandDef.description}`;
+                    try {
+                        Minecraft.world.commands.registerCommand({
+                            name: aliasFullName,
+                            description: aliasDescription.substring(0, 100), // Ensure description length limit
+                            permissionLevel: commandDef.permissionLevel,
+                            mandatoryParameters: commandDef.mandatoryParameters,
+                            optionalParameters: commandDef.optionalParameters
+                        }, commandDef.callback);
+                        logDebug(`[SafeGuard] Registered alias ${aliasFullName} for /${commandDef.name}`);
+                    } catch (e) {
+                        logDebug(`[SafeGuard] Failed to register alias ${aliasFullName} for /${commandDef.name}: ${e}`);
+                    }
+                }
+            }
+        }
+    });
 } else {
     logDebug("[SafeGuard] CustomCommandRegistry not available, skipping all slash command registrations.");
 }

@@ -39,10 +39,18 @@ export function commandHandler(data){
     const player = data.sender;
 	const message = data.message;
     const args = message.substring(prefix.length).split(" ");
-    const cmdName = args[0];
-    const command = commands[cmdName];
+    const cmdName = args[0]; // This is what the user typed
 
+    let actualCmdName = cmdName;
+    const commandAliases = config.default.aliases; // Get aliases from config
+    if (commandAliases && commandAliases[cmdName]) {
+        actualCmdName = commandAliases[cmdName];
+    }
 
+    const command = commands[actualCmdName]; // Use the resolved command name
+
+    // If 'command' is not found, it means neither the typed alias nor the resolved actualCmdName is a valid command.
+    // In this case, showing what the user typed (cmdName, which is args[0]) is appropriate.
     if (!command) return player.sendMessage(`§r§6[§eSafeGuard§6]§c Unknown command: §f${args[0]}`);
 
     let runData = {
@@ -50,7 +58,8 @@ export function commandHandler(data){
         player: player,
         message: message
     }
-    if(cmdName == "help") runData.commandsData = getHelpData();
+    // If the actual command is 'help', pass commandsData. Note: alias 'h' would resolve actualCmdName to 'help'.
+    if(actualCmdName == "help") runData.commandsData = getHelpData(); 
 
     if(command.adminOnly && !player.hasAdmin()) return player.sendMessage('§6[§eSafeGuard§6]§r§c You need admin tag to run this!');
     if (command.ownerOnly && !player.isOwner()) return player.sendMessage('§6[§eSafeGuard§6]§r§c You need owner status to run this!')
@@ -59,6 +68,7 @@ export function commandHandler(data){
         command.run(runData);
     }
     catch(error){
-        player.sendMessage(`§6[§eSafeGuard§6]§r§c Caught error while running command "${cmdName}":\n\n${error}\n${error.stack}`);
+        // Report the error with the actual command name that was executed.
+        player.sendMessage(`§6[§eSafeGuard§6]§r§c Caught error while running command "${actualCmdName}":\n\n${error}\n${error.stack}`);
     }
 }

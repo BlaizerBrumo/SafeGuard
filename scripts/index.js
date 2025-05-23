@@ -14,6 +14,8 @@ import { Vector3utils } from './classes/vector3.js';
 
 import "./classes/player.js"; // This is the import to verify later
 import { Initialize } from './initialize.js';
+import { initializeReachCheck } from './modules/reach_check.js';
+import { initializeNoSwingCheck } from './modules/noswing_check.js'; // New import
 
 logDebug("[SafeGuard] Script Loaded");
 
@@ -637,4 +639,6 @@ Minecraft.system.run(() => {
 	for (const player of world.getPlayers()) {
 		player.currentGamemode = player.getGameMode();
 	}
+	initializeReachCheck(); 
+	initializeNoSwingCheck(); // Call the new module initializer
 })
