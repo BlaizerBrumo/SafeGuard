@@ -1,6 +1,6 @@
 //Edit items in this file if you want customization:
 export default {
-    "version": "2.0.2",
+    "version": "2.0.3",
     //the owner password to edit config in game
     "OWNER_PASSWORD": "",
     "other":{

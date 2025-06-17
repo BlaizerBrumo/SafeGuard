@@ -192,7 +192,7 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	//migrate legacy "safeguard:Ban" tag ban system into the new one.
 	if (player.hasTag("safeguard:Ban")) return legacy_BanToV2(player);
 
-	if (world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)){
+	if ((world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)) && !player.hasAdmin()){
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§4 The player §c${player.name}§4 was kicked for joining on banned device: §c${player.clientSystemInfo.platformType}`);
 		player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
 		return;
