@@ -11,7 +11,10 @@ Also please note that all of the SafeGuard's detections/alerts/modules are disab
 For any questions or help please join the official SafeGuard discord server: [discord.gg/nGu5gehXs3](https://discord.gg/nGu5gehXs3)
 
 # Owner Status
-SafeGuard owner status allows players to use the in-game config editor and clear ban logs at will. To obtain owner status you must first edit the `OWNER_PASSWORD` field inside [config]. Then obtain the SafeGuard admin panel and head over to Settings -> Config Editor. If setup correctly you will be prompted with entering the password you set. After, entering the correct password you will be granted owner status and can edit the config. Please not that the config changes made through config editor will only save on the current instance of the world, in order to export the config you can use config debug option to log the current config to your console.
+SafeGuard owner status allows players to use the in-game config editor and clear ban logs at will. To obtain owner status you must first edit the `OWNER_PASSWORD` field inside [config] (`MOD_FOLDER/scripts/config.js`). Then obtain the SafeGuard admin panel and head over to Settings -> Config Editor. If setup correctly you will be prompted with entering the password you set. After, entering the correct password you will be granted owner status and can edit the config. Please not that the config changes made through config editor will only save on the current instance of the world, in order to export the config you can use config debug option to log the current config to your console.
+
+> [!NOTE]
+> If you are unsure how to edit the config file, please refer to the expandable section in [Setup Instructions](https://github.com/BlaizerBrumo/SafeGuard?tab=readme-ov-file#-setup-instructions) titled "How to Edit .mcpack Addon Files (Windows & Mobile)."
 
 > [!IMPORTANT]
 > Owner status is an extremely sensitive permission and you should never give anyone your owner password.
@@ -124,11 +127,59 @@ SafeGuard owner status allows players to use the in-game config editor and clear
 # 📖 Setup Instructions
   
   > 1. Download the mcpacks from [latest github release](https://github.com/BlaizerBrumo/SafeGuard/releases/latest)
-  > 2. If you want to customize, change the .mcpack to .zip, unzip files, change the things you want, zip it, and change .zip to .mcpack
+  > 2. If you want to customize, expand for step-by-step instructions:
+  >
+  >    <details>
+  >    <summary><strong>How to Edit .mcpack Addon Files (Windows & Mobile)</strong></summary>
+  >
+  >    ### For Windows
+  >
+  >    1. **Locate the `.mcpack` file** you downloaded.
+  >    2. **Enable file extensions** in File Explorer:
+  >        - Go to the "View" tab and check "File name extensions."
+  >    3. **Rename the file extension** from `.mcpack` to `.zip`.
+  >        - Right-click the file, select "Rename," and change `.mcpack` to `.zip`. Confirm if prompted.
+  >    4. **Extract the zip archive**:
+  >        - Right-click the `.zip` file and choose "Extract All..." or use a tool like 7-Zip or WinRAR.
+  >    5. **Edit the files** inside the extracted folder:
+  >        - Use a text editor (e.g., Notepad, Visual Studio Code) for JSON/scripts, or an image editor for textures.
+  >    6. **Repack the folder**:
+  >        - Select all the files/folders you edited (not the parent folder), right-click, and choose "Send to > Compressed (zipped) folder."
+  >    7. **Rename the new `.zip` file back to `.mcpack`**.
+  >        - Right-click, select "Rename," and change `.zip` to `.mcpack`.
+  >    8. **Import the edited `.mcpack`** into Minecraft:
+  >        - Double-click the file or move it to the appropriate resource/behavior pack folder.
+  >
+  >    ---
+  >
+  >    ### For Mobile (iOS/Android)
+  >
+  >    1. **Download the `.mcpack` file** to your device.
+  >    2. **Use a file manager app** (such as "Files" on iOS or "ZArchiver" on Android).
+  >    3. **Rename the file extension** from `.mcpack` to `.zip`.
+  >        - Tap and hold the file, select "Rename," and change `.mcpack` to `.zip."
+  >    4. **Extract the `.zip` file** using your file manager.
+  >    5. **Edit the desired files**:
+  >        - Use a text editor app for JSON/scripts or an image editor for textures.
+  >    6. **Re-compress the files**:
+  >        - Select the modified files/folders and compress them into a new `.zip` file.
+  >    7. **Rename the new `.zip` file back to `.mcpack`**.
+  >    8. **Import the `.mcpack`**:
+  >        - Tap the file to open it with Minecraft, or move it to the correct folder using your file manager.
+  >
+  >    ---
+  >
+  >    **Tips:**
+  >    - Always back up your original `.mcpack` before editing.
+  >    - On Windows, you can find your Minecraft folders in `%localappdata%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang`.
+  >    - On mobile, use your device’s file manager to navigate to the Minecraft folders.
+  >
+  >    </details>
+  >
   > 3. Add the add-on to world/realm
-  > 4. Turn on Upcoming Creator Features & Beta API
+  > 4. Turn on Beta API
   > 5. Run `/function setup/setup`
   > 6. Toggle all the modules you want inside admin panel
   > 7. Enjoy!
 
-[config]: https://github.com/BlaizerBrumo/SafeGuard/blob/v2/scripts/config.js
+[config]: https://github.com/BlaizerBrumo/SafeGuard/blob/main/scripts/config.js
