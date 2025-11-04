@@ -6,8 +6,8 @@
     "uuid": "81b13565-181a-42ee-abd9-a7bd3cb2dba4",
     "min_engine_version": [
       1,
-      19,
-      50
+      21,
+      121
     ],
     "version": [
       2,
@@ -42,15 +42,15 @@
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "2.2.0-beta"
+      "version": "beta"
     },
     {
       "module_name": "@minecraft/server-gametest",
-      "version": "1.0.0-beta"
+      "version": "beta"
     },
     {
       "module_name": "@minecraft/server-ui",
-      "version": "2.1.0-beta"
+      "version": "beta"
     }
   ]
 }
