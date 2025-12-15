@@ -2,7 +2,7 @@
 export default {
     "version": "2.0.6",
     //the owner password to edit config in game
-    "OWNER_PASSWORD": "",
+    "owners_password": "",
     "other":{
         //dev stuff
         "consoleDebugMode": true,
