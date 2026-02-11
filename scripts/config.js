@@ -1,6 +1,6 @@
 //Edit items in this file if you want customization:
 export default {
-    "version": "2.0.7",
+    "version": "2.0.8",
     //the owner password to edit config in game
     "OWNER_PASSWORD": "",
     "other":{
@@ -89,6 +89,8 @@ export default {
         //chat command prefix
         "prefix": "!",
         "spammer":{
+            //if a message contains non ASCII characters, it does not get sent
+            "preventNonAsciiChars": true,
             //maximum amount characters the message can have before it's considered spam
             "maxMessageCharLimit": 512,
             //maximum amount of words the message can have before it's considered spam

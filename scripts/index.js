@@ -35,8 +35,8 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
 	if (player.isMuted) {
 		const muteInfo = player.getMuteInfo();
-		if(!muteInfo.isActive) player.isMuted = false;
-		else{
+		if (!muteInfo.isActive) player.isMuted = false;
+		else {
 			player.sendMessage(`§6[§eSafeGuard§6]§4 You were muted by §c${muteInfo.admin}§4 Time remaining: §c${muteInfo.isPermanent ? "permanent" : formatMilliseconds(muteInfo.duration - Date.now())} §4reason: §c${muteInfo.reason}`);
 			data.cancel = true;
 			return;
@@ -76,6 +76,12 @@ world.beforeEvents.chatSend.subscribe((data) => {
 			player.sendMessage(`§6[§eSafeGuard§6]§r§c Please keep your message below ${config.default.chat.spammer.maxMessageWordLimit} words!`);
 			return;
 		}
+
+		else if (config.default.chat.spammer.preventNonAsciiChars && /[^\x20-\x7E]/g.test(message)) {
+			data.cancel = true;
+			player.sendMessage(`§6[§eSafeGuard§6]§r§c Sorry! Your message contains invalid characters and was not sent!`);
+			return;
+		}
 	}
 
 	whitelistedPrefixes.forEach(wPrefix => {
@@ -100,15 +106,15 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
 
 world.afterEvents.playerDimensionChange.subscribe((data) => {
-	const {fromLocation,player,toDimension} = data;
+	const { fromLocation, player, toDimension } = data;
 	//logDebug(`Dimension ID: ${toDimension.id}`);
 
 	if (toDimension.id == "minecraft:the_end") {
-		if(!SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock)) return;
-		if(player.hasAdmin() && config.default.world.endLock.adminsBypass) return;
-		
+		if (!SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock)) return;
+		if (player.hasAdmin() && config.default.world.endLock.adminsBypass) return;
+
 		logDebug(`${player.name} entered the end`);
-		player.teleport({...fromLocation,y:325}, { dimension: world.getDimension("overworld"), rotation: { x: 0, y: 0 } });
+		player.teleport({ ...fromLocation, y: 325 }, { dimension: world.getDimension("overworld"), rotation: { x: 0, y: 0 } });
 		player.sendMessage("§6[§eSafeGuard§6]§r§4 The end was locked by an admin!");
 		player.addEffect("slow_falling", 1200, { amplifier: 1, showParticles: false });
 	}
@@ -129,9 +135,9 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 
 	if (!data.initialSpawn) return;
 	//needed for first initialize
-	try{
+	try {
 		if (!world.safeguardInitialized) Initialize();
-	}catch(err){
+	} catch (err) {
 		logDebug(`Initialization had expected errors.`);
 	}
 	player.currentGamemode = player.getGameMode();
@@ -146,37 +152,37 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r ${player.name}§r§4 was automatically banned for namespoof`, true);
 		return;
 	}
-	
+
 
 	if (!world.safeguardIsSetup && player.hasAdmin()) {
 		player.sendMessage(`§r§6[§eSafeGuard§6]§r§4 WARNING! §cThe AntiCheat is not setup, some features may not work. Please run §7/function setup/setup§c to setup!`);
 	}
 
-	if(world.safeguardVersion !== config.default.version){
+	if (world.safeguardVersion !== config.default.version) {
 		player.sendMessage(`§r§6[§eSafeGuard§6]§f SafeGuard has successfully updated to v${config.default.version}`);
-		world.setDynamicProperty("safeguard:version",config.default.version);
+		world.setDynamicProperty("safeguard:version", config.default.version);
 	}
 
-	if (world.safeguardNotifyMigrationQueue.includes(player.name)){
+	if (world.safeguardNotifyMigrationQueue.includes(player.name)) {
 		//legacy migration
 		const notifyScoreboard = world.scoreboard.addObjective("safeguard:notify") ?? world.scoreboard.getObjective("safeguard:notify");
-		notifyScoreboard.setScore(player.scoreboardIdentity,1);
+		notifyScoreboard.setScore(player.scoreboardIdentity, 1);
 		let newArray = new Set(world.safeguardNotifyMigrationQueue);
 		newArray.delete(player.name);
-		world.setDynamicProperty("safeguard:legacyNotificationPlayerList",[...newArray].join(","));
-		
+		world.setDynamicProperty("safeguard:legacyNotificationPlayerList", [...newArray].join(","));
+
 	}
 	if (globalBanList.includes(player.name)) return player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Your name was found in the SafeGuard global ban list.`)
 
 
-	if (world.safeguardUnbanQueue.includes(player.name)){
-		if(player.unban()) {
+	if (world.safeguardUnbanQueue.includes(player.name)) {
+		if (player.unban()) {
 			player.sendMessage("§r§6[§eSafeGuard§6]§r You were unbanned.");
 			logDebug(`[SafeGuard] Player ${player.name} was unbanned through unban queue`);
 		}
 		else logDebug(`[SafeGuard] Unban for ${player.name} failed`);
 	}
-	
+
 	const banInfo = player.getBan();
 	if (banInfo.isBanned) {
 		const { unbanTime, isPermanent, bannedBy, reason } = banInfo;
@@ -192,12 +198,12 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	//migrate legacy "safeguard:Ban" tag ban system into the new one.
 	if (player.hasTag("safeguard:Ban")) return legacy_BanToV2(player);
 
-	if ((world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)) && !player.hasAdmin()){
+	if ((world.safeguardDeviceBan.length > 0 && world.safeguardDeviceBan.includes(player.clientSystemInfo.platformType)) && !player.hasAdmin()) {
 		sendMessageToAllAdmins(`§6[§eSafeGuard§6]§4 The player §c${player.name}§4 was kicked for joining on banned device: §c${player.clientSystemInfo.platformType}`);
 		player.runCommand(`kick @s §r§6[§eSafeGuard§6]§r §4Sorry, the administrators have banned the device you are playing on.`);
 		return;
 	}
-	
+
 	const welcomerisOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.welcomer);
 	if (welcomerisOn) {
 		const firstTimeWelcome = player.getDynamicProperty("safeguard:firstTimeWelcome");
@@ -213,9 +219,6 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	const endLockOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.endLock);
 	const netherLock = SafeguardModule.getModuleStatus(SafeguardModule.Modules.netherLock);
 
-	
-
-	
 	if ((endLockOn && player.dimension.id == "minecraft:the_end") && !(player.hasAdmin() && config.default.world.endLock.adminsBypass)) {
 		const playerSpawnPoint = player.getSpawnPoint();
 		player.teleport({ x: playerSpawnPoint.x, y: playerSpawnPoint.y, z: playerSpawnPoint.z }, { dimension: playerSpawnPoint.dimension, rotation: { x: 0, y: 0 } });
@@ -228,11 +231,11 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	}
 
 	if ((antiCLog && player.hasTag("safeguard:isInCombat"))) {
-		logDebug(player.name,"joined while in combat")
+		logDebug(player.name, "joined while in combat")
 		player.removeTag("safeguard:isInCombat");
 
 		if (player.hasAdmin() && config.default.combat.combatLogging.adminsBypass) player.combatLogTimer = null;
-		else {	
+		else {
 			logDebug(`executing clog punishment on ${player.name} (${config.default.combat.combatLogging.punishmentType})`);
 			if (config.default.combat.combatLogging.alwaysSendAlert) world.sendMessage(`§r§6[§eSafeGuard§6]§e ${player.name}§r Was detected combat logging!`);
 
@@ -274,10 +277,40 @@ world.afterEvents.playerSpawn.subscribe((data) => {
 	const playerFreezeStatus = player.getDynamicProperty("safeguard:freezeStatus");
 	if (typeof playerFreezeStatus === "boolean") player.setFreezeTo(playerFreezeStatus);
 
-	
+
 
 
 })
+
+function durabilityCheckModule(player) {
+	const isAdmin = player.hasAdmin();
+	// Skip if module is disabled or player is admin
+	if (!SafeguardModule.getModuleStatus(SafeguardModule.Modules.invalidDurabilityCheck) || isAdmin) return;
+
+	const inv = player.getComponent(Minecraft.EntityComponentTypes.Inventory).container;
+
+	for (let currSlot = 0; currSlot < inv.size; currSlot++) {
+		const item = inv.getItem(currSlot);
+
+		if (!item) return;
+
+		const durability = item.getComponent(Minecraft.ItemComponentTypes.Durability);
+		if (!durability) continue;
+
+		// Check for invalid/unbreakable
+		if (durability.damage > durability.maxDurability || durability.damage < 0) {
+			const newItem = item;
+
+			Minecraft.system.run(() => {
+				const durComp = newItem.getComponent(Minecraft.ItemComponentTypes.Durability);
+				durComp.damage = 0;
+				inv.setItem(currSlot, newItem);
+			})
+
+			sendAnticheatAlert(player, "unbreakable item", `Item: ${item.typeId.replace("minecraft:", "")} | Durability: ${durability.damage}/${durability.maxDurability}`, SafeguardModule.Modules.invalidDurabilityCheck);
+		}
+	}
+}
 
 Minecraft.system.runInterval(() => {
 	const invalidVelocityCheckOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.velocityCheck);
@@ -301,6 +334,7 @@ Minecraft.system.runInterval(() => {
 
 
 		betaFeatures(player);
+		durabilityCheckModule(player);
 		if (player.currentCps > 0 && Date.now() - player.initialClick >= 1000) {
 			const antiAutoclicker = SafeguardModule.getModuleStatus(SafeguardModule.Modules.cpsCheck);
 			if (player.currentCps > config.default.combat.autoclicker.maxCps && antiAutoclicker) {
@@ -335,26 +369,25 @@ Minecraft.system.runInterval(() => {
 		if (world.worldBorder) {
 			let { x, y, z } = player.location;
 			const border = world.worldBorder;
-			if (Math.abs(x) > border || Math.abs(y) > border || Math.abs(z) > border) {
+			if (Math.abs(x) > border || Math.abs(z) > border) {
 				if (isAdmin && config.default.world.worldborder.adminsBypassBorder) return;
 
 				player.sendMessage(`§6[§eSafeGuard§6]§r You reached the border of §e${border}§f blocks!`);
-				const currentLocation = player.location;
-				const offsetX = currentLocation.x >= 0 ? -1 : 1;
-				const offsetZ = currentLocation.z >= 0 ? -1 : 1;
-				//const offsetY = currentLocation.y >= 0 ? -1 : 1;
+				const newX = Math.max(-border, Math.min(border, x));
+				const newZ = Math.max(-border, Math.min(border, z));
 
-				player.tryTeleport({
-					x: currentLocation.x + offsetX,
-					y: currentLocation.y,
-					z: currentLocation.z + offsetZ,
-				}, {
-					checkForBlocks: false,
-				});
+				player.teleport(
+					{ x: newX, y: y, z: newZ },
+					{
+						dimension: player.dimension,
+						checkForBlocks: true
+					}
+				);
 			}
 		}
+
 	}
-});
+}, 2);
 
 world.afterEvents.entityHitEntity.subscribe(async (data) => {
 	const player = data.damagingEntity;
@@ -382,7 +415,7 @@ world.afterEvents.entityHitEntity.subscribe(async (data) => {
 		player.currentCps++;
 
 	}
-	
+
 
 })
 world.afterEvents.entityHurt.subscribe((data) => {
@@ -391,19 +424,19 @@ world.afterEvents.entityHurt.subscribe((data) => {
 	if (player.typeId !== "minecraft:player") return;
 
 	const hp = player.getComponent("health").currentValue;
-		
-	if(hp <= 0) {
+
+	if (hp <= 0) {
 		player.combatLogTimer = null;
-		if(player.hasTag("safeguard:isInCombat")) player.removeTag("safeguard:isInCombat");
-		
+		if (player.hasTag("safeguard:isInCombat")) player.removeTag("safeguard:isInCombat");
+
 		if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect)) player.runCommand("function assets/death_effect");
-		
+
 
 		//death coords
 		const deathCoordStatus = SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathCoords);
-		if(deathCoordStatus){
+		if (deathCoordStatus) {
 			const { x, y, z } = player.location;
-			player.sendMessage(`§6[§eSafeGuard§6]§r §eYou died at ${Math.round(x)}, ${Math.round(y)}, ${Math.round(z)} (in ${player.dimension.id.replace("minecraft:","")})`);
+			player.sendMessage(`§6[§eSafeGuard§6]§r §eYou died at ${Math.round(x)}, ${Math.round(y)}, ${Math.round(z)} (in ${player.dimension.id.replace("minecraft:", "")})`);
 		}
 	}
 
@@ -468,7 +501,7 @@ function betaFeatures(player) {
 
 	if (invalidVelocityCheckOn && (playerVelocity.y < -3.919921875 && (Date.now() - player.tridentLastUse) > 5000) && player.isFalling) {
 		//check for last trident use time to prevent false positive with riptide
-		
+
 		//while testing for a fly detection, I noticed that the terminal velocity for falling on y coordinate is -3.919921875
 		//this seems to be a a better detection fly because when flying the velocity sometimes tends to set the velocity below that number which I assume is impossible
 		//this also sometimes detects other movement cheats
@@ -514,15 +547,15 @@ Minecraft.system.runInterval(() => {
 
 
 world.afterEvents.playerGameModeChange.subscribe((data) => {
-	const {toGameMode,player} = data;
+	const { toGameMode, player } = data;
 	player.currentGamemode = toGameMode;
 	//NOTE: This only gets triggered when a person switches gamemode, it DOES NOT constantly check for gamemode creative
-	if(player.hasAdmin()) return;
+	if (player.hasAdmin()) return;
 
 	const antiGmcOn = SafeguardModule.getModuleStatus(SafeguardModule.Modules.antiGmc);
-	if(antiGmcOn && toGameMode == Minecraft.GameMode.creative){
+	if (antiGmcOn && toGameMode == Minecraft.GameMode.creative) {
 		player.setGameMode(Minecraft.GameMode.survival);
-		sendAnticheatAlert(player,"gamemode creative","true",SafeguardModule.Modules.antiGmc);
+		sendAnticheatAlert(player, "gamemode creative", "true", SafeguardModule.Modules.antiGmc);
 	}
 })
 
@@ -547,7 +580,7 @@ world.afterEvents.itemUse.subscribe((data) => {
 	const player = data.source;
 	const item = data.itemStack;
 	if (!item) return;
-	if (item.typeId === "minecraft:trident" && item.getComponent("enchantable").hasEnchantment("riptide")){
+	if (item.typeId === "minecraft:trident" && item.getComponent("enchantable").hasEnchantment("riptide")) {
 		player.tridentLastUse = Date.now();
 		//logDebug(`[SafeGuard] ${player.name} used riptide`)
 	}
@@ -653,7 +686,7 @@ world.afterEvents.playerBreakBlock.subscribe((data) => {
 
 Minecraft.system.run(() => {
 	//in case of /reload being ran
-	if(!world.safeguardInitialized) Initialize();
+	if (!world.safeguardInitialized) Initialize();
 	for (const player of world.getPlayers()) {
 		player.currentGamemode = player.getGameMode();
 	}

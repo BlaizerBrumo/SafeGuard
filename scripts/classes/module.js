@@ -22,6 +22,7 @@ class SafeGuardModule {
         velocityCheck: "Velocity Check",
         antiCombatlog: "Anti Combatlog",
         antiNamespoof: "Anti Namespoof",
+        invalidDurabilityCheck: "Invalid Durability Check",
         OreAlerts:{
             diamondOre: "Diamond Ore Alerts",
             netheriteOre: "Netherite Ore Alerts"
