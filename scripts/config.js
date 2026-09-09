@@ -1,16 +1,30 @@
 //Edit items in this file if you want customization:
 export default {
-    "version": "2.0.8",
+    "version": "2.1.0-beta",
+    "debug": false,
     //the owner password to edit config in game
     "OWNER_PASSWORD": "",
     "other":{
         //dev stuff
-        "consoleDebugMode": true,
+        "consoleDebugMode": false,
         //wether to send detection alerts to everyone(true) or just to admins (false)
-        "sendAlertsToEveryone": true,
+        "sendAlertsToEveryone": false,
         //if only owner status players can edit modules
-        "ownerOnlySettings": false
-
+        "ownerOnlySettings": false,
+        "performance": {
+            //how often (in ticks) to scan inventory/armor for invalid items
+            "inventoryScanEveryTicks": 10
+        },
+        "autoMod": {
+            //if true, players who keep getting flagged will be automatically temp banned
+            "escalationEnabled": true,
+            //how many times a player needs to be flagged before they get auto banned
+            "detectionThreshold": 4,
+            //how long (in ms) those flags are remembered before they reset
+            "escalationWindowMs": 10 * 60 * 1000,
+            //how long (in ms) the automatic ban lasts
+            "banDurationMs": 30 * 24 * 60 * 60 * 1000
+        }
     },
     "combat": {
         "autoclicker":{
@@ -20,6 +34,46 @@ export default {
         "killaura":{
             //if player attacks this or many more number of entities in a single tick, gets flagged for killaura
             "maxHitEntities": 2
+        },
+        "noSwing":{
+            //if a player attacks, places, or breaks something with no arm swing in this many ticks beforehand, gets flagged
+            "thresholdTicks": 60,
+            //how many ticks to wait before actually checking for no swing
+            "verifyDelayTicks": 10
+        },
+        "fov":{
+            //how far off (in degrees) a player's aim can be from their target when they hit them before it's flagged (higher is more lenient)
+            "maxAngle": 80,
+            //don't check hits closer than this many blocks
+            "minDistance": 2,
+            //minimum time (ms) between FOV alerts for the same player, so it doesn't spam
+            "alertCooldownMs": 3000
+        },
+        "autoTotem":{
+            //how fast (in ticks, 20 ticks = 1 second) a player can put a new totem in after using one before it's too fast for a human
+            "minSwapTicks": 5,
+            //how many times in a row a player has to swap that fast before its flagged
+            "fastSwapStreakRequired": 2,
+            //how many spawps in a row with same timing until flagged as consistent
+            "consistentSwapsRequired": 3,
+            //how close (in ticks) two swap speeds need to be to count as "the same speed" for the setting above
+            "tickTolerance": 1
+        },
+        "antiFastUse":{
+            //which items this check applies to
+            "items": ["minecraft:splash_potion", "minecraft:lingering_potion", "minecraft:experience_bottle", "minecraft:snowball"],
+            //throwing one of the items above faster than this many ms between throws
+            "minThrowIntervalMs": 50
+        },
+        "autoCrystal":{
+            //how long (in ticks, 20 ticks = 1 second) a right-click still counts toward the next crystal placement
+            "pendingPlacementTicks": 60,
+            //an unplaced crystal has to be broken within this many ticks of spawning to be attributed to a player
+            "maxBreakDelayTicks": 6,
+            //how many of these suspicious crystals in a row the same player has to break before it's flagged
+            "streakRequired": 3,
+            //how far away (in blocks) a real placement can be from a crystal spawn and still explain it
+            "nearbyPlayerRadius": 10
         },
         "combatLogging":{
             //how many milliseconds player will stay in combat after last damage they received from a player
@@ -39,27 +93,6 @@ export default {
             "adminsBypass": false
         }
     },
-    "item":{
-        "anti_items":{
-            //items flagged by anti-items
-            //you can add your custom items here
-            "bannedItems": ['minecraft:allow', 'minecraft:command_block', 'minecraft:repeating_command_block', 'minecraft:chain_command_block', 'minecraft:border_block', 'minecraft:mob_spawner', 'minecraft:command_block_minecart','minecraft:flowing_lava', 'minecraft:lava', 'minecraft:flowing_water', 'minecraft:water', 'minecraft:lit_redstone_lamp', 'minecraft:pistonarmcollision', 'minecraft:tripwire', 'minecraft:unpowered_comparator', 'minecraft:powered_comparator', 'minecraft:fire', 'minecraft:lit_furnace', 'minecraft:lit_redstone_ore', 'minecraft:unlit_redstone_torch', 'minecraft:portal','minecraft:structure_block', 'minecraft:powered_repeater', 'minecraft:invisiblebedrock','minecraft:bedrock', 'minecraft:wgateway', 'minecraft:end_portal', 'minecraft:end_portal_frame', 'minecraft:structure_void', 'minecraft:chalkboard', 'minecraft:bubble_column', 'minecraft:lit_smoker', 'minecraft:lava_cauldron', 'minecraft:jigsaw', 'minecraft:lit_blast_furnace', 'minecraft:light_block', 'minecraft:stickypistonarmcollision', 'minecraft:soul_fire', 'minecraft:lit_deepslate_redstone_ore', 'minecraft:camera', 'minecraft:deny', 'minecraft:barrier', 'minecraft:glowingobsidian', 'minecraft:glow_stick', 'minecraft:netherreactor', 'minecraft:info_update'],
-            //items that were found with these words in the name or lore will get cleared and player will get flagged (you can also include symbols)
-            //you can also remove all keywords if you don't want custom keyword detection
-            "bannedKeyWords": ["horion","32k","nbt","hack","nested","cbe","nuker","illegal"],
-            //the maximum length of an item name tag - 30 is the vanilla limit
-            "maxItemNameLength": 30,
-            //checks if an item has lore
-            "antiLore": true
-        }
-    },
-    "movement":{
-        "fly":{
-            //the anticheat checks for sudden changes in player velocity
-            //for example if it suddenly jumps from -4 to 6, the threshold determines how high that difference can be
-            "maxYVelocityThreshold": 8
-        }
-    },
     "world":{
         "endLock":{
             //wether admin players can go into the end even if the lock is enabled
@@ -75,7 +108,7 @@ export default {
             //checks if admin players are using nuker (good for anti op abuse)
             "checkAdmins": true,
             //blocks that are excluded from nuker check because they are instant broken
-            "blockExceptions": ["minecraft:sea_pickle","minecraft:sugar_cane","minecraft:deadbush","minecraft:horn_coral","minecraft:coral_fan","minecraft:coral_fan_dead","minecraft:brain_coral","minecraft:bubble_coral","minecraft:dead_brain_coral","minecraft:dead_bubble_coral","minecraft:dead_fire_coral","minecraft:dead_horn_coral","minecraft:dead_tube_coral","minecraft:fire_coral","minecraft:tube_coral","minecraft:red_flower","minecraft:yellow_flower","minecraft:grass","minecraft:seagrass","minecraft:netherrack","minecraft:torchflower","minecraft:sapling","minecraft:cherry_sapling","minecraft:tallgrass","minecraft:double_plant","minecraft:nether_sprouts"]
+            "blockExceptions": ["minecraft:sea_pickle","minecraft:sugar_cane","minecraft:deadbush","minecraft:horn_coral","minecraft:coral_fan","minecraft:coral_fan_dead","minecraft:brain_coral","minecraft:bubble_coral","minecraft:dead_brain_coral","minecraft:dead_bubble_coral","minecraft:dead_fire_coral","minecraft:dead_horn_coral","minecraft:dead_tube_coral","minecraft:fire_coral","minecraft:tube_coral","minecraft:red_flower","minecraft:yellow_flower","minecraft:grass","minecraft:seagrass","minecraft:netherrack","minecraft:torchflower","minecraft:sapling","minecraft:cherry_sapling","minecraft:tallgrass","minecraft:double_plant","minecraft:nether_sprouts", "minecraft:tnt"]
         },
         "worldborder":{
             //the minimum border size required, this is used so if a possible admin abuse or force op occurs hackers don't create a border of a size 1 block or less which
@@ -83,6 +116,10 @@ export default {
             "minBorderDistance": 500,
             //if admins can go beyond world border
             "adminsBypassBorder": true,
+            //each time a player hits the border again without a break, they get pushed back in twice as far as last time, how long until push back resets to 1
+            "pushStreakResetMs": 30000,
+            //hard cap on how far a single push-back can ever be, no matter how long the streak gets
+            "maxPushBlocks": 200
         }
     },
     "chat":{
@@ -92,9 +129,9 @@ export default {
             //if a message contains non ASCII characters, it does not get sent
             "preventNonAsciiChars": true,
             //maximum amount characters the message can have before it's considered spam
-            "maxMessageCharLimit": 512,
+            "maxMessageCharLimit": 256,
             //maximum amount of words the message can have before it's considered spam
-            "maxMessageWordLimit": 512,
+            "maxMessageWordLimit": 30,
             //minimum time between messages in milliseconds
             "minTime": 1500,
             //if a message starts with this word/symbol/letter or whatever you enter it won't be flagged for spam

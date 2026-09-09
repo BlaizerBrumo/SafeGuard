@@ -1,16 +1,8 @@
 import { Player, world, InputPermissionCategory } from "@minecraft/server";
 import { formatMilliseconds, generateBanLog, logDebug, sendMessageToAllAdmins } from "../assets/util";
 import { SafeguardModule } from "./module";
-
-Player.prototype.initialClick = 0;
-Player.prototype.finalCps = 0;
-Player.prototype.currentCps = 0;
-Player.prototype.hitEntities = [];
-Player.prototype.previousYVelocity = 0;
-Player.prototype.previousSpeed = 0;
-Player.prototype.registerValidCoords = true;
-Player.prototype.isMuted = false;
-Player.prototype.tridentLastUse = 0;
+import { getPlayerState } from "../assets/playerState";
+import * as config from "../config";
 
 //get warns
 Player.prototype.getWarnings = function () {
@@ -49,7 +41,27 @@ Player.prototype.setWarning = function (module) {
 
 }
 
-//get ban info 
+//AutoMod detection escalation
+Player.prototype.recordAutoModDetection = function () {
+	const cfg = config.default.other.autoMod;
+	if (!cfg.escalationEnabled) return false;
+
+	const now = Date.now();
+	const stored = this.getDynamicProperty("safeguard:autoModDetections");
+	let timestamps = stored ? JSON.parse(stored) : [];
+	timestamps = timestamps.filter((t) => now - t < cfg.escalationWindowMs);
+	timestamps.push(now);
+
+	if (timestamps.length >= cfg.detectionThreshold) {
+		this.setDynamicProperty("safeguard:autoModDetections", JSON.stringify([]));
+		return true;
+	}
+
+	this.setDynamicProperty("safeguard:autoModDetections", JSON.stringify(timestamps));
+	return false;
+};
+
+//get ban info
 Player.prototype.getBan = function () {
 	const banProperty = this.getDynamicProperty("safeguard:banInfo");
 	if (!banProperty) return { isBanned: false };
@@ -176,7 +188,7 @@ Player.prototype.mute = function (adminPlayer, reason, durationMs) {
 
 	const isPermanent = durationMs == -1;
 	const endTime = isPermanent ? "permanent" : Date.now() + durationMs;
-	const muteTime = isPermanent ? "permanent time" : `${timeValue}${timeUnit}`;
+	const muteTime = isPermanent ? "permanent time" : formatMilliseconds(durationMs);
 	const muteInfo = {
 		admin: adminName,
 		duration: endTime,
@@ -184,7 +196,7 @@ Player.prototype.mute = function (adminPlayer, reason, durationMs) {
 		reason: reason
 	}
 	this.setDynamicProperty("safeguard:muteInfo", JSON.stringify(muteInfo));
-	this.isMuted = true;
+	getPlayerState(this).isMuted = true;
 
 	// Notify player and admins
 	adminPlayer.sendMessage(`§6[§eSafeGuard§6]§f You have muted §e${this.name}§f for §e${muteTime}.`);
@@ -194,7 +206,7 @@ Player.prototype.mute = function (adminPlayer, reason, durationMs) {
 
 //unmute
 Player.prototype.unmute = function () {
-	if (!this.isMuted) throw Error(`"${this.name}" is not muted`);
+	if (!getPlayerState(this).isMuted) throw Error(`"${this.name}" is not muted`);
 
 	const muteInfo_string = JSON.stringify({
 		admin: "",
@@ -203,7 +215,7 @@ Player.prototype.unmute = function () {
 		reason: ""
 	});;
 	this.setDynamicProperty("safeguard:muteInfo", muteInfo_string);
-	this.isMuted = false;
+	getPlayerState(this).isMuted = false;
 
 	logDebug(muteInfo_string);
 }

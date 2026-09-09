@@ -12,7 +12,7 @@ newCommand({
         if (!targetPlayer) return player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${targetPlayerName}§f was not found`);
         
 
-        const {maxRenderDistance,memoryTier,platformType} = player.clientSystemInfo;
+        const {maxRenderDistance,memoryTier,platformType} = targetPlayer.clientSystemInfo;
 
         player.sendMessage(`§eClient Info for §6${targetPlayer.name}§e: \n\nMax Render Distance: §6${maxRenderDistance}§e\nMemory: §6${Object.keys(MemoryTier)[memoryTier]}§e\nPlatform: §6${platformType}`);
     }

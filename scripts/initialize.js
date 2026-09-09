@@ -14,6 +14,8 @@ export function Initialize(){
             if (!worldBorder) legacy_WorldBordertoV2();
             else world.worldBorder = worldBorder ?? 0;
         }
+        world.worldBorderOriginX = world.getDynamicProperty("safeguard:worldBorderOriginX") ?? 0;
+        world.worldBorderOriginZ = world.getDynamicProperty("safeguard:worldBorderOriginZ") ?? 0;
         if (world.scoreboard.getObjective("notify")){
             //NOTE: SafeGuard notify migration queue is handled in index.js at initialSpawn
             legacy_ScoreboardsToV2();
@@ -36,6 +38,12 @@ export function Initialize(){
             world.setDynamicProperty("safeguard:version",config.default.version);
             world.safeguardVersion = config.default.version;
         }
+        
+        // turn on automod by default
+        if (world.getDynamicProperty("safeguard:autoMod") === undefined) {
+            world.setDynamicProperty("safeguard:autoMod", true);
+        }
+
         //TODO: see if setting up logs works. Make sure to add a limit to how much logs can be displayed
 
         let editedConfig = world.getDynamicProperty("safeguard:config");

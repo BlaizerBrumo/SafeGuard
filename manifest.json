@@ -2,17 +2,17 @@
   "format_version": 2,
   "header": {
     "name": "§l§eSafe§6Guard §fAntiCheat§r",
-    "description": "§l§fMade by §eBlazer#9677 §fV2.0.8\nBeta API §cREQUIRED",
+    "description": "§l§fMade by §eBlazer#9677 §fV2.1.0-beta\nBeta API §cREQUIRED",
     "uuid": "81b13565-181a-42ee-abd9-a7bd3cb2dba4",
     "min_engine_version": [
       1,
-      19,
-      50
+      26,
+      45
     ],
     "version": [
       2,
-      0,
-      8
+      1,
+      0
     ]
   },
   "modules": [
@@ -42,7 +42,7 @@
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "2.6.0-beta"
+      "version": "2.10.0-beta"
     },
     {
       "module_name": "@minecraft/server-gametest",
@@ -50,7 +50,7 @@
     },
     {
       "module_name": "@minecraft/server-ui",
-      "version": "2.1.0-beta"
+      "version": "2.2.0-beta"
     }
   ]
 }

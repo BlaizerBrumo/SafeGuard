@@ -1,17 +1,26 @@
 <img src="https://img.shields.io/github/downloads/BlaizerBrumo/SafeGuard/total?style=for-the-badge" alt="Downloads"/><br>
 
+
+
 # Info
-SafeGuard is a minecraft bedrock anti-cheat add-on with protection against combat, item, and movement hacks.
+SafeGuard is a Minecraft Bedrock anti-cheat add-on with protection against combat, item, and world-abuse hacks, plus a full set of admin moderation tools.
 
-SafeGuard offers a variety of features, all of them will be listed inside their hack type.
-Almost all of the cheat detections require Beta APIs so please turn that on inside of minecraft experiment settings.
+SafeGuard offers a variety of features, all of them listed below by category. Almost all of the cheat detections require Beta APIs, so please turn that on inside Minecraft's experiment settings when creating/editing your world.
 
-Also please note that all of the SafeGuard's detections/alerts/modules are disable by default, to enable a module use the SafeGuard admin panel (`/give @s safeguard:admin_panel`) and navigate to the settings option.
+Also please note that all of SafeGuard's detection modules are **disabled by default** - to enable one, get the SafeGuard admin panel (`/give @s safeguard:admin_panel`) and navigate to Settings.
 
-For any questions or help please join the official SafeGuard discord server: [discord.gg/nGu5gehXs3](https://discord.gg/nGu5gehXs3)
+For any questions or help please join the official SafeGuard Discord server: [discord.gg/nGu5gehXs3](https://discord.gg/nGu5gehXs3)
+
+> [!CAUTION]
+> SafeGuard is distributed free of charge, exclusively through this GitHub repository and our official [MCPEDL page](https://mcpedl.com/safeguard-anticheat/). Any other website, app, or Discord server claiming to offer SafeGuard is an impersonation that wasn't uploaded by the developer, and may therefore be unsafe. Do not click their links or download their `.mcpack` files. We never use link shorteners or advertisement links (e.g. Adfly). Report any unauthorized uploads to Blazer on discord.
+
+# License
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+SafeGuard is licensed under [CC BY-NC-SA 4.0](LICENSE). In plain terms: you're free to modify and redistribute the code (including forks), as long as you **credit the original SafeGuard project**, keep any fork under this same license, and **never charge money for it or any modified version**.
 
 # Owner Status
-SafeGuard owner status allows players to use the in-game config editor and clear ban logs at will. To obtain owner status you must first edit the `OWNER_PASSWORD` field inside [config] (`MOD_FOLDER/scripts/config.js`). Then obtain the SafeGuard admin panel and head over to Settings -> Config Editor. If setup correctly you will be prompted with entering the password you set. After, entering the correct password you will be granted owner status and can edit the config. Please not that the config changes made through config editor will only save on the current instance of the world, in order to export the config you can use config debug option to log the current config to your console.
+SafeGuard owner status allows players to use the in-game config editor and clear ban logs at will. To obtain owner status you must first edit the `OWNER_PASSWORD` field inside [config] (`MOD_FOLDER/scripts/config.js`). Then obtain the SafeGuard admin panel and head over to Settings -> Config Editor. If setup correctly you will be prompted to enter the password you set. After entering the correct password you will be granted owner status and can edit the config. Please note that config changes made through the config editor only save on the current instance of the world - to export the config, use the config debug option to log the current config to your console.
 
 > [!NOTE]
 > If you are unsure how to edit the config file, please refer to the expandable section in [Setup Instructions](https://github.com/BlaizerBrumo/SafeGuard?tab=readme-ov-file#-setup-instructions) titled "How to Edit .mcpack Addon Files (Windows & Mobile)."
@@ -22,59 +31,53 @@ SafeGuard owner status allows players to use the in-game config editor and clear
 # ⚠️ Cheat Detections
 
 > ### ⚔️ Combat Cheat Detections
-  > _If player matches any of these checks, player is warned and is given weakness for 2s to prevent giving attacks_
-  > - **High CPS Check:** Checks if a player has a cps higher than the set amount inside of [config]
-  > - **Multi Killaura Check:** Checks if a player attacks more entities then the set amount inside [config]
-  > - **Combat Log Detection:** Checks if a player rejoins the server after leaving during combat and gives them the punishment selected in [config]
+  > - **High CPS Check:** Flags players clicking faster than the max CPS set in [config]
+  > - **Killaura Check:** Flags hitting too many entities at once, an aim angle that snaps to an exact whole-degree value, or attacking while performing another action
+  > - **No Swing Check:** Flags attacking, placing, or breaking a block with no arm swing beforehand
+  > - **FOV Check:** Flags hitting an entity or placing a block without actually looking at it
+  > - **Anti Fast Use:** Flags throwing potions, snowballs, or experience bottles faster than humanly possible
+  > - **Auto Totem Check:** Flags re-equipping a totem of undying faster than humanly possible, or with suspiciously consistent timing
+  > - **Auto Crystal Check:** Flags auto crystal behavior
+  > - **Combat Log Detection:** Punishes a player who leaves the game while flagged as in combat (punishment type set in [config])
 > 
 > 
-> ### 🏃 Movement Cheat Detections
-  > _If player matches any of these checks, player is warned and the anticheat tries to fix their position by teleporting_
-  > - **Fly Check:** Checks if player is flying
-  > - **Invalid Velocity Check:** Checks if player is reaching an invalid Y velocity
-  > - **High Velocity Check:** Checks if player reaches high velocity 
->
->
 > ### 🌎 World Cheat Detections
-  > _If player matches any of these checks, player is warned and anticheat replaces any broken blocks_
-  > - **Nuker Check:** Checks if player breaks more blocks than the set amount inside [config]
-  > - **Scaffold Check:** Checks if player is using scaffold or tower modules for horion
-  > - **Illegal Item Place Check:** Checks if player places a block or uses an item that is inside the banned item list in [config]
-  > - **Anti Namespoof:** Kicks and bans players with invalid usernames
+  > - **Anti Block Nuker:** Flags breaking more blocks in a single tick than allowed in [config], and restores the broken blocks
+  > - **Anti Scaffold:** Flags placing blocks with a suspiciously round angle head rotations
+  > - **Anti Air Place:** Cancels placing a block with nothing solid supporting it
+  > - **Anti Invalid Durability:** Detects and repairs items with impossible durability values (a sign of item duplication/editing)
+  > - **Anti Invalid Equipment:** Bans a player instantly for wearing an item in an armor slot it can't legitimately go in
+  > - **Anti Namespoof:** Kicks and bans players joining with an invalid username
 >
-> 
-> ### 💬 Chat Cheat Detections
-  > _If player matches any of these checks, player is warned and message is cancelled_
-  > - **Same Message Check:** Checks if player send the same message 2 or more times in a row
-  > - **Short Timed Messages Check:** Checks if player sends a message within a 1.5 second gap to prevent spam, edit in [config]
-  > - **Sending Message While Moving Check:** Checks if player send a message while moving
-  > - **Message Large Character Amount Check:** Checks if player sends a message with more than 512 characters, edit in [config]
-  > - **Message Too Many Words Check:** Checks if player has a message with too many words, edit in [config]
+>
+> ### 💬 Chat Protection
+  > - Blocks messages over the character/word limits set in [config]
+  > - Blocks repeated (spam) messages and messages sent too quickly in a row
+  > - Blocks messages containing non-ASCII characters (optional, set in [config])
+  > - Permanently bans a player for sending an oversized/invalid chat packet
 >
 >
 >
 
 # 💡 Miscellaneous Features
 
-> ### 👁️ Xray Alerts
-  > _This module alerts all staff members when a player mines enabled ores_
-  > - **Diamond Ore:** Alerts when player mines diamond ore or diamond deepslate ore
-  > - **Netherite Ore:** Alerts when player mines ancient debris
+> ### 👁️ Ore Alerts
+  > _Alerts all staff members when a player mines an enabled ore_
+  > - **Diamond Ore Alerts:** Alerts when a player mines diamond ore or deepslate diamond ore
+  > - **Netherite Ore Alerts:** Alerts when a player mines ancient debris
 >
 >
 > ### 🛡️ World Protection
-  > _These modules are all disabled by default and need to be enabled(read [info](#info))_
-  > - **Anti GMC:** Switches back any non staff players from creative to survival and alerts everyone
-  > - **Anti Grief:** Clears all explosive blocks, as well as automatically put out nearby fires
+  > - **Anti GMC:** Switches any non-admin player back from creative to survival
+  > - **End Lock:** Stops players from entering the End
+  > - **Nether Lock:** Stops players from entering the Nether
 >
 >
 > ### ⭐ Utility Features
-  > _These modules do not do any protection but are just here for utility/fun_
-  > - **Death Effects:** Creates a cool effect at the place where someone dies
-  > - **Death Coords:** Tells the player where they died when they die
-  > - **End Lock:** Teleports players out of the end
-  > - **Nether Lock:** Teleports players out of the nether
-  > - **Welcomer:** Welcomes newly joined players and shows a welcome screen, shows what device they joined on.
+  > _These modules don't do any protection, they're just for utility/fun_
+  > - **Death Effect:** Plays a visual effect where a player died
+  > - **Death Coords:** Tells a player their coordinates when they die
+  > - **Welcomer:** Welcomes newly joined players and shows what device they joined on
 >
 > 
 >
@@ -82,51 +85,53 @@ SafeGuard owner status allows players to use the in-game config editor and clear
 # 🛠 Admin Helpful Utilities
 
 > ### 🤖 Chat Commands
-  > _SafeGuard offers a variety of commands which can be viewed with `!help`, and the command prefix can be changed inside [config]_
-  > - **ban [player name]:** Ban a person
-  > - **invsee [player name]:** See the inventory of a player
-  > - **mute [time S | M | H | D] [reason]:** Mute a player for a specific duration
-  > - **unmute [player name]:** Unmute a player
-  > - **worldborder [border | remove]:** Get or set the world border
-  > - **vanish:** Toggle vanish mode
-  > - **clearchat:** Clear the chat
-  > - **fakeleave:** Simulate leaving the realm
-  > - **fakeleave_server:** Simulate leaving the server
-  > - **summon_npc:** Summon an NPC
-  > - **notify:** Toggle anticheat notifications
-  > - **lagclear:** Run lag clear function
-  > - **copyinv [player name]:** Copy the inventory of a player
-  > - **unban [player name]:** Unban a player
-  > - **report [player name]:** Report players anonymously to all online admins, admins can check a player's report count
-  > - **systeminfo [player name]:** Get the system info of a selected player
+  > _SafeGuard offers a variety of commands which can be viewed in-game with `!help`; the command prefix (`!`) can be changed inside [config]_
+  > - **ban `<player name>`:** Permanently bans a player by their name
+  > - **unban `<player>`:** Unbans a player
+  > - **kick `<player>`:** Kicks the target player
+  > - **mute `<player> [time S | M | H | D] [reason]`:** Mutes a player for a specific duration
+  > - **unmute `<player>`:** Unmutes a muted player
+  > - **freeze `<player>`:** Toggles freeze on the selected player
+  > - **warn `<player>`:** Warns a player
+  > - **warnings `<player>`:** Lists a player's warnings
+  > - **clearwarn `<player>`:** Clears a player's warnings
+  > - **report `<player> <reason>`:** Reports a player privately to online admins
+  > - **invsee `<player>`:** Lists everything in a player's inventory
+  > - **copyinv `<player>`:** Copies a player's items into your own inventory
+  > - **worldborder `<border | remove | origin <x> <z>>`:** Gets or sets the world border, and where it's centered
+  > - **toggledeviceban `<device name | Desktop | Console | Mobile | View>`:** Toggles a device ban, or views the banned ones
+  > - **vanish:** Toggles vanish mode
+  > - **notify:** Toggles anticheat notifications for yourself
+  > - **clearchat:** Clears the chat
+  > - **clearbanlogs:** Clears ban logs
+  > - **fakeleave:** Simulates leaving the realm
+  > - **fakeleave_server:** Simulates leaving the server
+  > - **summon_npc:** Summons an NPC at your location
+  > - **lagclear:** Clears lag by killing entities
+  > - **systeminfo `<player>`:** Gets the system info of a selected player
   > - **version:** Shows the pack version
-  > - **warn [player name]:** Warns the selected player
-  > - **warnings [player name]:** Lists the selected player's warnings
-  > - **toggledeviceban [device name | Desktop | Console | Mobile | View]:** Toggles a device ban or view the banned ones
-  > - **kick [player name]:** The same as /kick but without reason
-  > - **removeowner:** Removes your owner status
-  > - **clearbanlogs** Clears ban logs  
+  > - **removeowner:** Removes your own owner status
 >
 > 
 > ### 📃 Admin Panel Item
-  > _The admin panel is an item which can be obtained with command `/give @s safeguard:admin_panel`_
-  > - **Settings:** Toggle SafeGuard modules/features as well as config editor
-  > - **Quick Ban:** Quickly ban a player using SafeGuard ban system 
-  > - **Player Actions:** Select an online player to ban, clear echest, warn, etc
-  > - **Unban Player:** Enter a player's name to unban, they will be unban when they rejoin
-  > - **Ban Logs:** Display info on recently banned players
+  > _The admin panel is an item which can be obtained with the command `/give @s safeguard:admin_panel`_
+  > - **Settings:** Toggle SafeGuard modules/features, and the config editor
+  > - **Quick Ban:** Quickly ban a player using SafeGuard's ban system
+  > - **Player Actions:** Select an online player to ban, clear ender chest, warn, etc.
+  > - **Unban Player:** Enter a player's name to unban - they'll be unbanned when they rejoin
+  > - **Ban Logs:** View info on recently banned players
 >
 > 
 > ### ⚙️ Auto Mod
-  > _Auto mod is disabled by default, enable it inside admin panel_
-  > - **What it does:** The SafeGuard AutoMod will automatically kick players who are detected by an anticheat module.
+  > _Auto Mod is disabled by default - enable it inside the admin panel_
+  > - **What it does:** Pools detections from every enabled module for each player - once a player racks up enough detections within a short window (both set in [config]), Auto Mod automatically bans them, no admin action needed
 >
 >
 >
 
 # 📖 Setup Instructions
   
-  > 1. Download the mcpacks from [latest github release](https://github.com/BlaizerBrumo/SafeGuard/releases/latest)
+  > 1. Download the mcpacks from the [latest GitHub release](https://github.com/BlaizerBrumo/SafeGuard/releases/latest)
   > 2. If you want to customize, expand for step-by-step instructions:
   >
   >    <details>
@@ -171,15 +176,15 @@ SafeGuard owner status allows players to use the in-game config editor and clear
   >
   >    **Tips:**
   >    - Always back up your original `.mcpack` before editing.
-  >    - On Windows, you can find your Minecraft folders in `%localappdata%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang`.
-  >    - On mobile, use your device’s file manager to navigate to the Minecraft folders.
+  >    - On Windows, you can find your Minecraft folders in `%appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang`.
+  >    - On mobile, use your device's file manager to navigate to the Minecraft folders.
   >
   >    </details>
   >
-  > 3. Add the add-on to world/realm
-  > 4. Turn on Beta API
+  > 3. Add the add-on to your world/realm
+  > 4. Turn on the Beta APIs experiment
   > 5. Run `/function setup/setup`
-  > 6. Toggle all the modules you want inside admin panel
+  > 6. Toggle the modules you want inside the admin panel (all detections start disabled)
   > 7. Enjoy!
 
 [config]: https://github.com/BlaizerBrumo/SafeGuard/blob/main/scripts/config.js

@@ -13,8 +13,8 @@ export function legacy_WorldBordertoV2(){
         }
     };
     if(!currentWorldBorderScoreboardName) return false;
-    const currentBorder = currentWorldBorderScoreboardName.split("safeguard:worldBorder:")[1];
-    world.setDynamicProperty("safeguard:worldBorder",parseInt(currentBorder));
+    const currentBorder = parseInt(currentWorldBorderScoreboardName.split("safeguard:worldBorder:")[1]);
+    world.setDynamicProperty("safeguard:worldBorder",currentBorder);
     world.worldBorder = currentBorder;
     scoreboardAction(currentWorldBorderScoreboardName,"remove");
     logDebug("[SafeGuard] Successfully migrated world border from legacy to v2");
@@ -63,10 +63,10 @@ export function legacy_BanToV2(player){
 
 function checkAndToggleModules() {
     const scoreboards = [
-        "gmc_on", "grief_on", "item_on", "auto_mod_on", "death_coord_on", "death_effect", "end_lock", "welcome_on",
+        "gmc_on", "auto_mod_on", "death_coord_on", "death_effect", "end_lock", "welcome_on",
         "safeguard:cps_check", "safeguard:killaura_check", "safeguard:nuker_check", "safeguard:spammer_protection",
         "safeguard:diamond_alert", "safeguard:netherite_alert",
-        "safeguard:fly_check", "safeguard:scaffold_check", "safeguard:velocity_check", "safeguard:anti_combatlog"
+        "safeguard:scaffold_check", "safeguard:anti_combatlog"
     ];
 
     for (const scoreboardName of scoreboards) {
@@ -95,24 +95,20 @@ function checkAndToggleModules() {
 // Helper function to map scoreboard names to module names
 function convertScoreboardToModule(scoreboardName) {
     const moduleMap = {
-        "gmc_on": SafeguardModule.Modules.antiGmc,
-        "grief_on": SafeguardModule.Modules.antiGrief,
-        "item_on": SafeguardModule.Modules.antiItem,
-        "auto_mod_on": SafeguardModule.Modules.autoMod,
-        "death_coord_on": SafeguardModule.Modules.deathCoords,
-        "death_effect": SafeguardModule.Modules.deathEffect,
-        "end_lock": SafeguardModule.Modules.endLock,
-        "welcome_on": SafeguardModule.Modules.welcomer,
-        "safeguard:cps_check": SafeguardModule.Modules.cpsCheck,
-        "safeguard:killaura_check": SafeguardModule.Modules.killauraCheck,
-        "safeguard:nuker_check": SafeguardModule.Modules.nukerCheck,
-        "safeguard:spammer_protection": SafeguardModule.Modules.spammerProtection,
-        "safeguard:diamond_alert": SafeguardModule.Modules.OreAlerts.diamondOre,
-        "safeguard:netherite_alert": SafeguardModule.Modules.OreAlerts.netheriteOre,
-        "safeguard:fly_check": SafeguardModule.Modules.flyCheck,
-        "safeguard:scaffold_check": SafeguardModule.Modules.scaffoldCheck,
-        "safeguard:velocity_check": SafeguardModule.Modules.velocityCheck,
-        "safeguard:anti_combatlog": SafeguardModule.Modules.antiCombatlog
+        "gmc_on": SafeguardModule.Modules.antiGmc.name,
+        "auto_mod_on": SafeguardModule.Modules.autoMod.name,
+        "death_coord_on": SafeguardModule.Modules.deathCoords.name,
+        "death_effect": SafeguardModule.Modules.deathEffect.name,
+        "end_lock": SafeguardModule.Modules.endLock.name,
+        "welcome_on": SafeguardModule.Modules.welcomer.name,
+        "safeguard:cps_check": SafeguardModule.Modules.cpsCheck.name,
+        "safeguard:killaura_check": SafeguardModule.Modules.killauraCheck.name,
+        "safeguard:nuker_check": SafeguardModule.Modules.nukerCheck.name,
+        "safeguard:spammer_protection": SafeguardModule.Modules.spammerProtection.name,
+        "safeguard:diamond_alert": SafeguardModule.Modules.OreAlerts.diamondOre.name,
+        "safeguard:netherite_alert": SafeguardModule.Modules.OreAlerts.netheriteOre.name,
+        "safeguard:scaffold_check": SafeguardModule.Modules.scaffoldCheck.name,
+        "safeguard:anti_combatlog": SafeguardModule.Modules.antiCombatlog.name
     };
 
     return moduleMap[scoreboardName] ?? null;

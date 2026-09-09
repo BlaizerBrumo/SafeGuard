@@ -88,6 +88,14 @@ export function parsePunishmentTime(punishment) {
 	return amount * multiplier;
 }
 
+/**
+ * @param {Minecraft.Player} player
+ * @returns {Minecraft.ItemStack | undefined} The item in the player's currently selected hotbar slot.
+ */
+export function getSelectedItem(player) {
+	return player.getComponent(Minecraft.EntityComponentTypes.Inventory).container.getItem(player.selectedSlotIndex);
+}
+
 export function invsee(senderPlayer, targetPlayer) {
 	if (!(senderPlayer instanceof Minecraft.Player)) throw TypeError(`Parameter "senderPlayer" isn't instanceof Player`);
 	if (!(targetPlayer instanceof Minecraft.Player)) throw TypeError(`Parameter "targetPlayer" isn't instanceof Player`);
@@ -177,7 +185,6 @@ export function addPlayerToUnbanQueue(adminPlayer,playerName){
  * @returns 
  */
 export function sendMessageToAllAdmins(message = "No message provided",isANotification = false){
-	if(config.default.debug) return world.sendMessage(message);
 	let entityQueryOptions = {};
 	if(isANotification){
 		entityQueryOptions.scoreOptions = [{
@@ -255,14 +262,16 @@ export function copyInv(senderPlayer, targetPlayer) {
  * Sends an anti-cheat alert for a detected player, optionally kicking them if AutoMod is enabled.
  *
  * @param {Minecraft.Player} detectedPlayer - The player detected using cheats.
- * @param {string} detectionType - The type of cheat detected (e.g., "autoclicker").
+ * @param {string} detectionType - The specific sub-check within the module (e.g., "Swing" for FOV Check).
  * @param {string | number} detectionValue - The detected value related to the cheat (e.g., CPS count).
  * @param {SafeguardModule.Modules} module - The name of the SafeGuard module that detected the cheat.
+ * @param {boolean} [countsTowardAutoMod] - Whether this detection feeds AutoMod's pooled ban escalation.
+ * Default true. Set false for a detection that can be true without the detected player being the one who cheated. Adds [Unattributed] to the alert message.
  * @throws {TypeError} Throws an error if parameters are of the wrong type.
  * @throws {ReferenceError} Throws an error if the module is not valid.
  * @returns {void} Sends a message to admins or all players based on the configuration.
  */
-export function sendAnticheatAlert(detectedPlayer, detectionType, detectionValue, module) {
+export function sendAnticheatAlert(detectedPlayer, detectionType, detectionValue, module, countsTowardAutoMod = true) {
 	if (!(detectedPlayer instanceof Minecraft.Player)) throw TypeError(`"detectedPlayer" is not an instance of Minecraft Player`);
 	if (typeof detectionType !== "string") throw TypeError(`"detectionType" is typeof ${typeof detectionType}, not string`);
 	if (typeof detectionValue !== "string" && typeof detectionValue !== "number") throw TypeError(`"detectionValue" is typeof ${typeof detectionValue}, not string or number`);
@@ -271,12 +280,18 @@ export function sendAnticheatAlert(detectedPlayer, detectionType, detectionValue
 
 	detectedPlayer.setWarning(module);
 
-	if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.autoMod)) {
-		sendMessageToAllAdmins(`§6[§eSafeGuard Notify§6]§r§c ${detectedPlayer.name}§r was automatically kicked by SafeGuard AutoMod module. Detection[${module} = ${detectionValue}]`, true);
-		detectedPlayer.runCommand(`kick "${detectedPlayer.name}" §6[§eSafeGuard AutoMod§6]§r You have been detected cheating. Module[${module} = ${detectionValue}]`);
+	// AutoMod's ban escalation
+	if (countsTowardAutoMod && SafeguardModule.getModuleStatus(SafeguardModule.Modules.autoMod.name) && detectedPlayer.recordAutoModDetection()) {
+		const banDurationMs = config.default.other.autoMod.banDurationMs;
+		detectedPlayer.ban(`Repeated AutoMod detections (${module})`, Date.now() + banDurationMs, false, "SafeGuard AutoMod");
+		const banMessage = `§6[§eSafeGuard Notify§6]§4 ${detectedPlayer.name}§c was automatically banned for §c${formatMilliseconds(banDurationMs)}§c by SafeGuard AutoMod for repeated detections (${module}).`;
+		if (config.default.other.sendAlertsToEveryone) world.sendMessage(banMessage); else sendMessageToAllAdmins(banMessage, true);
+		detectedPlayer.runCommand(`kick "${detectedPlayer.name}" §6[§eSafeGuard AutoMod§6]§r You have been banned for §e${formatMilliseconds(banDurationMs)}§r for repeated cheat detections.`);
 	}
 
-	const message = `§6[§eSafeGuard§6]§r §c§l${detectedPlayer.name}§r§4 was detected using §l§c${detectionType}§r§4 with a value of §l§c${detectionValue}§r§4!`;
+	const unattributedSuffix = countsTowardAutoMod ? "" : " §7[Unattributed]§r";
+	const detectionLabel = detectionType ? `§4[§l§c${detectionType}§4]` : "";
+	const message = `§6[§eSafeGuard§6]§r §c§l${detectedPlayer.name}§r§4 was flagged by §l§c${module}${detectionLabel} §r§4(§l§c${detectionValue}§4)§r${unattributedSuffix}`;
 	if (config.default.other.sendAlertsToEveryone) world.sendMessage(message);
 	else sendMessageToAllAdmins(message, false);
 }

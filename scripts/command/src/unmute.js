@@ -1,4 +1,5 @@
 import { getPlayerByName, logDebug, sendMessageToAllAdmins } from '../../assets/util';
+import { getPlayerState } from '../../assets/playerState';
 import { newCommand } from '../handle';
 
 newCommand({
@@ -14,7 +15,7 @@ newCommand({
 		  return;
 		}
 		if (targetPlayer.name === player.name) return player.sendMessage(`§6[§eSafeGuard§6]§f Cannot execute this command on yourself!`);
-		if (!targetPlayer.isMuted) {
+		if (!getPlayerState(targetPlayer).isMuted) {
 		  player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${targetPlayer.name}§f is not muted.`);
 		  return;
 		}

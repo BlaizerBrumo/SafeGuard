@@ -1,6 +1,7 @@
 import * as Minecraft from '@minecraft/server';
 import { ActionFormData, MessageFormData, ModalFormData } from '@minecraft/server-ui';
 import { addPlayerToUnbanQueue, copyInv, getPlayerByName, invsee, logDebug, millisecondTime, sendMessageToAllAdmins } from './util.js';
+import { getPlayerState } from './playerState.js';
 import { SafeguardModule } from '../classes/module.js';
 import * as config from "../config.js";
 
@@ -182,6 +183,12 @@ function ownerLoginForm(player){
 	})
 }
 
+//strips the plaintext owner password before the config is exported to console or persisted to a dynamic property
+function redactedConfig(){
+	const { OWNER_PASSWORD, ...safeConfig } = config.default;
+	return safeConfig;
+}
+
 function configDebugForm(player){
 	const form = new ActionFormData()
 		.title("SafeGuard Config Debugger")
@@ -193,7 +200,7 @@ function configDebugForm(player){
 		if (formData.canceled) return;
 		switch (formData.selection) {
 			case 0:
-				console.warn(JSON.stringify(config.default));
+				console.warn(JSON.stringify(redactedConfig()));
 				player.sendMessage(`§6[§eSafeGuard§6]§f The config was exported to the console`);
 				break;
 			case 1:
@@ -289,7 +296,7 @@ function configEditorForm(player) {
 						break;
 				}
 			});
-			world.setDynamicProperty("safeguard:config",JSON.stringify(config.default));
+			world.setDynamicProperty("safeguard:config",JSON.stringify(redactedConfig()));
 
 			player.sendMessage(`§6[§eSafeGuard§6]§r Configuration updated successfully!`);
 		});
@@ -307,7 +314,7 @@ function moduleSettingsForm(player){
 		const setting = validModules[i];
 		const isSettingEnabled = SafeguardModule.getModuleStatus(setting);
 
-		settingsform.toggle(setting, {defaultValue:isSettingEnabled});
+		settingsform.toggle(setting, {defaultValue:isSettingEnabled, tooltip:SafeguardModule.getDescription(setting)});
 	}
 
 	settingsform.show(player).then((formData) => {
@@ -392,7 +399,7 @@ function playerActionForm(player,targetPlayer){
 			case 6:
 				return copyInv(player,targetPlayer);
 			case 7:
-				if (!targetPlayer.isMuted) {
+				if (!getPlayerState(targetPlayer).isMuted) {
 					player.sendMessage(`§6[§eSafeGuard§6]§f Player §e${targetPlayer.name}§f is not muted.`);
 					return;
 				}

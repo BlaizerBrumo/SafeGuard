@@ -1,6 +1,7 @@
 //import all commands
 import "../command/src/ban";
 import "../command/src/unban";
+import "../command/src/kick";
 import "../command/src/invsee";
 import "../command/src/copyinv";
 import "../command/src/mute";

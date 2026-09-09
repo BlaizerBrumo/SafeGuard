@@ -25,7 +25,7 @@ newCommand({
 
         player.sendMessage(`§6[§eSafeGuard§6]§f Manual §eWarnings by Admins§f: §e${warnings["manual"] ?? 0}`)
         for(let i = 0; i < moduleKeys.length; i++){
-            player.sendMessage(`§6[§eSafeGuard§6]§f Module §e${SafeguardModule.Modules[SafeguardModule.getModuleID(moduleKeys[i])]}§f: §e${warnings[SafeguardModule.getModuleID(moduleKeys[i])] ?? 0}`);
+            player.sendMessage(`§6[§eSafeGuard§6]§f Module §e${SafeguardModule.Modules[SafeguardModule.getModuleID(moduleKeys[i])].name}§f: §e${warnings[SafeguardModule.getModuleID(moduleKeys[i])] ?? 0}`);
         }
 
     }

@@ -21,6 +21,7 @@ tellraw @s[scores={safeguard:setup_success=3..}] {"rawtext":[{"text":"§6[§eSaf
 
 playsound random.levelup @s[scores={safeguard:setup_success=2}]
 execute as @s[scores={safeguard:setup_success=2}] run function credit
+execute as @s[scores={safeguard:setup_success=2}] run give @s safeguard:admin_panel 1
 tellraw @s[scores={safeguard:setup_success=2}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r Add tag §eadmin§r to all the staff §o/tag NAME add admin§r"}]}
 tellraw @s[scores={safeguard:setup_success=2}] {"rawtext":[{"text":"§6[§eSafeGuard§6]§r §aSuccessfully setup the anti-cheat!§r"}]}
 execute as @s[scores={safeguard:setup_success=2}] run scoreboard players set @s safeguard:setup_success 3
