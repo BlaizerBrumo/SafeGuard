@@ -1,14 +1,14 @@
 //Edit items in this file if you want customization:
 export default {
-    "version": "2.1.0-beta",
-    "debug": false,
+    "version": "2.1.1",
+    "debug": true,
     //the owner password to edit config in game
     "OWNER_PASSWORD": "",
     "other":{
         //dev stuff
-        "consoleDebugMode": false,
+        "consoleDebugMode": true,
         //wether to send detection alerts to everyone(true) or just to admins (false)
-        "sendAlertsToEveryone": false,
+        "sendAlertsToEveryone": true,
         //if only owner status players can edit modules
         "ownerOnlySettings": false,
         "performance": {

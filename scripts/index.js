@@ -426,6 +426,11 @@ Minecraft.system.runInterval(() => {
 		state.hitEntities = [];
 		state.blocksBroken = 0;
 
+		if (player.hasTag("admin")) {
+			const vanishScore = world.scoreboard.getObjective("safeguard:vanish")?.getScore(player.scoreboardIdentity) ?? 0;
+			if (vanishScore >= 1) player.onScreenDisplay.setActionBar("§l§7You are vanished.§r");
+		}
+
 		durabilitySelectedSlotCheckModule(player);
 		autoTotemCheckModule(player, state);
 		if (runInventoryScans) {
@@ -488,6 +493,32 @@ Minecraft.system.runInterval(() => {
 
 	}
 }, 2);
+
+function triggerDeathEffect(player) {
+	try {
+		const dimension = player.dimension;
+		const location = player.location;
+		const strikeLocation = { x: location.x, y: location.y + 3, z: location.z };
+
+		const previousMobGriefing = world.gameRules.mobGriefing;
+		world.gameRules.mobGriefing = false;
+
+		dimension.spawnEntity("minecraft:lightning_bolt", strikeLocation);
+		player.playSound("random.levelup");
+		dimension.spawnParticle("minecraft:totem_particle", { x: location.x, y: location.y + 1, z: location.z });
+
+		world.gameRules.mobGriefing = previousMobGriefing;
+
+		const strikeBlock = { x: Math.floor(strikeLocation.x), y: Math.floor(strikeLocation.y), z: Math.floor(strikeLocation.z) };
+		const volume = new Minecraft.BlockVolume(
+			{ x: strikeBlock.x - 2, y: strikeBlock.y - 2, z: strikeBlock.z - 2 },
+			{ x: strikeBlock.x + 2, y: strikeBlock.y + 2, z: strikeBlock.z + 2 }
+		);
+		dimension.fillBlocks(volume, "minecraft:air", { blockFilter: { includeTypes: ["minecraft:fire"] } });
+	} catch (err) {
+		logDebug("[SafeGuard] Death effect failed:", err);
+	}
+}
 
 // Credits to the Paradox team for this math.
 function computeViewDot(eyeLocation, targetPoint, viewDirection) {
@@ -667,7 +698,7 @@ world.afterEvents.entityHurt.subscribe((data) => {
 		state.combatLogTimer = null;
 		if (player.hasTag("safeguard:isInCombat")) player.removeTag("safeguard:isInCombat");
 
-		if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect.name)) player.runCommand("function assets/death_effect");
+		if (SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathEffect.name)) triggerDeathEffect(player);
 
 
 		const deathCoordStatus = SafeguardModule.getModuleStatus(SafeguardModule.Modules.deathCoords.name);
